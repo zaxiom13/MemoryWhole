@@ -8,6 +8,11 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
   const [startTime, setStartTime] = useState(null);
   const [lastCorrectIndex, setLastCorrectIndex] = useState(0);
   
+  // Move hasMistake function before the useEffect that uses it
+  const hasMistake = () => {
+    return userInput.split('').some((char, index) => selectedReference[index] !== char);
+  };
+  
   // Update lastCorrectIndex when userInput changes
   useEffect(() => {
     let correctIndex = 0;
@@ -50,11 +55,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
       }
     }, 100);
     return () => clearInterval(timer);
-  }, [lastInputTime, userInput, selectedReference]);
-
-  const hasMistake = () => {
-    return userInput.split('').some((char, index) => selectedReference[index] !== char);
-  };
+  }, [lastInputTime, userInput, selectedReference, hasMistake]); // Add hasMistake to the dependency array
 
   const renderColoredText = () => {
     let mistakeFound = false;
