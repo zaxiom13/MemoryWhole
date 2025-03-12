@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
 export default function ReferenceTyping({ userInput, selectedReference, onInputChange, onBack, isComplete }) {
   const textareaRef = useRef(null);
@@ -8,10 +9,10 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
   const [startTime, setStartTime] = useState(null);
   const [lastCorrectIndex, setLastCorrectIndex] = useState(0);
   
-  // Move hasMistake function before the useEffect that uses it
-  const hasMistake = () => {
+  // Wrap hasMistake in useCallback to memoize it
+  const hasMistake = useCallback(() => {
     return userInput.split('').some((char, index) => selectedReference[index] !== char);
-  };
+  }, [userInput, selectedReference]);
   
   // Update lastCorrectIndex when userInput changes
   useEffect(() => {
