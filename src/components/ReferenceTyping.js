@@ -65,6 +65,19 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         mistakeFound = true;
       }
       const isCorrect = !mistakeFound && selectedReference[index] === char;
+      
+      // Special handling for spaces
+      if (char === ' ' && !isCorrect) {
+        return (
+          <span key={index} className="text-red-500 inline-block" style={{ 
+            width: '0.5em', 
+            height: '1em', 
+            backgroundColor: 'rgba(239, 68, 68, 0.3)', 
+          }}>
+          </span>
+        );
+      }
+      
       return (
         <span key={index} className={isCorrect ? 'text-green-500' : 'text-red-500'}>
           {char || ''}
@@ -103,10 +116,11 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         <div className="w-full p-2 border rounded relative">
           <div className="font-mono whitespace-pre-wrap">
             {renderColoredText()}
-            <span className="animate-blink">|</span>
-            {/* Ghost text positioned absolutely to prevent layout shift */}
+            {/* Position the caret relative to character width */}
+            <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
+            {/* Ghost text positioned relative to character width */}
             {ghostText && (
-              <span className="absolute text-gray-400 opacity-50" style={{ left: `${userInput.length+1}ch` }}>
+              <span className="text-gray-400 opacity-50" style={{ marginLeft: '-0.5ch' }}>
                 {ghostText}
               </span>
             )}

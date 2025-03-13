@@ -10,7 +10,11 @@ export default function ReferenceSelection({ cards, onSelectReference }) {
           className="border rounded-lg p-6 shadow-md cursor-pointer hover:shadow-lg transition"
         >
           <h2 className="text-2xl font-semibold mb-2">{card.title}</h2>
-          <p>{card.text}</p>
+          <div className="h-64 overflow-hidden"> 
+            <p className="overflow-y-auto h-[calc(100%-3rem)]"> 
+              {card.text}
+            </p>
+          </div>
         </div>
       ))}
     </div>
