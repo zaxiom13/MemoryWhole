@@ -139,7 +139,7 @@ export default function App() {
             <h1 className="text-5xl font-bold mb-6 sticky top-0 z-10 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-2">
               Memory Whole
             </h1>
-            <div className="w-full max-w-2xl h-[70vh] relative backdrop-blur-sm bg-white/30 rounded-xl shadow-xl p-6 border border-white/50">
+            <div className="w-full max-w-2xl h-[80vh] relative backdrop-blur-sm bg-white/30 rounded-xl shadow-xl p-6 border border-white/50">
               {step === 1 && (
                 <HomePage 
                   cards={cards} 

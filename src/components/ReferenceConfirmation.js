@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function ReferenceConfirmation({ selectedReference, onConfirm, onBack }) {
   return (
-    <div className="w-full max-w-screen-sm px-4">
-      <div className="mt-4 p-4 border rounded shadow bg-white">
+    <div className="w-full max-w-screen-sm h-[50]% ">
+      <div className="mt-4 p-4 border rounded shadow bg-white  overflow-y-auto">
         <h3 className="text-lg md:text-xl font-semibold mb-2">Selected Reference</h3>
         <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
           {selectedReference}
