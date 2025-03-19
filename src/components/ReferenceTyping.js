@@ -8,6 +8,9 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
   const [timer, setTimer] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [lastCorrectIndex, setLastCorrectIndex] = useState(0);
+  const [isReferenceOpen, setIsReferenceOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   
   // Wrap hasMistake in useCallback to memoize it
   const hasMistake = useCallback(() => {
@@ -48,15 +51,15 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
   // Add useEffect for ghost text timeout
   useEffect(() => {
     const timer = setInterval(() => {
-      if (Date.now() - lastInputTime > 3000 && 
+      if (!isReferenceOpen && Date.now() - lastInputTime > 1000 && 
           selectedReference &&
           userInput.length < selectedReference.length &&
           !hasMistake()) {
-        setGhostText(selectedReference.slice(userInput.length, userInput.length + 5));
+        setGhostText(selectedReference.slice(userInput.length, userInput.length + 10));
       }
     }, 100);
     return () => clearInterval(timer);
-  }, [lastInputTime, userInput, selectedReference, hasMistake]); // Add hasMistake to the dependency array
+  }, [lastInputTime, userInput, selectedReference, hasMistake, isReferenceOpen]); // Add isReferenceOpen to the dependency array
 
   const renderColoredText = () => {
     let mistakeFound = false;
@@ -105,6 +108,24 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  const handleShowReferenceClick = () => {
+    setIsConfirmationOpen(true);
+  };
+
+  const handleConfirmShowReference = () => {
+    setIsReferenceOpen(true);
+    if (startTime) {
+      setTimer(prevTimer => prevTimer + 60); // Add 60 seconds penalty
+    } else {
+      setTimer(60); // If startTime is not initialized, set timer to 60
+    }
+    setIsConfirmationOpen(false);
+  };
+
+  const handleCancelShowReference = () => {
+    setIsConfirmationOpen(false);
+  };
+
   return (
     <>
       <div className="mt-4 w-full max-w-lg">
@@ -112,12 +133,13 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         <div className="mb-2 text-right font-mono text-lg">
           Time: {formatTime(timer)}
         </div>
-        <p className="mb-2 text-gray-600">Type the reference text here...</p>
         <div className="w-full p-2 border rounded relative">
           <div className="font-mono whitespace-pre-wrap">
             {renderColoredText()}
             {/* Position the caret relative to character width */}
-            <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
+            {isTextareaFocused && (
+              <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
+            )}
             {/* Ghost text positioned relative to character width */}
             {ghostText && (
               <span className="text-gray-400 opacity-50" style={{ marginLeft: '-0.5ch' }}>
@@ -131,6 +153,8 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
             value={userInput}
             onChange={handleInputChange}
             autoFocus
+            onFocus={() => setIsTextareaFocused(true)}
+            onBlur={() => setIsTextareaFocused(false)}
           />
         </div>
       </div>
@@ -151,6 +175,51 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
           </button>
         )}
       </div>
+      {!isReferenceOpen && (
+        <div className="w-full mt-2">
+          <button
+            className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
+            onClick={handleShowReferenceClick}
+          >
+            Show Reference
+          </button>
+        </div>
+      )}
+      {isReferenceOpen && (
+        <div className="mt-2 p-2 border rounded select-none">
+          <p className="text-gray-600">{selectedReference}</p>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {isConfirmationOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Confirmation</h3>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Opening the reference text will incur a 1-minute penalty. Are you sure you want to proceed?
+                </p>
+              </div>
+            </div>
+            <div className="items-center px-4 py-3">
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600 transition"
+                onClick={handleCancelShowReference}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition ml-2"
+                onClick={handleConfirmShowReference}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

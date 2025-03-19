@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReferenceConfirmation from './components/ReferenceConfirmation';
 import ReferenceTyping from './components/ReferenceTyping';
@@ -53,7 +53,7 @@ const cards = [
 
 // Modify initial state
 export default function App() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(localStorage.getItem('tutorialComplete') ? 1 : 0);
   const [selectedReference, setSelectedReference] = useState('');
   const [userInput, setUserInput] = useState('');
   const [isComplete, setIsComplete] = useState(false);
@@ -99,7 +99,10 @@ export default function App() {
     <div className="min-h-screen p-4 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
       <AnimatePresence>
         {step === 0 ? (
-          <TutorialGuide onComplete={() => setStep(1)} />
+          <TutorialGuide onComplete={() => {
+            localStorage.setItem('tutorialComplete', 'true');
+            setStep(1);
+          }} />
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
