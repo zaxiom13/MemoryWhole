@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReferenceConfirmation from './components/ReferenceConfirmation';
 import ReferenceTyping from './components/ReferenceTyping';
