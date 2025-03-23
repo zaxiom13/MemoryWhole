@@ -40,13 +40,13 @@ function CardForm({ card, onSubmit, onCancel }) {
 
   return (
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
-      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           {card && card.id ? 'Edit Card' : 'Create New Card'}
         </h2>
         <button 
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-800 dark:text-gray-200 transition-all duration-300"
+          className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
         >
           Cancel
         </button>
@@ -86,7 +86,7 @@ function CardForm({ card, onSubmit, onCancel }) {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-500 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
           >
             {card && card.id ? 'Update Card' : 'Create Card'}
           </button>
@@ -104,7 +104,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-[220px] flex flex-col cursor-pointer transition-all duration-300 relative"
+      className="leather-card p-6 rounded-lg h-[220px] flex flex-col cursor-pointer transition-all duration-300 relative"
     >
       <div 
         className="absolute top-3 right-3 flex space-x-2"
@@ -135,7 +135,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
       </div>
       <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100 pr-16">{card.title}</h3>
       <div 
-        className="flex-grow bg-gray-100 dark:bg-gray-700 p-3 rounded-lg"
+        className="flex-grow note-paper p-3 rounded-lg"
         onClick={() => onSelect(card.text)}
       >
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
@@ -155,13 +155,13 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
 function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard }) {
   return (
     <>
-      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
+      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           Choose a passage to practice your memory
         </h2>
         <button 
           onClick={onCreateCard}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-800 dark:text-gray-200 transition-all duration-300"
+          className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
         >
           New Card
         </button>

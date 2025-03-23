@@ -54,7 +54,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-70 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center">
       <motion.div 
-        className="relative mx-auto p-6 border border-gray-200 dark:border-gray-700 w-full max-w-md shadow-xl rounded-xl bg-white dark:bg-gray-800"
+        className="relative mx-auto p-6 border border-gray-200 dark:border-gray-700 w-full max-w-md shadow-xl rounded-xl note-paper"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -79,7 +79,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-700 dark:to-purple-800 dark:hover:from-indigo-800 dark:hover:to-purple-900 text-white rounded-lg transition-all duration-300"
+            className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
             onClick={onConfirm}
           >
             Confirm
@@ -143,7 +143,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         {/* Timer display */}
         <div className="mb-3 text-right">
           <motion.div 
-            className="inline-block font-mono text-lg font-semibold px-4 py-1 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 rounded-lg border border-indigo-200 dark:border-indigo-800 shadow-sm"
+            className="inline-block font-mono text-lg font-semibold px-4 py-1 note-paper rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
             animate={{ 
               scale: [1, 1.02, 1],
             }}
@@ -159,7 +159,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         </div>
         
         {/* Typing area */}
-        <div className="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl relative bg-white dark:bg-gray-800 shadow-md transition-all duration-300">
+        <div className="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl relative note-paper shadow-md transition-all duration-300">
           <div className="font-mono whitespace-pre-wrap text-gray-800 dark:text-gray-200 min-h-[100px]">
             <ColoredTextDisplay userInput={userInput} referenceText={selectedReference} />
             
@@ -196,7 +196,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
             <motion.button 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-300 flex items-center"
+              className="px-4 py-2 leather-button rounded-lg transition-colors duration-300 flex items-center"
               onClick={onBack}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -209,7 +209,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
               <motion.button 
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-medium rounded-lg shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 leather-button text-white font-medium rounded-lg shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleBackToLastCorrect}
                 disabled={lastCorrectIndex === userInput.length}
               >
@@ -224,7 +224,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-700 dark:to-purple-800 dark:hover:from-indigo-800 dark:hover:to-purple-900 text-white font-medium rounded-lg shadow-md transition-all duration-300 flex items-center justify-center"
+                className="w-full px-4 py-3 leather-button text-white font-medium rounded-lg shadow-md transition-all duration-300 flex items-center justify-center"
                 onClick={handleShowReferenceClick}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -243,7 +243,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-lg mt-4 p-4 border border-yellow-300 dark:border-yellow-600 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 shadow-md transition-all duration-300"
+          className="w-full max-w-lg mt-4 p-4 border border-yellow-300 dark:border-yellow-600 rounded-xl note-paper shadow-md transition-all duration-300"
         >
           <div className="flex items-center mb-2 text-yellow-700 dark:text-yellow-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

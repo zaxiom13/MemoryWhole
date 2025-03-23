@@ -7,6 +7,7 @@ import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
 import { loadPreference, savePreference, formatTime } from './utils/memoryUtils';
+import './styles/skeuomorphic.css';
 
 // Application state management
 export default function App() {
@@ -97,10 +98,10 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen p-4 transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100'}`}>
+    <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
       <button 
         onClick={toggleDarkMode}
-        className={`fixed top-4 right-4 p-2 rounded-full z-50 transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-indigo-100 text-gray-800'}`}
+        className={`fixed top-4 right-4 p-2 rounded-full z-50 transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-[#d2b48c] text-gray-800'}`}
         aria-label="Toggle dark mode"
       >
         {darkMode ? (
@@ -127,10 +128,10 @@ export default function App() {
             className="flex flex-col items-center justify-center"
           >
             <GlobalStyles />
-            <h1 className="text-5xl font-bold mb-6 sticky top-0 z-10 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-2">
+            <h1 className="text-5xl font-bold mb-6 sticky top-0 z-10 leather-title py-2">
               Memory Whole
             </h1>
-            <div className="w-full max-w-2xl h-[80vh] relative backdrop-blur-sm bg-white/30 rounded-xl shadow-xl p-6 border border-white/50">
+            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-6">
               {step === 1 && (
                 <HomePage 
                   cards={cards} 
@@ -190,30 +191,23 @@ function GlobalStyles() {
     <style>
       {`
         ::-webkit-scrollbar {
-          width: 6px;
-          opacity: 0;
-          transition: opacity 0.2s;
+          width: 8px;
         }
         ::-webkit-scrollbar-track {
-          background: rgba(241, 241, 241, 0.5);
+          background: rgba(210, 180, 140, 0.3);
           border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #6366f1, #8b5cf6, #ec4899);
+          background: #8b5a2b;
           border-radius: 10px;
+          border: 1px solid #5c4033;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #4f46e5, #7c3aed, #db2777);
+          background: #a67c52;
         }
         .h-[70vh]:hover::-webkit-scrollbar {
           opacity: 1;
         }
-        .card-gradient-1 { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); }
-        .card-gradient-2 { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
-        .card-gradient-3 { background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); }
-        .card-gradient-4 { background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); }
-        .card-gradient-5 { background: linear-gradient(135deg, #ede9fe 0%, #fbcfe8 100%); }
-        .card-gradient-6 { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); }
       `}
     </style>
   );
