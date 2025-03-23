@@ -6,7 +6,7 @@ import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
-import { loadPreference, savePreference } from './utils/memoryUtils';
+import { loadPreference, savePreference, savePersonalBestTime } from './utils/memoryUtils';
 import './styles/modern.css';
 
 // Application state management
@@ -60,6 +60,9 @@ export default function App() {
       // Set the total completion time (base time includes penalties already due to startTime adjustment,
       // so we don't need to add penalties here)
       setCompletionTime(baseTime);
+      
+      // Save the personal best time
+      savePersonalBestTime(selectedReference, baseTime);
     }
   };
 

@@ -146,3 +146,54 @@ export function savePreference(key, value) {
     console.error(`Error saving ${key} to localStorage:`, error);
   }
 } 
+
+/**
+ * Save a personal best time for a reference text
+ * @param {string} referenceText - The reference text
+ * @param {number} completionTime - The completion time in seconds
+ */
+export function savePersonalBestTime(referenceText, completionTime) {
+  try {
+    // Create a unique key based on the first 50 characters of the reference text
+    const referenceKey = `personalBest_${referenceText.substring(0, 50).replace(/\s+/g, '_')}`;
+    
+    // Get existing best times or initialize empty array
+    const existingTimes = loadPersonalBestTimes(referenceText);
+    
+    // Add new time
+    existingTimes.push({
+      time: completionTime,
+      date: Date.now()
+    });
+    
+    // Sort by time (ascending)
+    existingTimes.sort((a, b) => a.time - b.time);
+    
+    // Keep only top 5 times
+    const topTimes = existingTimes.slice(0, 5);
+    
+    // Save to localStorage
+    localStorage.setItem(referenceKey, JSON.stringify(topTimes));
+  } catch (error) {
+    console.error('Error saving personal best time:', error);
+  }
+}
+
+/**
+ * Load personal best times for a reference text
+ * @param {string} referenceText - The reference text
+ * @returns {Array} Array of best times objects with time and date properties
+ */
+export function loadPersonalBestTimes(referenceText) {
+  try {
+    // Create a unique key based on the first 50 characters of the reference text
+    const referenceKey = `personalBest_${referenceText.substring(0, 50).replace(/\s+/g, '_')}`;
+    
+    // Get existing best times or initialize empty array
+    const savedTimes = localStorage.getItem(referenceKey);
+    return savedTimes ? JSON.parse(savedTimes) : [];
+  } catch (error) {
+    console.error('Error loading personal best times:', error);
+    return [];
+  }
+}

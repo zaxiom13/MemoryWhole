@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { loadPersonalBestTimes, formatTime, formatDate } from '../utils/memoryUtils';
 
 /**
  * ReferenceConfirmation component - displays the selected reference text
  * and allows user to start the memory test
  */
 export default function ReferenceConfirmation({ selectedReference, onBegin, onBack }) {
+  const [personalBestTimes, setPersonalBestTimes] = useState([]);
+
+  // Load personal best times when the component mounts or reference changes
+  useEffect(() => {
+    if (selectedReference) {
+      const bestTimes = loadPersonalBestTimes(selectedReference);
+      setPersonalBestTimes(bestTimes);
+    }
+  }, [selectedReference]);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -21,6 +32,34 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
             {selectedReference}
           </p>
         </div>
+        
+        {/* Personal Best Times Section */}
+        {personalBestTimes.length > 0 && (
+          <div className="mt-6 p-4 rounded-lg leather-card border border-gray-200 dark:border-gray-700">
+            <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300 flex items-center">
+              <span className="mr-2">🏆</span> Personal Best Times
+            </h4>
+            <div className="space-y-2">
+              {personalBestTimes.slice(0, 3).map((timeData, index) => (
+                <div 
+                  key={index}
+                  className="flex justify-between items-center p-2 rounded-lg bg-white/50 dark:bg-gray-800/50"
+                >
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold mr-2">{index + 1}.</span>
+                    <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">
+                      {formatTime(timeData.time)}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {formatDate(timeData.date)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <p className="mt-4 text-gray-600 dark:text-gray-400 italic">
           Take a moment to study this text. When ready, click "Begin" to test your recall.
         </p>
