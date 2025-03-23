@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
+import { formatTime } from '../utils/memoryUtils';
 
-function CompletionPage({ completionTime, onReturnToMenu, formatTime }) {
+/**
+ * CompletionPage component - displays completion metrics and animation
+ */
+function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onTryAgain }) {
   return (
     <motion.div 
       className="text-center p-8 rounded-xl shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-700 dark:to-purple-800 text-white"
@@ -62,6 +66,7 @@ function CompletionPage({ completionTime, onReturnToMenu, formatTime }) {
       </motion.p>
       
       <motion.div
+        className="flex justify-center space-x-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.1 }}
@@ -71,6 +76,13 @@ function CompletionPage({ completionTime, onReturnToMenu, formatTime }) {
           className="bg-white text-indigo-600 dark:text-indigo-800 px-6 py-3 rounded-full hover:bg-blue-50 dark:hover:bg-white/90 font-bold shadow-md transition-all duration-300"
         >
           Return to Menu
+        </button>
+        
+        <button 
+          onClick={onTryAgain}
+          className="bg-indigo-800 text-white px-6 py-3 rounded-full hover:bg-indigo-900 font-bold shadow-md transition-all duration-300"
+        >
+          Try Again
         </button>
       </motion.div>
     </motion.div>

@@ -1,7 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function ReferenceConfirmation({ selectedReference, onConfirm, onBack }) {
+/**
+ * ReferenceConfirmation component - displays the selected reference text
+ * and allows user to start the memory test
+ */
+export default function ReferenceConfirmation({ selectedReference, onBegin, onBack }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -34,7 +38,7 @@ export default function ReferenceConfirmation({ selectedReference, onConfirm, on
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-700 dark:to-purple-800 dark:hover:from-indigo-800 dark:hover:to-purple-900 text-white font-medium rounded-lg transition-all duration-300"
-            onClick={onConfirm}
+            onClick={onBegin}
           >
             Begin Test
           </motion.button>
