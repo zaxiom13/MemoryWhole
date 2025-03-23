@@ -87,13 +87,15 @@ class CardCollection {
   }
 
   /**
-   * Sort cards by creation date
+   * Sort cards by last modified date (updatedAt or createdAt)
    * @param {boolean} ascending - Sort direction (true for oldest first)
    * @returns {Card[]} Sorted array of cards
    */
   sortByDate(ascending = false) {
     const sorted = [...this.cards].sort((a, b) => {
-      const comparison = (a.createdAt || 0) - (b.createdAt || 0);
+      const aDate = a.updatedAt || a.createdAt || 0;
+      const bDate = b.updatedAt || b.createdAt || 0;
+      const comparison = aDate - bDate;
       return ascending ? comparison : -comparison;
     });
     return sorted;
@@ -108,4 +110,4 @@ class CardCollection {
   }
 }
 
-export default CardCollection; 
+export default CardCollection;

@@ -134,16 +134,21 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
         </button>
       </div>
       <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100 pr-16">{card.title}</h3>
-      <div 
-        className="flex-grow note-paper p-3 rounded-lg"
-        onClick={() => onSelect(card.text)}
-      >
+      <div className="flex-grow note-paper p-3 rounded-lg">
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
           {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 150) + '...'}
         </p>
       </div>
-      <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-        {card.updatedAt && ` · Updated: ${formatDate(card.updatedAt)}`}
+      <div className="mt-2 flex justify-between items-center">
+        <div className="text-xs text-gray-600 dark:text-gray-400">
+          {` · Last modified: ${formatDate(card.updatedAt || card.createdAt)}`}
+        </div>
+        <button
+          onClick={() => onSelect(card.text)}
+          className="px-3 py-1 leather-button rounded-lg text-sm transition-all duration-300"
+        >
+          Study
+        </button>
       </div>
     </motion.div>
   );
