@@ -1,31 +1,45 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function ReferenceConfirmation({ selectedReference, onConfirm, onBack }) {
   return (
-    <div className="w-full max-w-screen-sm h-[50]% ">
-      <div className="mt-4 p-4 border rounded shadow bg-white  overflow-y-auto">
-        <h3 className="text-lg md:text-xl font-semibold mb-2">Selected Reference</h3>
-        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-          {selectedReference}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="w-full max-w-screen-sm"
+    >
+      <div className="p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300">
+        <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready to Test Your Memory?</h3>
+        <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 max-h-[50vh] overflow-y-auto">
+          <h4 className="text-lg font-medium mb-2 text-gray-700 dark:text-gray-300">Selected Reference:</h4>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+            {selectedReference}
+          </p>
+        </div>
+        <p className="mt-4 text-gray-600 dark:text-gray-400 italic">
+          Take a moment to study this text. When ready, click "Begin" to test your recall.
         </p>
+        
+        <div className="flex justify-end gap-3 mt-6">
+          <motion.button 
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300"
+            onClick={onBack}
+          >
+            Back
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-700 dark:to-purple-800 dark:hover:from-indigo-800 dark:hover:to-purple-900 text-white font-medium rounded-lg transition-all duration-300"
+            onClick={onConfirm}
+          >
+            Begin Test
+          </motion.button>
+        </div>
       </div>
-      {/* Buttons container remains the same but with responsive spacing */}
-      <div className="flex flex-col md:flex-row gap-2 mt-4 px-4">
-        <button 
-          className="px-4 py-2 bg-blue-500 text-white rounded shadow 
-            hover:bg-blue-600 transition w-full md:w-auto"
-          onClick={onConfirm}
-        >
-          Confirm
-        </button>
-        <button 
-          className="px-4 py-2 bg-gray-500 text-white rounded shadow 
-            hover:bg-gray-600 transition w-full md:w-auto"
-          onClick={onBack}
-        >
-          Back
-        </button>
-      </div>
-    </div>
+    </motion.div>
   );
 }

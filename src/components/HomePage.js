@@ -1,28 +1,193 @@
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
-function HomePage({ cards, onSelectReference }) {
+function HomePage({ 
+  cards, 
+  onSelectReference, 
+  onCreateCard, 
+  onEditCard, 
+  onDeleteCard,
+  editingCard,
+  onUpdateCard,
+  onCreateNewCard,
+  onCancelEdit
+}) {
+  const [formData, setFormData] = useState({ title: '', text: '' });
+  const [sortedCards, setSortedCards] = useState([]);
+
+  // Sort cards by creation date (most recent first)
+  useEffect(() => {
+    const sorted = [...cards].sort((a, b) => {
+      return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+    setSortedCards(sorted);
+  }, [cards]);
+
+  // Initialize form data when editing card changes
+  useEffect(() => {
+    if (editingCard) {
+      setFormData({
+        title: editingCard.title || '',
+        text: editingCard.text || ''
+      });
+    } else {
+      setFormData({ title: '', text: '' });
+    }
+  }, [editingCard]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!formData.title.trim() || !formData.text.trim()) {
+      alert("Title and text are required!");
+      return;
+    }
+    
+    if (editingCard && editingCard.id) {
+      onUpdateCard({ ...editingCard, ...formData });
+    } else {
+      onCreateNewCard(formData);
+    }
+    
+    setFormData({ title: '', text: '' });
+  };
+
+  const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  if (editingCard !== null) {
+    return (
+      <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
+        <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+            {editingCard.id ? 'Edit Card' : 'Create New Card'}
+          </h2>
+          <button 
+            onClick={onCancelEdit}
+            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-800 dark:text-gray-200 transition-all duration-300"
+          >
+            Cancel
+          </button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              placeholder="Card Title"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="text">
+              Text
+            </label>
+            <textarea
+              id="text"
+              name="text"
+              value={formData.text}
+              onChange={handleChange}
+              rows="10"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              placeholder="Card Content"
+            ></textarea>
+          </div>
+          
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-500 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            >
+              {editingCard.id ? 'Update Card' : 'Create Card'}
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="sticky top-0 z-20 bg-gradient-to-r from-indigo-600/90 via-purple-600/90 to-pink-600/90 backdrop-blur-sm py-4 px-4 mx-0 shadow-lg">
-        <h2 className="text-2xl text-center font-semibold text-white">
+      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           Choose a passage to practice your memory
         </h2>
+        <button 
+          onClick={onCreateCard}
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-800 dark:text-gray-200 transition-all duration-300"
+        >
+          New Card
+        </button>
       </div>
       <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
         <div className="grid grid-cols-1 gap-6 mt-6">
-          {cards.map((card) => (
+          {sortedCards.reverse().map((card) => (
             <motion.div
               key={card.id}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`card-gradient-${card.id} p-6 rounded-lg shadow-lg border border-white/50 h-[200px] flex flex-col cursor-pointer transition-all duration-300`}
-              onClick={() => onSelectReference(card.text)}
+              className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-[220px] flex flex-col cursor-pointer transition-all duration-300 relative"
             >
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">{card.title}</h3>
-              <div className="flex-grow backdrop-blur-sm bg-white/20 p-3 rounded-lg">
-                <p className="whitespace-pre-line text-gray-700">
+              <div 
+                className="absolute top-3 right-3 flex space-x-2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => onEditCard(card)}
+                  className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2 rounded-full transition-all duration-300"
+                  title="Edit Card"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to delete this card?')) {
+                      onDeleteCard(card.id);
+                    }
+                  }}
+                  className="bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-full transition-all duration-300"
+                  title="Delete Card"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100 pr-16">{card.title}</h3>
+              <div 
+                className="flex-grow bg-gray-100 dark:bg-gray-700 p-3 rounded-lg"
+                onClick={() => onSelectReference(card.text)}
+              >
+                <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
                   {card.text.split('\n')[0].substring(0, 150)}...
                 </p>
+              </div>
+              <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                 {card.updatedAt && ` · Updated: ${formatDate(card.updatedAt)}`}
               </div>
             </motion.div>
           ))}
