@@ -7,7 +7,7 @@ import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
 import { loadPreference, savePreference, formatTime } from './utils/memoryUtils';
-import './styles/skeuomorphic.css';
+import './styles/modern.css';
 
 // Application state management
 export default function App() {
@@ -101,7 +101,7 @@ export default function App() {
     <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
       <button 
         onClick={toggleDarkMode}
-        className={`fixed top-4 right-4 p-2 rounded-full z-50 transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-[#d2b48c] text-gray-800'}`}
+        className={`fixed top-4 right-4 p-2 rounded-full z-50 transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-blue-100 text-blue-800'}`}
         aria-label="Toggle dark mode"
       >
         {darkMode ? (
@@ -194,16 +194,26 @@ function GlobalStyles() {
           width: 8px;
         }
         ::-webkit-scrollbar-track {
-          background: rgba(210, 180, 140, 0.3);
+          background: #f1f5f9;
           border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-          background: #8b5a2b;
+          background: #94a3b8;
           border-radius: 10px;
-          border: 1px solid #5c4033;
+          border: 2px solid #f1f5f9;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: #a67c52;
+          background: #64748b;
+        }
+        .dark ::-webkit-scrollbar-track {
+          background: #334155;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+          background: #64748b;
+          border: 2px solid #334155;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
         }
         .h-[70vh]:hover::-webkit-scrollbar {
           opacity: 1;
