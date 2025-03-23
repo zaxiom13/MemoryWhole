@@ -6,7 +6,7 @@ import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
-import { loadPreference, savePreference, formatTime } from './utils/memoryUtils';
+import { loadPreference, savePreference } from './utils/memoryUtils';
 import './styles/modern.css';
 
 // Application state management

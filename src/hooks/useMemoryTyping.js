@@ -1,6 +1,6 @@
 // useMemoryTyping.js - Custom hook for managing memory typing state
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { hasMistakes, findLastCorrectIndex, savePreference } from '../utils/memoryUtils';
+import { hasMistakes, findLastCorrectIndex } from '../utils/memoryUtils';
 
 /**
  * Custom hook that manages memory typing state and logic
@@ -156,4 +156,4 @@ function useMemoryTyping({ referenceText }) {
   };
 }
 
-export default useMemoryTyping; 
+export default useMemoryTyping;

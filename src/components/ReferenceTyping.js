@@ -122,7 +122,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
     if (userInput !== undefined) {
       internalHandleInputChange({ target: { value: userInput } });
     }
-  }, [userInput]);
+  }, [userInput, internalHandleInputChange]);
 
   // Handle input change bridging between props and hook
   const handleInputChange = (e) => {
