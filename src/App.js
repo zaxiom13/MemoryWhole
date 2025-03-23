@@ -57,9 +57,6 @@ export default function App() {
       // Get the base completion time
       const baseTime = Math.floor((Date.now() - window.startTime) / 1000);
       
-      // Get any penalty time from localStorage
-      const penaltyTime = localStorage.getItem('timePenalty') ? parseInt(localStorage.getItem('timePenalty')) : 0;
-      
       // Set the total completion time (base time includes penalties already due to startTime adjustment,
       // so we don't need to add penalties here)
       setCompletionTime(baseTime);
