@@ -53,7 +53,15 @@ export default function App() {
     if (newValue.length === selectedReference.length && 
         newValue === selectedReference) {
       setIsComplete(true);
-      setCompletionTime(Math.floor((Date.now() - window.startTime) / 1000));
+      // Get the base completion time
+      const baseTime = Math.floor((Date.now() - window.startTime) / 1000);
+      
+      // Get any penalty time from localStorage
+      const penaltyTime = localStorage.getItem('timePenalty') ? parseInt(localStorage.getItem('timePenalty')) : 0;
+      
+      // Set the total completion time (base time includes penalties already due to startTime adjustment,
+      // so we don't need to add penalties here)
+      setCompletionTime(baseTime);
     }
   };
 
@@ -70,6 +78,8 @@ export default function App() {
     setStep(2);
     setIsComplete(false);
     window.startTime = null;
+    // Reset time penalty when trying again
+    localStorage.setItem('timePenalty', '0');
   };
 
   // Return to menu handler
@@ -77,6 +87,8 @@ export default function App() {
     setStep(1);
     setIsComplete(false);
     setUserInput('');
+    // Reset time penalty when returning to menu
+    localStorage.setItem('timePenalty', '0');
   };
 
   // Dark mode toggle
@@ -139,6 +151,8 @@ export default function App() {
                   onBegin={() => {
                     setStep(3);
                     window.startTime = Date.now();
+                    // Reset time penalty when beginning a new test
+                    localStorage.setItem('timePenalty', '0');
                   }}
                   onBack={handleReturnToMenu}
                 />

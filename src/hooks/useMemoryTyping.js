@@ -1,6 +1,6 @@
 // useMemoryTyping.js - Custom hook for managing memory typing state
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { hasMistakes, findLastCorrectIndex } from '../utils/memoryUtils';
+import { hasMistakes, findLastCorrectIndex, savePreference } from '../utils/memoryUtils';
 
 /**
  * Custom hook that manages memory typing state and logic
@@ -18,6 +18,7 @@ function useMemoryTyping({ referenceText }) {
   const [isReferenceOpen, setIsReferenceOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [penaltyTime, setPenaltyTime] = useState(0);
   const textareaRef = useRef(null);
 
   // Check if the input has any mistakes
@@ -42,6 +43,9 @@ function useMemoryTyping({ referenceText }) {
     const now = Date.now();
     setStartTime(now);
     window.startTime = now; // For compatibility with existing code
+    // Reset penalty time when starting a new session
+    setPenaltyTime(0);
+    localStorage.setItem('timePenalty', '0');
   }, []);
   
   // Update timer every second
@@ -93,8 +97,23 @@ function useMemoryTyping({ referenceText }) {
   const handleConfirmShowReference = () => {
     setIsReferenceOpen(true);
     if (startTime) {
-      setTimer(prevTimer => prevTimer + 60); // Add 60 seconds penalty
-      setStartTime(prev => prev - 60000); // Adjust startTime to account for penalty
+      // Apply 60-second penalty
+      const penalty = 60;
+      setTimer(prevTimer => prevTimer + penalty);
+      
+      // Adjust startTime to account for penalty
+      const newStartTime = startTime - (penalty * 1000);
+      setStartTime(newStartTime);
+      
+      // Also adjust window.startTime to stay in sync
+      window.startTime = newStartTime;
+      
+      // Update penalty time
+      setPenaltyTime(prevPenalty => {
+        const newPenalty = prevPenalty + penalty;
+        localStorage.setItem('timePenalty', newPenalty.toString());
+        return newPenalty;
+      });
     }
     setIsConfirmationOpen(false);
   };
@@ -112,6 +131,9 @@ function useMemoryTyping({ referenceText }) {
     const now = Date.now();
     setStartTime(now);
     window.startTime = now;
+    // Reset penalty time
+    setPenaltyTime(0);
+    localStorage.setItem('timePenalty', '0');
   };
 
   return {
@@ -123,6 +145,7 @@ function useMemoryTyping({ referenceText }) {
     isReferenceOpen,
     isConfirmationOpen,
     textareaRef,
+    penaltyTime,
     hasMistakes: checkMistakes,
     handleInputChange,
     handleBackToLastCorrect,

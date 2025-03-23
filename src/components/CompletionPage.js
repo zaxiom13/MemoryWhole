@@ -5,6 +5,13 @@ import { formatTime } from '../utils/memoryUtils';
  * CompletionPage component - displays completion metrics and animation
  */
 function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onTryAgain }) {
+  // Get any stored penalty time from localStorage
+  const penaltyTime = localStorage.getItem('timePenalty') ? parseInt(localStorage.getItem('timePenalty')) : 0;
+  
+  // Calculate raw time (completion time minus any penalties)
+  // Note that completionTime already includes penalties from startTime adjustment
+  const rawTime = Math.max(0, completionTime - penaltyTime);
+  
   return (
     <motion.div 
       className="text-center p-8 rounded-xl shadow-lg bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-700 dark:to-purple-800 text-white"
@@ -54,7 +61,7 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
       </motion.h2>
       
       <motion.p 
-        className="text-xl mb-8"
+        className="text-xl mb-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.8 }}
@@ -64,6 +71,24 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
           {formatTime(completionTime)}
         </span>
       </motion.p>
+      
+      {penaltyTime > 0 && (
+        <motion.div
+          className="mb-8 text-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.0 }}
+        >
+          <p className="text-yellow-300">
+            <span className="inline-block mr-2">⚠️</span>
+            Includes a penalty of{' '}
+            <span className="font-bold">{formatTime(penaltyTime)}</span>
+          </p>
+          <p className="text-sm text-white/70">
+            Raw time: {formatTime(rawTime)}
+          </p>
+        </motion.div>
+      )}
       
       <motion.div
         className="flex justify-center space-x-4"
