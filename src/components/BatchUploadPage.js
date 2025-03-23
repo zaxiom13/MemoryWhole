@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-
 /**
  * BatchUploadPage component for creating multiple cards from JSON
  */

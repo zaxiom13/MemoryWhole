@@ -83,9 +83,10 @@ function useMemoryTyping({ referenceText }) {
 
   // Reset to last correct position
   const handleBackToLastCorrect = () => {
+    console.log('Back to last correct position: ' + lastCorrectIndex + ' characters');
     const correctedInput = userInput.slice(0, lastCorrectIndex);
     setUserInput(correctedInput);
-    textareaRef.current.focus();
+
   };
 
   // Show reference confirmation dialog

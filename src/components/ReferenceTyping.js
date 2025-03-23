@@ -102,7 +102,6 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
     userInput: internalUserInput,
     ghostText,
     timer,
-    isComplete: internalIsComplete,
     lastCorrectIndex,
     isReferenceOpen,
     isConfirmationOpen,
@@ -116,17 +115,19 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
   } = useMemoryTyping({
     referenceText: selectedReference
   });
-
-  // Sync internal and external state
+  
+  // For debugging
   useEffect(() => {
-    if (userInput !== undefined) {
-      internalHandleInputChange({ target: { value: userInput } });
-    }
-  }, [userInput, internalHandleInputChange]);
+    console.log('Ghost text:', ghostText);
+    console.log('Last correct index:', lastCorrectIndex);
+  }, [ghostText, lastCorrectIndex]);
 
+  
   // Handle input change bridging between props and hook
   const handleInputChange = (e) => {
+    // First update the internal state in the hook
     internalHandleInputChange(e);
+    // Then propagate the change to the parent component
     if (onInputChange) {
       onInputChange(e);
     }
@@ -161,7 +162,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         {/* Typing area */}
         <div className="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl relative note-paper shadow-md transition-all duration-300">
           <div className="font-mono whitespace-pre-wrap text-gray-800 dark:text-gray-200 min-h-[100px]">
-            <ColoredTextDisplay userInput={userInput} referenceText={selectedReference} />
+            <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} />
             
             {/* Position the caret relative to character width */}
             {isTextareaFocused && (
@@ -178,7 +179,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
           <textarea 
             ref={textareaRef}
             className="absolute inset-0 w-full h-full opacity-0 p-4 resize-none rounded-xl"
-            value={userInput}
+            value={internalUserInput}
             onChange={handleInputChange}
             autoFocus
             disabled={isComplete}
@@ -211,7 +212,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
                 whileTap={{ scale: 0.98 }}
                 className="px-4 py-2 leather-button text-white font-medium rounded-lg shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleBackToLastCorrect}
-                disabled={lastCorrectIndex === userInput.length}
+                disabled={lastCorrectIndex === internalUserInput.length}  // Changed from userInput to internalUserInput
               >
                 Back to Last Correct
               </motion.button>
