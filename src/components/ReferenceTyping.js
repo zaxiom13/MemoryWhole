@@ -151,37 +151,42 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
             value={userInput}
             onChange={handleInputChange}
             autoFocus
+            disabled={isComplete}
             onFocus={() => setIsTextareaFocused(true)}
             onBlur={() => setIsTextareaFocused(false)}
           />
         </div>
       </div>
-      <div className="flex gap-2 mt-4">
-        <button 
-          className="px-4 py-2 bg-gray-500 text-white rounded shadow hover:bg-gray-600 transition"
-          onClick={onBack}
-        >
-          Back
-        </button>
-        {hasMistakes() && (
-          <button 
-            className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
-            onClick={handleBackToLastCorrect}
-            disabled={lastCorrectIndex === userInput.length}
-          >
-            Back to Last Correct
-          </button>
-        )}
-      </div>
-      {!isReferenceOpen && (
-        <div className="w-full mt-2">
-          <button
-            className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
-            onClick={handleShowReferenceClick}
-          >
-            Show Reference
-          </button>
-        </div>
+      {!isComplete && (
+        <>
+          <div className="flex gap-2 mt-4">
+            <button 
+              className="px-4 py-2 bg-gray-500 text-white rounded shadow hover:bg-gray-600 transition"
+              onClick={onBack}
+            >
+              Back
+            </button>
+            {hasMistakes() && (
+              <button 
+                className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+                onClick={handleBackToLastCorrect}
+                disabled={lastCorrectIndex === userInput.length}
+              >
+                Back to Last Correct
+              </button>
+            )}
+          </div>
+          {!isReferenceOpen && (
+            <div className="w-full mt-2">
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
+                onClick={handleShowReferenceClick}
+              >
+                Show Reference
+              </button>
+            </div>
+          )}
+        </>
       )}
       {isReferenceOpen && (
         <div className="mt-2 p-2 border rounded select-none">

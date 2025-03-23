@@ -68,6 +68,7 @@ export default function App() {
   const handleTypingBack = () => {
     setUserInput('');
     setStep(2);
+    setIsComplete(false);
     window.startTime = null;
   };
 
