@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { formatDate } from '../utils/memoryUtils';
 import Card from '../models/Card';
+import BatchUploadPage from './BatchUploadPage';
 
 /**
  * Card form component for creating/editing cards
@@ -44,12 +45,14 @@ function CardForm({ card, onSubmit, onCancel }) {
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           {card && card.id ? 'Edit Card' : 'Create New Card'}
         </h2>
-        <button 
-          onClick={onCancel}
-          className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
-        >
-          Cancel
-        </button>
+        <div className="flex space-x-2">
+          <button 
+            onClick={onCancel}
+            className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -164,12 +167,17 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           Choose a passage to practice your memory
         </h2>
-        <button 
-          onClick={onCreateCard}
-          className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
-        >
-          New Card
-        </button>
+        <div>
+          <button 
+            onClick={onCreateCard}
+            className="p-2 leather-button rounded-full transition-all duration-300 flex items-center justify-center"
+            title="Add New Card"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        </div>
       </div>
       <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
         <div className="grid grid-cols-1 gap-6 mt-6">
@@ -202,12 +210,44 @@ function HomePage({
   onCreateNewCard,
   onCancelEdit
 }) {
+  const [showBatchUpload, setShowBatchUpload] = useState(false);
+  const [showCardForm, setShowCardForm] = useState(false);
+
   const handleFormSubmit = (formData) => {
     if (editingCard && editingCard.id) {
       onUpdateCard({ ...editingCard, ...formData });
     } else {
       onCreateNewCard(formData);
     }
+    setShowCardForm(false);
+  };
+
+  const handleBatchUpload = () => {
+    setShowBatchUpload(true);
+    setShowCardForm(false);
+  };
+
+  const handleBatchCancel = () => {
+    setShowBatchUpload(false);
+    setShowCardForm(true);
+  };
+
+  const handleCreateCards = (cardsData) => {
+    // Create multiple cards from the batch data
+    cardsData.forEach(cardData => {
+      onCreateNewCard(cardData);
+    });
+    setShowBatchUpload(false);
+    setShowCardForm(false);
+  };
+
+  const handleCreateCard = () => {
+    setShowCardForm(true);
+  };
+
+  const handleCancelCreate = () => {
+    setShowCardForm(false);
+    onCancelEdit();
   };
 
   if (editingCard !== null) {
@@ -220,11 +260,84 @@ function HomePage({
     );
   }
 
+  if (showBatchUpload) {
+    return (
+      <BatchUploadPage 
+        onCreateCards={handleCreateCards}
+        onCancel={handleBatchCancel}
+      />
+    );
+  }
+
+  if (showCardForm) {
+    return (
+      <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
+        <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+            Create New Card
+          </h2>
+          <div className="flex space-x-2">
+            <button 
+              onClick={handleBatchUpload}
+              className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+              title="Upload multiple cards from JSON"
+            >
+              Batch Upload
+            </button>
+            <button 
+              onClick={handleCancelCreate}
+              className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+        
+        <form onSubmit={(e) => { e.preventDefault(); handleFormSubmit({ title: e.target.title.value, text: e.target.text.value }); }} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              placeholder="Card Title"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="text">
+              Text
+            </label>
+            <textarea
+              id="text"
+              name="text"
+              rows="10"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              placeholder="Card Content"
+            ></textarea>
+          </div>
+          
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            >
+              Create Card
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <CardList
       cards={cards}
       onSelectReference={onSelectReference}
-      onCreateCard={onCreateCard}
+      onCreateCard={handleCreateCard}
       onEditCard={onEditCard}
       onDeleteCard={onDeleteCard}
     />
