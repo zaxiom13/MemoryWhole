@@ -54,8 +54,6 @@
 /* Paper Background Styles */
 .note-paper {
   @apply bg-white/90 dark:bg-gray-800/90;
-  background-image: 
-    linear-gradient(#eee 0.1em, transparent 0.1em);
   background-size: 100% 1.2em;
   background-position-y: 0.5em;
 }
@@ -72,8 +70,6 @@
 
 /* Dark Mode Enhancements */
 .dark .note-paper {
-  background-image: 
-    linear-gradient(#333 0.1em, transparent 0.1em);
 }
 
 .dark .leather-card {
