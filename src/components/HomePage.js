@@ -48,7 +48,7 @@ function CardForm({ card, onSubmit, onCancel }) {
         <div className="flex space-x-2">
           <button 
             onClick={onCancel}
-            className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+            className="leather-button px-4 py-2"
           >
             Cancel
           </button>
@@ -66,7 +66,7 @@ function CardForm({ card, onSubmit, onCancel }) {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+            className="enhanced-input"
             placeholder="Card Title"
           />
         </div>
@@ -81,7 +81,7 @@ function CardForm({ card, onSubmit, onCancel }) {
             value={formData.text}
             onChange={handleChange}
             rows="10"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+            className="enhanced-textarea"
             placeholder="Card Content"
           ></textarea>
         </div>
@@ -89,7 +89,7 @@ function CardForm({ card, onSubmit, onCancel }) {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            className="leather-button py-2 px-6"
           >
             {card && card.id ? 'Update Card' : 'Create Card'}
           </button>
@@ -107,15 +107,15 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="leather-card p-8 h-[280px] flex flex-col cursor-pointer relative group"
+      className="leather-card p-8 h-[280px] flex flex-col cursor-pointer relative group hover:shadow-lg"
     >
       <div 
-        className="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        className="absolute top-4 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={() => onEdit(card)}
-          className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2 rounded-full transition-all duration-300"
+          className="leather-button p-2 rounded-full"
           title="Edit Card"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,7 +128,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
               onDelete(card.id);
             }
           }}
-          className="bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/40 p-2 rounded-full transition-all duration-300"
+          className="leather-button p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/40"
           title="Delete Card"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,12 +136,12 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           </svg>
         </button>
       </div>
-      <h3 className="text-1xl font-semibold mb-3 text-gray-800 dark:text-gray-100 pr-20 h-[3rem] overflow-hidden text-ellipsis whitespace-nowrap">
+      <h3 className="text-1xl font-semibold mb-1 text-gray-800 dark:text-gray-100 pr-0 h-[3rem] w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap">
         {card.title}
       </h3>
       <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">
-          {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 30) + '...'}
+          {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 70) + '...'}
         </p>
       </div>
       <div className="mt-2 flex justify-between items-center">
@@ -172,7 +172,7 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
         <div>
           <button 
             onClick={onCreateCard}
-            className="p-2 leather-button rounded-full transition-all duration-300 flex items-center justify-center"
+            className="leather-button p-2 rounded-full flex items-center justify-center"
             title="Add New Card"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -281,7 +281,7 @@ function HomePage({
           <div className="flex space-x-2">
             <button 
               onClick={handleBatchUpload}
-              className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+              className="leather-button px-4 py-2"
               title="Upload multiple cards from JSON"
             >
               Batch Upload

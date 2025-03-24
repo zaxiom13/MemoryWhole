@@ -8,6 +8,7 @@ import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
 import { loadPreference, savePreference, savePersonalBestTime } from './utils/memoryUtils';
 import './styles/modern.css';
+import './styles/ui-enhancements.css';
 
 // Application state management
 export default function App() {

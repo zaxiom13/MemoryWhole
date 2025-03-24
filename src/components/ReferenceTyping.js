@@ -19,7 +19,7 @@ function CharacterDisplay({ char, isCorrect, isSpace }) {
   }
   
   return (
-    <span className={isCorrect ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
+    <span className={isCorrect ? 'character-correct' : 'character-incorrect'}>
       {char || ''}
     </span>
   );
@@ -160,7 +160,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         </div>
         
         {/* Typing area */}
-        <div className="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl relative note-paper shadow-md transition-all duration-300">
+        <div className="typing-area w-full p-4 relative">
           <div className="font-mono whitespace-pre-wrap text-gray-800 dark:text-gray-200 min-h-[100px]">
             <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} />
             
@@ -197,7 +197,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
             <motion.button 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className="px-4 py-2 leather-button rounded-lg transition-colors duration-300 flex items-center"
+              className="leather-button px-4 py-2 flex items-center"
               onClick={onBack}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -225,7 +225,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full px-4 py-3 leather-button text-white font-medium rounded-lg shadow-md transition-all duration-300 flex items-center justify-center"
+                className="leather-button w-full px-4 py-3 flex items-center justify-center"
                 onClick={handleShowReferenceClick}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { loadPersonalBestTimes, formatTime, formatDate } from '../utils/memoryUtils';
 
@@ -76,7 +76,7 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
           <motion.button 
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="px-5 py-2 leather-button text-white font-medium rounded-lg transition-all duration-300"
+            className="leather-button px-5 py-2"
             onClick={onBegin}
           >
             Begin Test
