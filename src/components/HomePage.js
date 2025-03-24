@@ -182,7 +182,7 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
         </div>
       </div>
       <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-8">
           {cards.map((card) => (
             <CardItem 
               key={card.id}
