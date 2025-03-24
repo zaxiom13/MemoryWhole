@@ -107,10 +107,10 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="leather-card p-6 rounded-lg h-[220px] flex flex-col cursor-pointer transition-all duration-300 relative"
+      className="leather-card p-8 h-[280px] flex flex-col cursor-pointer relative group"
     >
       <div 
-        className="absolute top-3 right-3 flex space-x-2"
+        className="absolute top-4 right-4 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -136,10 +136,10 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           </svg>
         </button>
       </div>
-      <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100 pr-16">{card.title}</h3>
-      <div className="flex-grow note-paper p-3 rounded-lg">
+      <h3 className="text-1xl font-semibold mb-3 text-gray-800 dark:text-gray-100 pr-20">{card.title}</h3>
+      <div className="flex-grow note-paper p-4 rounded-xl mt-2">
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
-          {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 150) + '...'}
+          {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 100) + '...'}
         </p>
       </div>
       <div className="mt-2 flex justify-between items-center">
@@ -148,7 +148,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
         </div>
         <button
           onClick={() => onSelect(card.text)}
-          className="px-3 py-1 leather-button rounded-lg text-sm transition-all duration-300"
+          className="px-4 py-2 leather-button text-sm font-medium hover:scale-105 transform transition-transform duration-200"
         >
           Study
         </button>
@@ -180,7 +180,7 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
         </div>
       </div>
       <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
-        <div className="grid grid-cols-1 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {cards.map((card) => (
             <CardItem 
               key={card.id}

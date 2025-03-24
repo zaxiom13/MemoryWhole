@@ -48,7 +48,7 @@ class Card {
    * @param {number} length - Maximum length of preview
    * @returns {string} Text preview
    */
-  getPreview(length = 150) {
+  getPreview(length = 100) {
     const firstLine = this.text.split('\n')[0];
     if (firstLine.length <= length) {
       return firstLine;
