@@ -136,11 +136,11 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           </svg>
         </button>
       </div>
-      <h3 className="text-1xl font-semibold mb-3 text-gray-800 dark:text-gray-100 pr-20 h-[3rem] overflow-hidden">
-        {card.title.length > 30 ? card.title.substring(0, 10) + '...' : card.title}
+      <h3 className="text-1xl font-semibold mb-3 text-gray-800 dark:text-gray-100 pr-20 h-[3rem] overflow-hidden text-ellipsis whitespace-nowrap">
+        {card.title}
       </h3>
       <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
-        <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
+        <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">
           {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 30) + '...'}
         </p>
       </div>
