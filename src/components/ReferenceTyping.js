@@ -144,7 +144,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         {/* Timer display */}
         <div className="mb-3 text-right">
           <motion.div 
-            className="inline-block font-mono text-lg font-semibold px-4 py-1 note-paper rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
+            className="inline-block font-mono text-lg font-semibold px-4 py-1 note-paper rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm text-gray-900 dark:text-gray-100"
             animate={{ 
               scale: [1, 1.02, 1],
             }}
