@@ -1,11 +1,10 @@
 import { useState } from 'react';
-/**
- * BatchUploadPage component for creating multiple cards from JSON
- */
+
 function BatchUploadPage({ onCreateCards, onCancel }) {
   const [jsonInput, setJsonInput] = useState('');
   const [error, setError] = useState('');
   const [preview, setPreview] = useState(null);
+  const [prompt, setPrompt] = useState('');
 
   // Handle JSON input change
   const handleInputChange = (e) => {
@@ -71,6 +70,28 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
     onCreateCards(preview);
   };
 
+  const handleGenerateWithAI = () => {
+    // Hardcoded response for demonstration
+    const mockAIResponse = [
+      {
+        "title": "Ancient Rome",
+        "text": "The Roman Empire was one of the largest and most influential civilizations in world history."
+      },
+      {
+        "title": "Renaissance Art",
+        "text": "The Renaissance period marked a great revival of classical learning and wisdom after the Middle Ages."
+      },
+      {
+        "title": "Industrial Revolution",
+        "text": "A period of major industrialization that transformed largely rural societies into industrial ones."
+      }
+    ];
+
+    setJsonInput(JSON.stringify(mockAIResponse, null, 2));
+    setError('');
+    setPreview(null);
+  };
+
   return (
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
@@ -86,6 +107,29 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="prompt">
+            AI Prompt
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              id="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="shadow appearance-none border rounded flex-1 py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter a prompt for AI generation..."
+            />
+            <button
+              type="button"
+              onClick={handleGenerateWithAI}
+              className="leather-button font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            >
+              Generate with AI
+            </button>
+          </div>
+        </div>
+
         <div>
           <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="jsonInput">
             JSON Data
