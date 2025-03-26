@@ -1,6 +1,6 @@
 // useMemoryTyping.js - Custom hook for managing memory typing state
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { hasMistakes, findLastCorrectIndex, normalizeWhitespace } from '../utils/memoryUtils';
+import { hasMistakes, findLastCorrectIndex } from '../utils/memoryUtils';
 
 /**
  * Custom hook that manages memory typing state and logic
@@ -37,7 +37,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
         const refChar = refChars[i] || '';
         
         // Skip punctuation in reference text
-        if (/[.,;:!?"'\[\](){}\-–—]/.test(refChar)) {
+        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
           continue;
         }
         
@@ -68,7 +68,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
         const refChar = refChars[i] || '';
         
         // Skip punctuation in reference text
-        if (/[.,;:!?"'\[\](){}\-–—]/.test(refChar)) {
+        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
           index = i + 1;
           continue;
         }
@@ -99,7 +99,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
         const refChar = refChars[i];
         
         // Skip punctuation in reference text
-        if (/[.,;:!?"'\[\](){}\-–—]/.test(refChar)) {
+        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
           continue;
         }
         
@@ -173,7 +173,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
     if (easyMode && newValue.length > oldValue.length) {
       // Check if the last character typed is punctuation
       const lastCharTyped = newValue[newValue.length - 1];
-      if (/[.,;:!?"'\[\](){}\-–—]/.test(lastCharTyped)) {
+      if (/[.,;:!?"'[\](){}\-–—]/.test(lastCharTyped)) {
         // Ignore the punctuation keystroke by reverting to previous value
         newValue = oldValue;
       }
@@ -186,7 +186,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
         oldValue.length > 1) {
       // Check if the last character was punctuation
       const lastChar = oldValue[oldValue.length - 1];
-      if (/[.,;:!?"'\[\](){}\-–—]/.test(lastChar)) {
+      if (/[.,;:!?"'[\](){}\-–—]/.test(lastChar)) {
         // Remove the character before the punctuation as well
         newValue = newValue.slice(0, -1);
       }
@@ -220,7 +220,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
       // Keep adding punctuation as long as the next character is punctuation
       while (
         nextIndex < normalizedReferenceText.length && 
-        /[.,;:!?"'\[\](){}\-–—]/.test(normalizedReferenceText[nextIndex])
+        /[.,;:!?"'[\](){}\-–—]/.test(normalizedReferenceText[nextIndex])
       ) {
         newValue += normalizedReferenceText[nextIndex];
         nextIndex++;

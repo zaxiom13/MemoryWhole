@@ -89,7 +89,7 @@ export function getCharacterCorrectness(userInput, reference, easyMode = false) 
       const refChar = reference[index] ? reference[index].toLowerCase() : '';
       
       // Check if it's punctuation in the reference that we should auto-handle
-      const isPunctuation = /[.,;:!?"'\[\](){}\-–—]/.test(refChar);
+      const isPunctuation = /[.,;:!?"'[\](){}\-–—]/.test(refChar);
       
       // Character is correct if:
       // 1. It matches exactly (ignoring case), or

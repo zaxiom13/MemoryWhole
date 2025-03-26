@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import useMemoryTyping from '../hooks/useMemoryTyping';
-import { formatTime, getCharacterCorrectness, normalizeWhitespace } from '../utils/memoryUtils';
+import { formatTime, getCharacterCorrectness } from '../utils/memoryUtils';
 
 /**
  * Character display component for colored text
@@ -94,7 +94,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
 /**
  * Main reference typing component
  */
-export default function ReferenceTyping({ userInput, selectedReference, onInputChange, onBack, isComplete, easyMode = false }) {
+export default function ReferenceTyping({  selectedReference, onInputChange, onBack, isComplete, easyMode = false }) {
   // State to track textarea focus
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
 

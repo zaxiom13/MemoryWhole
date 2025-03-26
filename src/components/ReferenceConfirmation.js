@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { loadPersonalBestTimes, formatTime, formatDate, loadPreference, savePreference } from '../utils/memoryUtils';
+import { loadPersonalBestTimes, formatTime, formatDate, savePreference } from '../utils/memoryUtils';
 
 /**
  * ReferenceConfirmation component - displays the selected reference text
