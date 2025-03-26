@@ -6,7 +6,7 @@ import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
-import { loadPreference, savePreference, savePersonalBestTime } from './utils/memoryUtils';
+import { loadPreference, savePreference, savePersonalBestTime, normalizeWhitespace } from './utils/memoryUtils';
 import './styles/modern.css';
 import './styles/ui-enhancements.css';
 
@@ -28,6 +28,7 @@ export default function App() {
   const [isComplete, setIsComplete] = useState(false);
   const [completionTime, setCompletionTime] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+  const [easyMode, setEasyMode] = useState(false);
 
   // Set initial step based on tutorial completion
   useEffect(() => {
@@ -35,10 +36,12 @@ export default function App() {
     setStep(tutorialComplete ? 1 : 0);
   }, []);
 
-  // Load dark mode preference
+  // Load dark mode and easy mode preferences
   useEffect(() => {
     const savedDarkMode = loadPreference('darkMode', false);
+    const savedEasyMode = loadPreference('easyMode', false);
     setDarkMode(savedDarkMode);
+    setEasyMode(savedEasyMode);
   }, []);
 
   // Apply dark mode to document
@@ -46,6 +49,11 @@ export default function App() {
     document.documentElement.classList.toggle('dark', darkMode);
     savePreference('darkMode', darkMode);
   }, [darkMode]);
+  
+  // Save easy mode preference when it changes
+  useEffect(() => {
+    savePreference('easyMode', easyMode);
+  }, [easyMode]);
 
   // Input change handler
   const handleInputChange = (e) => {
@@ -69,7 +77,9 @@ export default function App() {
 
   // Reference selection handler
   const handleSelectReference = (text) => {
-    setSelectedReference(text);
+    // Normalize the reference text at the earliest point
+    const normalizedText = normalizeWhitespace(text);
+    setSelectedReference(normalizedText);
     setUserInput('');
     setStep(2);
   };
@@ -97,24 +107,43 @@ export default function App() {
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
   };
+  
+  // Easy mode toggle
+  const toggleEasyMode = () => {
+    const newEasyMode = !easyMode;
+    setEasyMode(newEasyMode);
+    savePreference('easyMode', newEasyMode);
+  };
 
   return (
     <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
-      <button 
-        onClick={toggleDarkMode}
-        className={`fixed top-4 right-4 p-2 rounded-full z-50 transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-blue-100 text-blue-800'}`}
-        aria-label="Toggle dark mode"
-      >
-        {darkMode ? (
+      <div className="fixed top-4 right-4 flex gap-2 z-50">
+        <button 
+          onClick={toggleEasyMode}
+          className={`p-2 rounded-full transition-colors duration-300 ${easyMode ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
+          aria-label="Toggle easy mode"
+          title={easyMode ? "Easy Mode: On" : "Easy Mode: Off"}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-        )}
-      </button>
+        </button>
+        <button 
+          onClick={toggleDarkMode}
+          className={`p-2 rounded-full transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-blue-100 text-blue-800'}`}
+          aria-label="Toggle dark mode"
+        >
+          {darkMode ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          )}
+        </button>
+      </div>
       <AnimatePresence>
         {step === 0 ? (
           <TutorialGuide onComplete={() => {
@@ -167,6 +196,7 @@ export default function App() {
                   onInputChange={handleInputChange}
                   onBack={handleReturnToMenu}
                   isComplete={isComplete}
+                  easyMode={easyMode}
                 />
               )}
               

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { formatDate } from '../utils/memoryUtils';
+import { formatDate, normalizeWhitespace } from '../utils/memoryUtils';
 import Card from '../models/Card';
 import BatchUploadPage from './BatchUploadPage';
 
@@ -141,7 +141,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
       </h3>
       <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">
-          {card instanceof Card ? card.getPreview() : card.text.split('\n')[0].substring(0, 70) + '...'}
+          {card instanceof Card ? card.getPreview() : normalizeWhitespace(card.text).substring(0, 70) + '...'}
         </p>
       </div>
       <div className="mt-2 flex justify-between items-center">
@@ -149,7 +149,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           {` · Last modified: ${formatDate(card.updatedAt || card.createdAt)}`}
         </div>
         <button
-          onClick={() => onSelect(card.text)}
+          onClick={() => onSelect(normalizeWhitespace(card.text))}
           className="px-4 py-2 leather-button text-sm font-medium hover:scale-105 transform transition-transform duration-200"
         >
           Study

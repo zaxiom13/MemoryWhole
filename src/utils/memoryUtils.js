@@ -1,6 +1,20 @@
 // memoryUtils.js - Pure utility functions for the Memory Whole app
 
 /**
+ * Normalize whitespace in text by removing newlines and trimming multiple spaces to single spaces
+ * @param {string} text - Text to normalize
+ * @returns {string} Normalized text
+ */
+export function normalizeWhitespace(text) {
+  if (!text) return '';
+  // Replace all newlines with spaces
+  let normalized = text.replace(/\n/g, ' ');
+  // Replace multiple spaces with a single space
+  normalized = normalized.replace(/\s+/g, ' ');
+  return normalized;
+}
+
+/**
  * Format seconds into MM:SS time format
  * @param {number} seconds - Seconds to format
  * @returns {string} Formatted time string (MM:SS)
@@ -61,23 +75,44 @@ export function findLastCorrectIndex(userInput, reference) {
  * Compare input and reference to get character-by-character correctness
  * @param {string} userInput - User's typed input
  * @param {string} reference - Reference text
+ * @param {boolean} easyMode - Whether easy mode is enabled
  * @returns {Array<{char: string, isCorrect: boolean}>} Array of characters with correctness
  */
-export function getCharacterCorrectness(userInput, reference) {
+export function getCharacterCorrectness(userInput, reference, easyMode = false) {
   let mistakeFound = false;
   return userInput.split('').map((char, index) => {
-    if (!mistakeFound && reference[index] !== char) {
+    // In easy mode, we ignore case and punctuation
+    let isCharCorrect = false;
+    if (easyMode) {
+      // Ignore case by converting both to lowercase
+      const userChar = char.toLowerCase();
+      const refChar = reference[index] ? reference[index].toLowerCase() : '';
+      
+      // Check if it's punctuation in the reference that we should auto-handle
+      const isPunctuation = /[.,;:!?"'\[\](){}\-–—]/.test(refChar);
+      
+      // Character is correct if:
+      // 1. It matches exactly (ignoring case), or
+      // 2. It's a punctuation mark in the reference (we auto-handle it)
+      isCharCorrect = !mistakeFound && (userChar === refChar || isPunctuation);
+    } else {
+      // Normal mode - exact match required
+      isCharCorrect = !mistakeFound && reference[index] === char;
+    }
+    
+    // If this character is wrong and we haven't found a mistake yet, mark it
+    if (!mistakeFound && !isCharCorrect) {
       mistakeFound = true;
     }
-    const isCorrect = !mistakeFound && reference[index] === char;
     
     return {
       char,
-      isCorrect,
+      isCorrect: isCharCorrect,
       isSpace: char === ' '
     };
   });
 }
+
 
 /**
  * Load cards from localStorage
@@ -154,6 +189,7 @@ export function savePreference(key, value) {
  */
 export function savePersonalBestTime(referenceText, completionTime) {
   try {
+    // The reference text is already normalized at this point
     // Create a unique key based on the first 50 characters of the reference text
     const referenceKey = `personalBest_${referenceText.substring(0, 50).replace(/\s+/g, '_')}`;
     
@@ -186,6 +222,7 @@ export function savePersonalBestTime(referenceText, completionTime) {
  */
 export function loadPersonalBestTimes(referenceText) {
   try {
+    // The reference text is already normalized at this point
     // Create a unique key based on the first 50 characters of the reference text
     const referenceKey = `personalBest_${referenceText.substring(0, 50).replace(/\s+/g, '_')}`;
     

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import useMemoryTyping from '../hooks/useMemoryTyping';
-import { formatTime, getCharacterCorrectness } from '../utils/memoryUtils';
+import { formatTime, getCharacterCorrectness, normalizeWhitespace } from '../utils/memoryUtils';
 
 /**
  * Character display component for colored text
@@ -28,8 +28,9 @@ function CharacterDisplay({ char, isCorrect, isSpace }) {
 /**
  * Text display with character coloring
  */
-function ColoredTextDisplay({ userInput, referenceText }) {
-  const characterData = getCharacterCorrectness(userInput, referenceText);
+function ColoredTextDisplay({ userInput, referenceText, easyMode }) {
+  // The reference text is already normalized at this point
+  const characterData = getCharacterCorrectness(userInput, referenceText, easyMode);
   
   return (
     <>
@@ -93,7 +94,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
 /**
  * Main reference typing component
  */
-export default function ReferenceTyping({ userInput, selectedReference, onInputChange, onBack, isComplete }) {
+export default function ReferenceTyping({ userInput, selectedReference, onInputChange, onBack, isComplete, easyMode = false }) {
   // State to track textarea focus
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
 
@@ -113,7 +114,8 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
     handleConfirmShowReference,
     handleCancelShowReference
   } = useMemoryTyping({
-    referenceText: selectedReference
+    referenceText: selectedReference,
+    easyMode: easyMode
   });
   
   // For debugging
@@ -162,7 +164,7 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
         {/* Typing area */}
         <div className="typing-area w-full p-4 relative">
           <div className="font-mono whitespace-pre-wrap text-gray-800 dark:text-gray-200 min-h-[100px]">
-            <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} />
+            <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} easyMode={easyMode} />
             
             {/* Position the caret relative to character width */}
             {isTextareaFocused && (
@@ -246,13 +248,27 @@ export default function ReferenceTyping({ userInput, selectedReference, onInputC
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-lg mt-4 p-4 border border-yellow-300 dark:border-yellow-600 rounded-xl note-paper shadow-md transition-all duration-300"
         >
+          {easyMode && (
+            <div className="mb-3 p-2 bg-green-100 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center text-green-700 dark:text-green-400 mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Easy Mode Enabled</span>
+              </div>
+              <p className="text-sm text-green-600 dark:text-green-500">
+                Punctuation is automatically handled and case is ignored for easier typing.  
+              </p>
+            </div>
+          )}
           <div className="flex items-center mb-2 text-yellow-700 dark:text-yellow-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
             <span className="font-medium">Reference Text:</span>
           </div>
-          <p className="text-gray-700 dark:text-gray-300 select-none whitespace-pre-wrap leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-300 select-none leading-relaxed">
+            {/* Display the normalized reference text */}
             {selectedReference}
           </p>
         </motion.div>

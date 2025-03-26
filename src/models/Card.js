@@ -1,4 +1,5 @@
 // Card.js - Data model for memory cards
+import { normalizeWhitespace } from '../utils/memoryUtils';
 
 /**
  * Represents a memory card in the system
@@ -49,11 +50,11 @@ class Card {
    * @returns {string} Text preview
    */
   getPreview(length = 70) {
-    const firstLine = this.text.split('\n')[0];
-    if (firstLine.length <= length) {
-      return firstLine;
+    const normalizedText = normalizeWhitespace(this.text);
+    if (normalizedText.length <= length) {
+      return normalizedText;
     }
-    return firstLine.substring(0, length) + '...';
+    return normalizedText.substring(0, length) + '...';
   }
 
   /**
@@ -71,4 +72,4 @@ class Card {
   }
 }
 
-export default Card; 
+export default Card;
