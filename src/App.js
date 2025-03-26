@@ -60,6 +60,22 @@ export default function App() {
     const newValue = e.target.value;
     setUserInput(newValue);
     
+    // In easy mode, if the last char of reference is punctuation, thenwhen newvalue length is 
+    // one less than selected reference then mark as complete
+    if (easyMode && selectedReference && selectedReference.length > 0 &&
+        newValue.length === selectedReference.length - 1 &&
+        newValue === selectedReference.slice(0, -1)) {
+          setIsComplete(true);
+          // Get the base completion time
+          const baseTime = Math.floor((Date.now() - window.startTime) / 1000 );
+
+          // Set the total completion time (base time includes penalties already due to startTime adjustment    
+          //  
+          setCompletionTime(baseTime);
+          savePersonalBestTime(selectedReference, baseTime);
+          // ,    
+        }
+
     if (newValue.length === selectedReference.length && 
         newValue === selectedReference) {
       setIsComplete(true);
