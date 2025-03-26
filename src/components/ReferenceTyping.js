@@ -94,7 +94,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
 /**
  * Main reference typing component
  */
-export default function ReferenceTyping({  selectedReference, onInputChange, onBack, isComplete, easyMode = false }) {
+export default function ReferenceTyping({  selectedReference, onInputChange, onBack, isComplete, easyMode = false, onReferenceExposed }) {
   // State to track textarea focus
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
 
@@ -132,6 +132,16 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
     // Then propagate the change to the parent component
     if (onInputChange) {
       onInputChange(e);
+    }
+  };
+  
+  // Override the handleConfirmShowReference to notify parent component
+  const handleConfirmShowReferenceWithCallback = () => {
+    // Call the hook's implementation
+    handleConfirmShowReference();
+    // Notify parent component that reference was exposed
+    if (onReferenceExposed) {
+      onReferenceExposed();
     }
   };
 
@@ -292,7 +302,7 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
       {/* Reference Text Confirmation Modal */}
       <ReferenceTextModal 
         isOpen={isConfirmationOpen}
-        onConfirm={handleConfirmShowReference}
+        onConfirm={handleConfirmShowReferenceWithCallback}
         onCancel={handleCancelShowReference}
       />
     </motion.div>

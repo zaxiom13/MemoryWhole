@@ -55,16 +55,23 @@ export default function App() {
     savePreference('easyMode', easyMode);
   }, [easyMode]);
 
+  // State to track if reference was exposed during the test
+  const [referenceExposed, setReferenceExposed] = useState(false);
+
   // Input change handler
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setUserInput(newValue);
+
+    // is last char of reference is punctuation
+    const lastChar = selectedReference && selectedReference.length > 0 ? selectedReference.charAt(selectedReference.length - 1) : null;
+    const isPunctuation = lastChar && /[.,?!]/.test(lastChar);
     
     // In easy mode, if the last char of reference is punctuation, thenwhen newvalue length is 
     // one less than selected reference then mark as complete
     if (easyMode && selectedReference && selectedReference.length > 0 &&
         newValue.length === selectedReference.length - 1 &&
-        newValue === selectedReference.slice(0, -1)) {
+        newValue === selectedReference.slice(0, -1) && isPunctuation) {
           setIsComplete(true);
           // Get the base completion time
           const baseTime = Math.floor((Date.now() - window.startTime) / 1000 );
@@ -72,7 +79,8 @@ export default function App() {
           // Set the total completion time (base time includes penalties already due to startTime adjustment    
           //  
           setCompletionTime(baseTime);
-          savePersonalBestTime(selectedReference, baseTime);
+          // Pass easyMode parameter to savePersonalBestTime
+          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
           // ,    
         }
 
@@ -86,8 +94,8 @@ export default function App() {
       // so we don't need to add penalties here)
       setCompletionTime(baseTime);
       
-      // Save the personal best time
-      savePersonalBestTime(selectedReference, baseTime);
+      // Save the personal best time with easyMode information and referenceExposed flag
+      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
     }
   };
 
@@ -105,6 +113,7 @@ export default function App() {
     setUserInput('');
     setStep(2);
     setIsComplete(false);
+    setReferenceExposed(false); // Reset reference exposed flag
     window.startTime = null;
     // Reset time penalty when trying again
     localStorage.setItem('timePenalty', '0');
@@ -115,6 +124,7 @@ export default function App() {
     setStep(1);
     setIsComplete(false);
     setUserInput('');
+    setReferenceExposed(false); // Reset reference exposed flag
     // Reset time penalty when returning to menu
     localStorage.setItem('timePenalty', '0');
   };
@@ -187,6 +197,7 @@ export default function App() {
                   selectedReference={selectedReference}
                   onBegin={() => {
                     setStep(3);
+                    setReferenceExposed(false); // Reset reference exposed flag
                     window.startTime = Date.now();
                     // Reset time penalty when beginning a new test
                     localStorage.setItem('timePenalty', '0');
@@ -205,6 +216,7 @@ export default function App() {
                   onBack={handleReturnToMenu}
                   isComplete={isComplete}
                   easyMode={easyMode}
+                  onReferenceExposed={() => setReferenceExposed(true)}
                 />
               )}
               

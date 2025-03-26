@@ -186,8 +186,10 @@ export function savePreference(key, value) {
  * Save a personal best time for a reference text
  * @param {string} referenceText - The reference text
  * @param {number} completionTime - The completion time in seconds
+ * @param {boolean} easyMode - Whether easy mode was used (optional, defaults to false)
+ * @param {boolean} referenceExposed - Whether reference text was exposed (optional, defaults to false)
  */
-export function savePersonalBestTime(referenceText, completionTime) {
+export function savePersonalBestTime(referenceText, completionTime, easyMode = false, referenceExposed = false) {
   try {
     // The reference text is already normalized at this point
     // Create a unique key based on the first 50 characters of the reference text
@@ -196,10 +198,12 @@ export function savePersonalBestTime(referenceText, completionTime) {
     // Get existing best times or initialize empty array
     const existingTimes = loadPersonalBestTimes(referenceText);
     
-    // Add new time
+    // Add new time with additional information
     existingTimes.push({
       time: completionTime,
-      date: Date.now()
+      date: Date.now(),
+      easyMode: easyMode,
+      referenceExposed: referenceExposed
     });
     
     // Sort by time (ascending)
