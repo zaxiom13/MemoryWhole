@@ -119,16 +119,6 @@ export default function App() {
     <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
       <div className="fixed top-4 right-4 flex gap-2 z-50">
         <button 
-          onClick={toggleEasyMode}
-          className={`p-2 rounded-full transition-colors duration-300 ${easyMode ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
-          aria-label="Toggle easy mode"
-          title={easyMode ? "Easy Mode: On" : "Easy Mode: Off"}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </button>
-        <button 
           onClick={toggleDarkMode}
           className={`p-2 rounded-full transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-blue-100 text-blue-800'}`}
           aria-label="Toggle dark mode"
@@ -186,6 +176,8 @@ export default function App() {
                     localStorage.setItem('timePenalty', '0');
                   }}
                   onBack={handleReturnToMenu}
+                  easyMode={easyMode}
+                  onToggleEasyMode={toggleEasyMode}
                 />
               )}
               
@@ -208,6 +200,7 @@ export default function App() {
                   onTryAgain={handleTypingBack}
                 />
               )}
+              
             </div>
           </motion.div>
         )}

@@ -169,6 +169,16 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
     let newValue = e.target.value;
     const oldValue = userInput;
     
+    // In easy mode, filter out punctuation characters that the user types
+    if (easyMode && newValue.length > oldValue.length) {
+      // Check if the last character typed is punctuation
+      const lastCharTyped = newValue[newValue.length - 1];
+      if (/[.,;:!?"'\[\](){}\-–—]/.test(lastCharTyped)) {
+        // Ignore the punctuation keystroke by reverting to previous value
+        newValue = oldValue;
+      }
+    }
+    
     // Handle special backspace case for punctuation in easy mode
     if (easyMode && 
         oldValue.length > newValue.length && 

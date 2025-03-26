@@ -1,13 +1,14 @@
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { loadPersonalBestTimes, formatTime, formatDate } from '../utils/memoryUtils';
+import { loadPersonalBestTimes, formatTime, formatDate, loadPreference, savePreference } from '../utils/memoryUtils';
 
 /**
  * ReferenceConfirmation component - displays the selected reference text
  * and allows user to start the memory test
  */
-export default function ReferenceConfirmation({ selectedReference, onBegin, onBack }) {
+export default function ReferenceConfirmation({ selectedReference, onBegin, onBack, easyMode, onToggleEasyMode }) {
   const [personalBestTimes, setPersonalBestTimes] = useState([]);
+  const [localEasyMode, setLocalEasyMode] = useState(easyMode);
 
   // Load personal best times when the component mounts or reference changes
   useEffect(() => {
@@ -15,7 +16,9 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
       const bestTimes = loadPersonalBestTimes(selectedReference);
       setPersonalBestTimes(bestTimes);
     }
-  }, [selectedReference]);
+    // Initialize local easy mode state from prop
+    setLocalEasyMode(easyMode);
+  }, [selectedReference, easyMode]);
 
   return (
     <motion.div 
@@ -63,6 +66,33 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
         <p className="mt-4 text-gray-600 dark:text-gray-400 italic">
           Take a moment to study this text. When ready, click "Begin" to test your recall.
         </p>
+        
+        {/* Easy Mode Toggle */}
+        <div className="mt-4 flex items-center">
+          <button 
+            onClick={() => {
+              const newEasyMode = !localEasyMode;
+              setLocalEasyMode(newEasyMode);
+              if (onToggleEasyMode) {
+                onToggleEasyMode(newEasyMode);
+              }
+              savePreference('easyMode', newEasyMode);
+            }}
+            className={`p-2 rounded-full transition-colors duration-300 ${localEasyMode ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
+            aria-label="Toggle easy mode"
+            title={localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </button>
+          <span className="ml-2 text-gray-700 dark:text-gray-300">
+            {localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
+          </span>
+          <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+            {localEasyMode ? "(Punctuation and case are handled automatically)" : "(Exact match required)"}
+          </div>
+        </div>
         
         <div className="flex justify-end gap-3 mt-6">
           <motion.button 
