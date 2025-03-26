@@ -1,4 +1,75 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .character-correct {
+    @apply inline-block text-green-600 dark:text-green-400;
+    animation: pop-animation 0.3s ease-out;
+  }
+
+  .character-incorrect {
+    @apply inline-block text-red-600 dark:text-red-400;
+  }
+
+  /* Special handling for incorrect spaces was done inline, 
+     but we can keep this consistent if needed later */
+  .incorrect-space {
+    @apply inline-block bg-red-500 bg-opacity-30;
+    width: 0.5em; 
+    height: 1em; 
+  }
+
+  /* Add the pop animation */
+  @keyframes pop-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  /* Blinking caret animation */
+  .animate-blink {
+    animation: blink-caret 1s step-end infinite;
+  }
+
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: currentColor; } /* Use currentColor to adapt to light/dark mode */
+  }
+
+  /* Wobble animation for incorrect input */
+  @keyframes wobble-animation {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-5px) rotate(-3deg); }
+    30% { transform: translateX(5px) rotate(3deg); }
+    45% { transform: translateX(-5px) rotate(-3deg); }
+    60% { transform: translateX(5px) rotate(3deg); }
+    75% { transform: translateX(-3px) rotate(-1deg); }
+    90% { transform: translateX(3px) rotate(1deg); }
+  }
+
+  .input-wobble {
+    animation: wobble-animation 0.5s ease-in-out;
+  }
+
+  /* Base styles for note-paper effect */
+  .note-paper {
+    @apply bg-gradient-to-br from-yellow-50 via-amber-50 to-yellow-100 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+    position: relative;
+    /* Add subtle texture or lines if desired */
+  }
+
+  /* Leather button style */
+  .leather-button {
+    @apply bg-gradient-to-br from-yellow-600 to-yellow-800 dark:from-yellow-700 dark:to-yellow-900 text-white font-medium shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 disabled:opacity-60 disabled:cursor-not-allowed;
+    /* Add subtle texture or grain effect if desired */
+    transition: all 0.2s ease-in-out;
+  }
+  .leather-button:hover {
+    @apply from-yellow-700 to-yellow-900 dark:from-yellow-800 dark:to-yellow-950;
+  }
+  .leather-button:active {
+    @apply shadow-inner scale-[0.98];
+  }
+}
