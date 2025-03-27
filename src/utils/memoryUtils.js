@@ -188,8 +188,9 @@ export function savePreference(key, value) {
  * @param {number} completionTime - The completion time in seconds
  * @param {boolean} easyMode - Whether easy mode was used (optional, defaults to false)
  * @param {boolean} referenceExposed - Whether reference text was exposed (optional, defaults to false)
+ * @param {boolean} ghostTextUsed - Whether ghost text assistance was used (optional, defaults to false)
  */
-export function savePersonalBestTime(referenceText, completionTime, easyMode = false, referenceExposed = false) {
+export function savePersonalBestTime(referenceText, completionTime, easyMode = false, referenceExposed = false, ghostTextUsed = false) {
   try {
     // The reference text is already normalized at this point
     // Create a unique key based on the first 50 characters of the reference text
@@ -203,7 +204,8 @@ export function savePersonalBestTime(referenceText, completionTime, easyMode = f
       time: completionTime,
       date: Date.now(),
       easyMode: easyMode,
-      referenceExposed: referenceExposed
+      referenceExposed: referenceExposed,
+      ghostTextUsed: ghostTextUsed
     });
     
     // Sort by time (ascending)

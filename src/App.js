@@ -95,7 +95,7 @@ export default function App() {
           //  
           setCompletionTime(baseTime);
           // Pass easyMode parameter to savePersonalBestTime
-          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
           // ,    
         }
 
@@ -110,7 +110,7 @@ export default function App() {
       setCompletionTime(baseTime);
       
       // Save the personal best time with easyMode information and referenceExposed flag
-      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
     }
   };
 
