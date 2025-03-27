@@ -24,6 +24,7 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [penaltyTime, setPenaltyTime] = useState(0);
+  const [shakeError, setShakeError] = useState(false);
   const textareaRef = useRef(null);
 
   // Check if the input has any mistakes
@@ -53,6 +54,16 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
       return hasMistakes(userInput, normalizedReferenceText);
     }
   }, [userInput, normalizedReferenceText, easyMode]);
+
+  // Reset shake error animation after it completes
+  useEffect(() => {
+    if (shakeError) {
+      const timer = setTimeout(() => {
+        setShakeError(false);
+      }, 500); // Match animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [shakeError]);
 
   // Update lastCorrectIndex when userInput changes
   useEffect(() => {
@@ -176,6 +187,21 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     let newValue = e.target.value;
     const oldValue = userInput;
     
+    // Check for incorrect character
+    if (newValue.length > oldValue.length) {
+      const newChar = newValue[newValue.length - 1];
+      const expectedChar = normalizedReferenceText[oldValue.length];
+      
+      // In easy mode, check with case insensitivity
+      const isIncorrect = easyMode 
+        ? newChar.toLowerCase() !== expectedChar?.toLowerCase() && !(/[.,;:!?"'[\](){}\-–—]/.test(expectedChar))
+        : newChar !== expectedChar;
+        
+      if (isIncorrect && expectedChar) {
+        setShakeError(true);
+      }
+    }
+    
     // In easy mode, filter out punctuation characters that the user types
     if (easyMode && newValue.length > oldValue.length) {
       // Check if the last character typed is punctuation
@@ -286,6 +312,7 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     isConfirmationOpen,
     textareaRef,
     penaltyTime,
+    shakeError,
     hasMistakes: checkMistakes,
     handleInputChange,
     handleBackToLastCorrect,
