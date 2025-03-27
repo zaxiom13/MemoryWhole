@@ -1,101 +1,133 @@
-/* Enhanced Button Styles */
+/* Enhanced Button Styles - Using Amber Theme */
 .leather-button {
-  @apply bg-amber-700 hover:bg-amber-800 dark:bg-amber-800 dark:hover:bg-amber-900 
-         text-white font-medium py-2 px-4 rounded-lg shadow-sm 
-         transition-all duration-300 ease-in-out;
+  /* Overriding the blue from modern.css with amber */
+  @apply bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700
+         dark:from-amber-600 dark:to-amber-700 dark:hover:from-amber-700 dark:hover:to-amber-800
+         text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg
+         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:focus:ring-offset-gray-900;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.03em;
 }
 
 .leather-button::after {
+  /* Subtle sheen effect */
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 50%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: rotate(30deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-/* Enhanced Card Styles */
-.leather-card {
-  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 
-         border border-gray-200 dark:border-gray-700
-         transition-all duration-300 ease-in-out;
-  background-image: 
-    linear-gradient(to bottom right, rgba(0,0,0,0.02) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.02) 100%),
-    url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1" stroke-dasharray="2,2"/></svg>');
-  background-size: 40px 40px;
+.leather-button:hover::after {
+  opacity: 1;
 }
 
-.leather-card:hover {
-  @apply shadow-lg transform -translate-y-1;
+.leather-button:active {
+    @apply shadow-inner scale-[0.98] transform translate-y-0;
 }
+
+
+/* Enhanced Card Styles - Adding subtle pattern */
+.leather-card {
+  /* Keep base styles from modern.css, add subtle pattern */
+  background-image:
+    /* Subtle cross-hatch pattern */
+    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
+    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
+    /* Base gradient and noise from modern.css */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='800'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom right, #ffffff, #f1f5f9);
+  background-size: 10px 10px, 10px 10px, auto, auto;
+  background-position: 0 0, 5px 5px, 0 0, 0 0;
+}
+
+.dark .leather-card {
+  background-image:
+    /* Subtle cross-hatch pattern for dark */
+    linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%, rgba(255,255,255,0.01)),
+    linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%, rgba(255,255,255,0.01)),
+    /* Base gradient and noise from modern.css */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom right, #374151, #1f2937);
+  background-size: 10px 10px, 10px 10px, auto, auto;
+  background-position: 0 0, 5px 5px, 0 0, 0 0;
+}
+
 
 /* Enhanced Form Inputs */
-.enhanced-input {
-  @apply w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600
-         bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200
-         focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400
-         transition-all duration-200 ease-in-out;
+.enhanced-input, .enhanced-textarea {
+  @apply w-full px-4 py-2.5 rounded-md border border-gray-300 dark:border-gray-600
+         bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+         placeholder-gray-400 dark:placeholder-gray-500
+         focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400 focus:border-transparent
+         transition-all duration-200 ease-in-out shadow-sm;
 }
 
 .enhanced-textarea {
-  @apply enhanced-input;
-  min-height: 120px;
+  min-height: 140px; /* Slightly taller */
 }
 
-/* Paper Background Styles */
+/* Paper Background Styles - Adding faint lines */
 .note-paper {
-  @apply bg-white/90 dark:bg-gray-800/90;
-  background-size: 100% 1.2em;
-  background-position-y: 0.5em;
+  /* Keep base from modern.css, add lines */
+  background-image:
+    /* Faint horizontal lines */
+    repeating-linear-gradient(to bottom, transparent, transparent 24px, #e2e8f0 25px, #e2e8f0 25px),
+    /* Base gradient/noise from modern.css */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.02 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, #ffffff, #f8f9fa);
+  background-size: 100% 25px, auto, auto; /* Line height */
+  background-position-y: 0.6em; /* Adjust line start */
 }
 
 /* Animation Enhancements */
 @keyframes subtlePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.015); opacity: 0.95; } /* More subtle pulse */
 }
 
 .subtle-pulse {
-  animation: subtlePulse 3s ease-in-out infinite;
+  animation: subtlePulse 4s ease-in-out infinite; /* Slower pulse */
 }
 
 /* Dark Mode Enhancements */
 .dark .note-paper {
-}
-
-.dark .leather-card {
-  background-image: 
-    linear-gradient(to bottom right, rgba(255,255,255,0.02) 0%, transparent 20%, transparent 80%, rgba(255,255,255,0.02) 100%),
-    url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="2,2"/></svg>');
+  /* Dark mode lines */
+  background-image:
+    repeating-linear-gradient(to bottom, transparent, transparent 24px, #4a5568 25px, #4a5568 25px),
+    /* Base dark gradient/noise from modern.css */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, #2d3748, #1a202c);
+  background-size: 100% 25px, auto, auto;
+  background-position-y: 0.6em;
 }
 
 /* Typing Area Enhancements */
 .typing-area {
-  @apply p-4 rounded-xl border border-gray-200 dark:border-gray-700 
-         bg-white/80 dark:bg-gray-800/80 shadow-sm
+  @apply p-4 rounded-lg border border-gray-200 dark:border-gray-700
+         bg-gray-50/70 dark:bg-gray-900/70 shadow-inner /* Inner shadow for depth */
+         backdrop-blur-sm /* Subtle blur */
          transition-all duration-300;
 }
 
 .typing-area:focus-within {
-  @apply ring-2 ring-amber-400 dark:ring-amber-500 shadow-md;
+  @apply ring-2 ring-amber-400 dark:ring-amber-500 border-transparent shadow-md;
 }
 
-/* Character Display Enhancements */
+/* Character Display Enhancements - Slightly bolder */
 .character-correct {
-  @apply text-green-600 dark:text-green-400;
+  @apply text-green-600 dark:text-green-400 font-medium;
 }
 
 .character-incorrect {
-  @apply text-red-600 dark:text-red-400;
+  @apply text-red-600 dark:text-red-400 font-medium;
 }
 
 /* Responsive Improvements */
@@ -103,8 +135,12 @@
   .leather-card {
     @apply p-4;
   }
-  
+
   .enhanced-input, .enhanced-textarea {
-    @apply px-3 py-1.5;
+    @apply px-3 py-2; /* Adjusted padding for mobile */
+  }
+
+  .leather-button {
+    @apply py-2 px-4 text-sm; /* Smaller buttons on mobile */
   }
 }
