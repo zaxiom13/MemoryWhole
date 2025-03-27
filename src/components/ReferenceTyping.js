@@ -119,7 +119,6 @@ export default function ReferenceTyping({
     hasMistakes,
     handleInputChange: internalHandleInputChange,
     handleBackToLastCorrect,
-    handleShowReferenceClick,
     handleConfirmShowReference,
     handleCancelShowReference,
     setIsReferenceOpen
