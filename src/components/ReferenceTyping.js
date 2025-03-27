@@ -192,7 +192,7 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
             <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} easyMode={easyMode} />
             
             {/* Position the caret relative to character width */}
-            {isTextareaFocused && (
+            {isTextareaFocused && !isComplete && (
               <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
             )}
             
