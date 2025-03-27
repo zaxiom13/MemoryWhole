@@ -7,9 +7,10 @@ import { hasMistakes, findLastCorrectIndex } from '../utils/memoryUtils';
  * @param {Object} props - Hook properties
  * @param {string} props.referenceText - The text to memorize and type
  * @param {boolean} props.easyMode - Whether easy mode is enabled
+ * @param {boolean} props.ghostTextEnabled - Whether ghost text is enabled
  * @returns {Object} State and handlers for typing component
  */
-function useMemoryTyping({ referenceText, easyMode = false }) {
+function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = true }) {
   // The reference text is already normalized at this point
   const normalizedReferenceText = referenceText;
   
@@ -150,6 +151,12 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
   
   // Handle ghost text display
   useEffect(() => {
+    // Only show ghost text if it's enabled
+    if (!ghostTextEnabled) {
+      setGhostText('');
+      return () => {};
+    }
+    
     const timer = setInterval(() => {
       if (!isReferenceOpen && Date.now() - lastInputTime > 1000 && 
           normalizedReferenceText &&
@@ -159,7 +166,7 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
       }
     }, 100);
     return () => clearInterval(timer);
-  }, [lastInputTime, userInput, normalizedReferenceText, checkMistakes, isReferenceOpen]);
+  }, [lastInputTime, userInput, normalizedReferenceText, checkMistakes, isReferenceOpen, ghostTextEnabled]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -246,26 +253,9 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
   // Handle showing the reference text
   const handleConfirmShowReference = () => {
     setIsReferenceOpen(true);
-    if (startTime) {
-      // Apply 60-second penalty
-      const penalty = 60;
-      setTimer(prevTimer => prevTimer + penalty);
-      
-      // Adjust startTime to account for penalty
-      const newStartTime = startTime - (penalty * 1000);
-      setStartTime(newStartTime);
-      
-      // Also adjust window.startTime to stay in sync
-      window.startTime = newStartTime;
-      
-      // Update penalty time
-      setPenaltyTime(prevPenalty => {
-        const newPenalty = prevPenalty + penalty;
-        localStorage.setItem('timePenalty', newPenalty.toString());
-        return newPenalty;
-      });
-    }
     setIsConfirmationOpen(false);
+    
+    // No time penalty for showing reference - removed
   };
 
   // Hide confirmation
@@ -302,7 +292,8 @@ function useMemoryTyping({ referenceText, easyMode = false }) {
     handleShowReferenceClick,
     handleConfirmShowReference,
     handleCancelShowReference,
-    resetTyping
+    resetTyping,
+    setIsReferenceOpen // Expose the setter function to allow external control
   };
 }
 

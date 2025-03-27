@@ -6,9 +6,21 @@ import { loadPersonalBestTimes, formatTime, formatDate, savePreference } from '.
  * ReferenceConfirmation component - displays the selected reference text
  * and allows user to start the memory test
  */
-export default function ReferenceConfirmation({ selectedReference, onBegin, onBack, easyMode, onToggleEasyMode }) {
+export default function ReferenceConfirmation({ 
+  selectedReference, 
+  onBegin, 
+  onBack, 
+  easyMode, 
+  onToggleEasyMode,
+  ghostTextEnabled,
+  onToggleGhostText,
+  showReferenceEnabled,
+  onToggleShowReference
+}) {
   const [personalBestTimes, setPersonalBestTimes] = useState([]);
   const [localEasyMode, setLocalEasyMode] = useState(easyMode);
+  const [localGhostTextEnabled, setLocalGhostTextEnabled] = useState(ghostTextEnabled);
+  const [localShowReferenceEnabled, setLocalShowReferenceEnabled] = useState(showReferenceEnabled);
 
   // Load personal best times when the component mounts or reference changes
   useEffect(() => {
@@ -16,9 +28,11 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
       const bestTimes = loadPersonalBestTimes(selectedReference);
       setPersonalBestTimes(bestTimes);
     }
-    // Initialize local easy mode state from prop
+    // Initialize local state from props
     setLocalEasyMode(easyMode);
-  }, [selectedReference, easyMode]);
+    setLocalGhostTextEnabled(ghostTextEnabled);
+    setLocalShowReferenceEnabled(showReferenceEnabled);
+  }, [selectedReference, easyMode, ghostTextEnabled, showReferenceEnabled]);
 
   return (
     <motion.div 
@@ -91,30 +105,90 @@ export default function ReferenceConfirmation({ selectedReference, onBegin, onBa
           Take a moment to study this text. When ready, click "Begin" to test your recall.
         </p>
         
-        {/* Easy Mode Toggle */}
-        <div className="mt-4 flex items-center">
-          <button 
-            onClick={() => {
-              const newEasyMode = !localEasyMode;
-              setLocalEasyMode(newEasyMode);
-              if (onToggleEasyMode) {
-                onToggleEasyMode(newEasyMode);
-              }
-              savePreference('easyMode', newEasyMode);
-            }}
-            className={`p-2 rounded-full transition-colors duration-300 ${localEasyMode ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
-            aria-label="Toggle easy mode"
-            title={localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </button>
-          <span className="ml-2 text-gray-700 dark:text-gray-300">
-            {localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
-          </span>
-          <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-            {localEasyMode ? "(Punctuation and case are handled automatically)" : "(Exact match required)"}
+        {/* Feature Toggles Section */}
+        <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">Study Options</h4>
+          
+          {/* Easy Mode Toggle */}
+          <div className="flex items-center mb-3">
+            <button 
+              onClick={() => {
+                const newEasyMode = !localEasyMode;
+                setLocalEasyMode(newEasyMode);
+                if (onToggleEasyMode) {
+                  onToggleEasyMode(newEasyMode);
+                }
+                savePreference('easyMode', newEasyMode);
+              }}
+              className={`p-2 rounded-full transition-colors duration-300 ${localEasyMode ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
+              aria-label="Toggle easy mode"
+              title={localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </button>
+            <span className="ml-2 text-gray-700 dark:text-gray-300">
+              {localEasyMode ? "Easy Mode: On" : "Easy Mode: Off"}
+            </span>
+            <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+              {localEasyMode ? "(Punctuation and case are handled automatically)" : "(Exact match required)"}
+            </div>
+          </div>
+          
+          {/* Ghost Text Toggle */}
+          <div className="flex items-center mb-3">
+            <button 
+              onClick={() => {
+                const newGhostTextEnabled = !localGhostTextEnabled;
+                setLocalGhostTextEnabled(newGhostTextEnabled);
+                if (onToggleGhostText) {
+                  onToggleGhostText(newGhostTextEnabled);
+                }
+                savePreference('ghostTextEnabled', newGhostTextEnabled);
+              }}
+              className={`p-2 rounded-full transition-colors duration-300 ${localGhostTextEnabled ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
+              aria-label="Toggle ghost text"
+              title={localGhostTextEnabled ? "Ghost Text: On" : "Ghost Text: Off"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </button>
+            <span className="ml-2 text-gray-700 dark:text-gray-300">
+              {localGhostTextEnabled ? "Ghost Text: On" : "Ghost Text: Off"}
+            </span>
+            <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+              {localGhostTextEnabled ? "(Shows upcoming text after a pause)" : "(No typing assistance)"}
+            </div>
+          </div>
+          
+          {/* Show Reference Toggle */}
+          <div className="flex items-center">
+            <button 
+              onClick={() => {
+                const newShowReferenceEnabled = !localShowReferenceEnabled;
+                setLocalShowReferenceEnabled(newShowReferenceEnabled);
+                if (onToggleShowReference) {
+                  onToggleShowReference(newShowReferenceEnabled);
+                }
+                savePreference('showReferenceEnabled', newShowReferenceEnabled);
+              }}
+              className={`p-2 rounded-full transition-colors duration-300 ${localShowReferenceEnabled ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}
+              aria-label="Toggle show reference"
+              title={localShowReferenceEnabled ? "Show Reference: On" : "Show Reference: Off"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+              </svg>
+            </button>
+            <span className="ml-2 text-gray-700 dark:text-gray-300">
+              {localShowReferenceEnabled ? "Show Reference: On" : "Show Reference: Off"}
+            </span>
+            <div className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+              {localShowReferenceEnabled ? "(View reference while typing)" : "(No reference available)"}
+            </div>
           </div>
         </div>
         

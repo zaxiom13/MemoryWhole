@@ -29,6 +29,8 @@ export default function App() {
   const [completionTime, setCompletionTime] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [easyMode, setEasyMode] = useState(false);
+  const [ghostTextEnabled, setGhostTextEnabled] = useState(true);
+  const [showReferenceEnabled, setShowReferenceEnabled] = useState(false);
 
   // Set initial step based on tutorial completion
   useEffect(() => {
@@ -36,12 +38,17 @@ export default function App() {
     setStep(tutorialComplete ? 1 : 0);
   }, []);
 
-  // Load dark mode and easy mode preferences
+  // Load preferences
   useEffect(() => {
     const savedDarkMode = loadPreference('darkMode', false);
     const savedEasyMode = loadPreference('easyMode', false);
+    const savedGhostTextEnabled = loadPreference('ghostTextEnabled', true);
+    const savedShowReferenceEnabled = loadPreference('showReferenceEnabled', false);
+    
     setDarkMode(savedDarkMode);
     setEasyMode(savedEasyMode);
+    setGhostTextEnabled(savedGhostTextEnabled);
+    setShowReferenceEnabled(savedShowReferenceEnabled);
   }, []);
 
   // Apply dark mode to document
@@ -50,10 +57,18 @@ export default function App() {
     savePreference('darkMode', darkMode);
   }, [darkMode]);
   
-  // Save easy mode preference when it changes
+  // Save preferences when they change
   useEffect(() => {
     savePreference('easyMode', easyMode);
   }, [easyMode]);
+  
+  useEffect(() => {
+    savePreference('ghostTextEnabled', ghostTextEnabled);
+  }, [ghostTextEnabled]);
+  
+  useEffect(() => {
+    savePreference('showReferenceEnabled', showReferenceEnabled);
+  }, [showReferenceEnabled]);
 
   // State to track if reference was exposed during the test
   const [referenceExposed, setReferenceExposed] = useState(false);
@@ -140,6 +155,20 @@ export default function App() {
     setEasyMode(newEasyMode);
     savePreference('easyMode', newEasyMode);
   };
+  
+  // Ghost text toggle
+  const toggleGhostText = () => {
+    const newGhostTextEnabled = !ghostTextEnabled;
+    setGhostTextEnabled(newGhostTextEnabled);
+    savePreference('ghostTextEnabled', newGhostTextEnabled);
+  };
+  
+  // Show reference toggle
+  const toggleShowReference = () => {
+    const newShowReferenceEnabled = !showReferenceEnabled;
+    setShowReferenceEnabled(newShowReferenceEnabled);
+    savePreference('showReferenceEnabled', newShowReferenceEnabled);
+  };
 
   return (
     <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
@@ -205,6 +234,10 @@ export default function App() {
                   onBack={handleReturnToMenu}
                   easyMode={easyMode}
                   onToggleEasyMode={toggleEasyMode}
+                  ghostTextEnabled={ghostTextEnabled}
+                  onToggleGhostText={toggleGhostText}
+                  showReferenceEnabled={showReferenceEnabled}
+                  onToggleShowReference={toggleShowReference}
                 />
               )}
               
@@ -217,6 +250,8 @@ export default function App() {
                   isComplete={isComplete}
                   easyMode={easyMode}
                   onReferenceExposed={() => setReferenceExposed(true)}
+                  ghostTextEnabled={ghostTextEnabled}
+                  showReferenceEnabled={showReferenceEnabled}
                 />
               )}
               

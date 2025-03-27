@@ -61,10 +61,10 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
         exit={{ scale: 0.9, opacity: 0 }}
       >
         <div className="text-center">
-          <h3 className="text-xl leading-6 font-medium text-gray-900 dark:text-gray-100 mb-3">Time Penalty Warning</h3>
+          <h3 className="text-xl leading-6 font-medium text-gray-900 dark:text-gray-100 mb-3">Show Reference Text</h3>
           <div className="mt-2">
             <p className="text-gray-600 dark:text-gray-300">
-              Opening the reference text will incur a 1-minute penalty. Are you sure you want to proceed?
+              Would you like to view the reference text? This will be recorded in your personal best history.
             </p>
           </div>
         </div>
@@ -83,7 +83,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
             className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
             onClick={onConfirm}
           >
-            Confirm
+            Show Reference
           </motion.button>
         </div>
       </motion.div>
@@ -94,7 +94,16 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
 /**
  * Main reference typing component
  */
-export default function ReferenceTyping({  selectedReference, onInputChange, onBack, isComplete, easyMode = false, onReferenceExposed }) {
+export default function ReferenceTyping({  
+  selectedReference, 
+  onInputChange, 
+  onBack, 
+  isComplete, 
+  easyMode = false, 
+  onReferenceExposed,
+  ghostTextEnabled = true,
+  showReferenceEnabled = false
+}) {
   // State to track textarea focus
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
 
@@ -112,10 +121,12 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
     handleBackToLastCorrect,
     handleShowReferenceClick,
     handleConfirmShowReference,
-    handleCancelShowReference
+    handleCancelShowReference,
+    setIsReferenceOpen
   } = useMemoryTyping({
     referenceText: selectedReference,
-    easyMode: easyMode
+    easyMode: easyMode,
+    ghostTextEnabled: ghostTextEnabled
   });
   
   // For debugging
@@ -124,6 +135,15 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
     console.log('Last correct index:', lastCorrectIndex);
   }, [ghostText, lastCorrectIndex]);
 
+  // Automatically set isReferenceOpen if showReferenceEnabled is true
+  useEffect(() => {
+    if (showReferenceEnabled) {
+      setIsReferenceOpen(true);
+      if (onReferenceExposed) {
+        onReferenceExposed();
+      }
+    }
+  }, [showReferenceEnabled, setIsReferenceOpen, onReferenceExposed]);
   
   // Handle input change bridging between props and hook
   const handleInputChange = (e) => {
@@ -197,7 +217,7 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
             )}
             
             {/* Ghost text positioned relative to character width */}
-            {ghostText && (
+            {ghostText && ghostTextEnabled && (
               <span className="text-gray-400 opacity-50" style={{ marginLeft: '-0.5ch' }}>
                 {ghostText}
               </span>
@@ -239,30 +259,14 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
                 whileTap={{ scale: 0.98 }}
                 className="px-4 py-2 leather-button text-white font-medium rounded-lg shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleBackToLastCorrect}
-                disabled={lastCorrectIndex === internalUserInput.length}  // Changed from userInput to internalUserInput
+                disabled={lastCorrectIndex === internalUserInput.length}
               >
                 Back to Last Correct
               </motion.button>
             )}
           </div>
           
-          {/* Show reference button */}
-          {!isReferenceOpen && (
-            <div className="w-full">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className="leather-button w-full px-4 py-3 flex items-center justify-center"
-                onClick={handleShowReferenceClick}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-                Show Reference
-              </motion.button>
-            </div>
-          )}
+          {/* Show reference button - removed in favor of toggle in confirmation screen */}
         </div>
       )}
       
@@ -299,12 +303,14 @@ export default function ReferenceTyping({  selectedReference, onInputChange, onB
         </motion.div>
       )}
 
-      {/* Reference Text Confirmation Modal */}
-      <ReferenceTextModal 
-        isOpen={isConfirmationOpen}
-        onConfirm={handleConfirmShowReferenceWithCallback}
-        onCancel={handleCancelShowReference}
-      />
+      {/* Reference Text Confirmation Modal - only show if not already enabled via settings */}
+      {!showReferenceEnabled && (
+        <ReferenceTextModal 
+          isOpen={isConfirmationOpen}
+          onConfirm={handleConfirmShowReferenceWithCallback}
+          onCancel={handleCancelShowReference}
+        />
+      )}
     </motion.div>
   );
 }
