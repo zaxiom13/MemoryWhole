@@ -23,6 +23,11 @@ function StackStudyPage({
   const [referenceExposed, setReferenceExposed] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [isStackComplete, setIsStackComplete] = useState(false);
+  const [stackStats, setStackStats] = useState({
+    totalTime: 0,
+    cardsCompleted: 0,
+    exposedCount: 0
+  });
 
   // Load stack and cards
   useEffect(() => {
@@ -89,6 +94,13 @@ function StackStudyPage({
   }, [currentCardIndex, currentCard, isCardComplete]); // Depend on index and card
 
   const goToNextCard = useCallback(() => {
+    // Update stats
+    setStackStats(prev => ({
+      totalTime: prev.totalTime + completionTime,
+      cardsCompleted: prev.cardsCompleted + 1,
+      exposedCount: prev.exposedCount + (referenceExposed ? 1 : 0)
+    }));
+
     if (currentCardIndex < cards.length - 1) {
       setCurrentCardIndex(prevIndex => prevIndex + 1);
       setIsCardComplete(false);
@@ -96,7 +108,7 @@ function StackStudyPage({
     } else {
       setIsStackComplete(true); // All cards completed
     }
-  }, [currentCardIndex, cards.length]);
+  }, [currentCardIndex, cards.length, completionTime, referenceExposed]);
 
   const handleToggleShowReference = useCallback(() => {
     setReferenceExposed(true); // Mark as exposed if toggled
@@ -109,10 +121,46 @@ function StackStudyPage({
   }
 
   if (isStackComplete) {
-    // You might want a dedicated stack completion summary here
-    // For now, just reuse the generic CompletionPage idea but with an Exit button
     return (
-       <div className="text-center"><h2 className="text-2xl font-semibold mb-4">Stack "{stack.name}" Complete!</h2><button onClick={onExit} className="leather-button py-2 px-6">Back to Menu</button></div>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        className="max-w-2xl mx-auto p-6"
+      >
+        <div className="leather-card p-8 text-center">
+          <h2 className="text-2xl font-bold mb-6">Stack Complete! 🎉</h2>
+          
+          <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="note-paper p-4 rounded-lg">
+              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{stackStats.cardsCompleted}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Cards Completed</p>
+            </div>
+            
+            <div className="note-paper p-4 rounded-lg">
+              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{stackStats.totalTime}s</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Total Time</p>
+            </div>
+            
+            <div className="note-paper p-4 rounded-lg">
+              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                {stackStats.exposedCount > 0 ? 
+                  `${Math.round((stackStats.exposedCount / stackStats.cardsCompleted) * 100)}%` : 
+                  '0%'}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">References Viewed</p>
+            </div>
+          </div>
+          
+          <div className="flex justify-center">
+            <button 
+              onClick={() => onExit(true, stackStats.totalTime)} 
+              className="leather-button py-2 px-6 text-lg"
+            >
+              Back to Menu
+            </button>
+          </div>
+        </div>
+      </motion.div>
     );
   }
 
@@ -128,7 +176,7 @@ function StackStudyPage({
       exit={{ opacity: 0 }} 
       transition={{ duration: 0.3 }}
     >
-      <div className="mb-4 flex justify-between items-center"><h2 className="text-xl font-semibold">{stack.name} - Card {currentCardIndex + 1} of {cards.length}</h2><button onClick={onExit} className="leather-button text-sm px-3 py-1">Exit Stack</button></div>
+      <div className="mb-4 flex justify-between items-center"><h2 className="text-xl font-semibold">{stack.name} - Card {currentCardIndex + 1} of {cards.length}</h2><button onClick={() => onExit(false, 0)} className="leather-button text-sm px-3 py-1">Exit Stack</button></div>
       
       {!isCardComplete ? (
         <ReferenceTyping 

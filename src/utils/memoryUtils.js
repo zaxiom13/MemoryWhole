@@ -250,7 +250,7 @@ const defaultStacks = [
 
 /**
  * Load stacks from localStorage
- * @returns {Array} Stacks from localStorage or defaultStacks
+ * @returns {Array} Stacks from localStorage or empty array
  */
 export function loadStacksFromStorage() {
   try {
@@ -259,9 +259,10 @@ export function loadStacksFromStorage() {
       return JSON.parse(savedStacks);
     }
     
-    // Initialize with default stacks if none exist (currently empty)
-    localStorage.setItem('memoryStacks', JSON.stringify(defaultStacks));
-    return defaultStacks;
+    // Initialize with empty array if none exist
+    const emptyStacks = [];
+    localStorage.setItem('memoryStacks', JSON.stringify(emptyStacks));
+    return emptyStacks;
   } catch (error) {
     console.error('Error loading stacks from localStorage:', error);
     return []; // Return empty array on error

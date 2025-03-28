@@ -162,6 +162,25 @@ export default function App() {
     setStep(4);
   }, []);
 
+  // Record stack study completion
+  const handleStackStudyComplete = useCallback((stackId, totalTime) => {
+    const stack = getStackById(stackId);
+    if (stack) {
+      const updatedStack = stack.recordStudySession(totalTime);
+      updateStack(updatedStack.toObject());
+    }
+  }, [getStackById, updateStack]);
+
+  // Exit stack study handler
+  const handleExitStackStudy = useCallback((completedSuccess, totalTime) => {
+    if (completedSuccess && studyStackId) {
+      handleStackStudyComplete(studyStackId, totalTime);
+    }
+    setStep(1);
+    setStudyStackId(null);
+    setSelectedReference('');
+  }, [studyStackId, handleStackStudyComplete]);
+
   // Start typing handler
   const handleStartTyping = useCallback(() => {
     setUserInput('');
@@ -193,15 +212,6 @@ export default function App() {
     setStep(2);
   }, []);
 
-  // Exit stack study handler
-  const handleExitStackStudy = useCallback(() => {
-    setStep(1);
-    setStudyStackId(null);
-    setSelectedReference('');
-    setUserInput('');
-    setIsComplete(false);
-  }, []);
-
   // Dark mode toggle
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
@@ -209,23 +219,29 @@ export default function App() {
   
   // Easy mode toggle
   const toggleEasyMode = () => {
-    const newEasyMode = !easyMode;
-    setEasyMode(newEasyMode);
-    savePreference('easyMode', newEasyMode);
+    setEasyMode(prev => {
+      const newValue = !prev;
+      savePreference('easyMode', newValue);
+      return newValue;
+    });
   };
   
   // Ghost text toggle
   const toggleGhostText = () => {
-    const newGhostTextEnabled = !ghostTextEnabled;
-    setGhostTextEnabled(newGhostTextEnabled);
-    savePreference('ghostTextEnabled', newGhostTextEnabled);
+    setGhostTextEnabled(prev => {
+      const newValue = !prev;
+      savePreference('ghostTextEnabled', newValue);
+      return newValue;
+    });
   };
   
   // Show reference toggle
   const toggleShowReference = () => {
-    const newShowReferenceEnabled = !showReferenceEnabled;
-    setShowReferenceEnabled(newShowReferenceEnabled);
-    savePreference('showReferenceEnabled', newShowReferenceEnabled);
+    setShowReferenceEnabled(prev => {
+      const newValue = !prev;
+      savePreference('showReferenceEnabled', newValue);
+      return newValue;
+    });
   };
 
   return (
@@ -284,13 +300,14 @@ export default function App() {
                 onCancelEdit={cancelEditCard}
                 stacks={stacks}
                 editingStack={editingStack}
-                onCreateStack={() => editStack({})}
+                onShowStackForm={() => editStack({})}
                 onEditStack={editStack}
                 onDeleteStack={deleteStack}
                 onUpdateStack={updateStack}
-                onCreateNewStack={createStack}
+                onCreateStack={createStack}
                 onCancelEditStack={cancelEditStack}
                 onStudyStack={handleStudyStack}
+                getCardsByStackId={getCardsByStackId}
               />
             </div>
           </motion.div>
@@ -364,9 +381,7 @@ export default function App() {
                 easyMode={easyMode}
                 ghostTextEnabled={ghostTextEnabled}
                 showReferenceEnabled={showReferenceEnabled}
-                onToggleShowReference={() => { 
-                  setShowReferenceEnabled(prev => !prev);
-                }}
+                onToggleShowReference={toggleShowReference}
               />
             </div>
           </motion.div>
