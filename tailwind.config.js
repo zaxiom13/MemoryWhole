@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -6,6 +8,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        serif: ['Merriweather', ...defaultTheme.fontFamily.serif],
+      },
       animation: {
         blink: 'blink 1s step-end infinite',
         fadeIn: 'fadeIn 0.5s ease-in',

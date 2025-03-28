@@ -31,6 +31,7 @@ export default function App() {
   const [easyMode, setEasyMode] = useState(false);
   const [ghostTextEnabled, setGhostTextEnabled] = useState(true);
   const [showReferenceEnabled, setShowReferenceEnabled] = useState(false);
+  const [inputError, setInputError] = useState(false);
 
   // Set initial step based on tutorial completion
   useEffect(() => {
@@ -77,6 +78,21 @@ export default function App() {
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setUserInput(newValue);
+
+    // Check if the input is currently incorrect
+    let isIncorrect = false;
+    if (selectedReference && newValue.length > 0) {
+      const referenceSubstring = selectedReference.substring(0, newValue.length);
+      isIncorrect = newValue !== referenceSubstring;
+    }
+
+    // Set error state and reset after animation
+    if (isIncorrect) {
+      setInputError(true);
+      setTimeout(() => setInputError(false), 500); // Match animation duration
+    } else {
+      setInputError(false); // Reset if correct or deleting
+    }
 
     // is last char of reference is punctuation
     const lastChar = selectedReference && selectedReference.length > 0 ? selectedReference.charAt(selectedReference.length - 1) : null;
@@ -171,11 +187,11 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen p-4 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen px-4 py-8 transition-colors duration-300 leather-background ${darkMode ? 'dark' : ''}`}>
       <div className="fixed top-4 right-4 flex gap-2 z-50">
         <button 
           onClick={toggleDarkMode}
-          className={`p-2 rounded-full transition-colors duration-300 ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-blue-100 text-blue-800'}`}
+          className={`p-2.5 rounded-full transition-colors duration-300 ${darkMode ? 'bg-gray-600 text-indigo-400 hover:bg-gray-500' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}
           aria-label="Toggle dark mode"
         >
           {darkMode ? (
@@ -203,10 +219,10 @@ export default function App() {
             className="flex flex-col items-center justify-center"
           >
             <GlobalStyles />
-            <h1 className="text-5xl font-bold mb-6 sticky top-0 z-10 leather-title py-2">
+            <h1 className="text-5xl font-bold mb-10 sticky top-0 z-10 leather-title py-2">
               Memory Whole
             </h1>
-            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-6">
+            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-8">
               {step === 1 && (
                 <HomePage 
                   cards={cards} 
@@ -252,6 +268,7 @@ export default function App() {
                   onReferenceExposed={() => setReferenceExposed(true)}
                   ghostTextEnabled={ghostTextEnabled}
                   showReferenceEnabled={showReferenceEnabled}
+                  inputError={inputError}
                 />
               )}
               
@@ -277,31 +294,7 @@ function GlobalStyles() {
   return (
     <style>
       {`
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #f1f5f9;
-          border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #94a3b8;
-          border-radius: 10px;
-          border: 2px solid #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #64748b;
-        }
-        .dark ::-webkit-scrollbar-track {
-          background: #334155;
-        }
-        .dark ::-webkit-scrollbar-thumb {
-          background: #64748b;
-          border: 2px solid #334155;
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
-        }
+        /* Removed redundant scrollbar styles - Handled in modern.css */
         .h-[70vh]:hover::-webkit-scrollbar {
           opacity: 1;
         }

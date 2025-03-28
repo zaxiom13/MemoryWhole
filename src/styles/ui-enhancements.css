@@ -1,10 +1,10 @@
-/* Enhanced Button Styles - Using Amber Theme */
+/* Enhanced Button Styles - Using Indigo Theme */
 .leather-button {
-  /* Overriding the blue from modern.css with amber */
-  @apply bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700
-         dark:from-amber-600 dark:to-amber-700 dark:hover:from-amber-700 dark:hover:to-amber-800
+  /* Overriding the blue from modern.css with indigo */
+  @apply bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700
+         dark:from-indigo-600 dark:to-indigo-700 dark:hover:from-indigo-700 dark:hover:to-indigo-800
          text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg
-         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:focus:ring-offset-gray-900;
+         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.03em;
@@ -36,28 +36,11 @@
 
 /* Enhanced Card Styles - Adding subtle pattern */
 .leather-card {
-  /* Keep base styles from modern.css, add subtle pattern */
-  background-image:
-    /* Subtle cross-hatch pattern */
-    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
-    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
-    /* Base gradient and noise from modern.css */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='800'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom right, #ffffff, #f1f5f9);
-  background-size: 10px 10px, 10px 10px, auto, auto;
-  background-position: 0 0, 5px 5px, 0 0, 0 0;
+  /* Keep base styles from modern.css, removed pattern */
 }
 
 .dark .leather-card {
-  background-image:
-    /* Subtle cross-hatch pattern for dark */
-    linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%, rgba(255,255,255,0.01)),
-    linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%, rgba(255,255,255,0.01)),
-    /* Base gradient and noise from modern.css */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom right, #374151, #1f2937);
-  background-size: 10px 10px, 10px 10px, auto, auto;
-  background-position: 0 0, 5px 5px, 0 0, 0 0;
+  /* Keep base styles from modern.css, removed pattern */
 }
 
 
@@ -66,25 +49,14 @@
   @apply w-full px-4 py-2.5 rounded-md border border-gray-300 dark:border-gray-600
          bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
          placeholder-gray-400 dark:placeholder-gray-500
-         focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400 focus:border-transparent
+         focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent
          transition-all duration-200 ease-in-out shadow-sm;
-}
-
-.enhanced-textarea {
   min-height: 140px; /* Slightly taller */
 }
 
 /* Paper Background Styles - Adding faint lines */
 .note-paper {
-  /* Keep base from modern.css, add lines */
-  background-image:
-    /* Faint horizontal lines */
-    repeating-linear-gradient(to bottom, transparent, transparent 24px, #e2e8f0 25px, #e2e8f0 25px),
-    /* Base gradient/noise from modern.css */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.02 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom, #ffffff, #f8f9fa);
-  background-size: 100% 25px, auto, auto; /* Line height */
-  background-position-y: 0.6em; /* Adjust line start */
+  /* Keep base from modern.css, removed lines */
 }
 
 /* Animation Enhancements */
@@ -99,14 +71,7 @@
 
 /* Dark Mode Enhancements */
 .dark .note-paper {
-  /* Dark mode lines */
-  background-image:
-    repeating-linear-gradient(to bottom, transparent, transparent 24px, #4a5568 25px, #4a5568 25px),
-    /* Base dark gradient/noise from modern.css */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom, #2d3748, #1a202c);
-  background-size: 100% 25px, auto, auto;
-  background-position-y: 0.6em;
+  /* Dark mode lines removed */
 }
 
 /* Typing Area Enhancements */
@@ -118,7 +83,7 @@
 }
 
 .typing-area:focus-within {
-  @apply ring-2 ring-amber-400 dark:ring-amber-500 border-transparent shadow-md;
+  @apply ring-2 ring-indigo-400 dark:ring-indigo-500 border-transparent shadow-md;
 }
 
 /* Character Display Enhancements - Slightly bolder */
