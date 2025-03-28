@@ -150,6 +150,17 @@ export default function App() {
     localStorage.setItem('timePenalty', '0');
   };
 
+  // Return to confirmation handler (Step 3 -> Step 2)
+  const handleReturnToConfirmation = () => {
+    setUserInput('');
+    setStep(2);
+    setIsComplete(false);
+    setReferenceExposed(false); // Reset reference exposed flag
+    window.startTime = null;
+    // Reset time penalty when going back
+    localStorage.setItem('timePenalty', '0');
+  };
+
   // Return to menu handler
   const handleReturnToMenu = () => {
     setStep(1);
@@ -222,7 +233,7 @@ export default function App() {
             <h1 className="text-5xl font-bold mb-10 sticky top-0 z-10 leather-title py-2">
               Memory Whole
             </h1>
-            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-8">
+            <div className="w-full max-w-2xl min-h-[70vh] relative stitched-border paper-background p-8 overflow-y-auto">
               {step === 1 && (
                 <HomePage 
                   cards={cards} 
@@ -262,7 +273,7 @@ export default function App() {
                   userInput={userInput}
                   selectedReference={selectedReference}
                   onInputChange={handleInputChange}
-                  onBack={handleReturnToMenu}
+                  onBack={handleReturnToConfirmation}
                   isComplete={isComplete}
                   easyMode={easyMode}
                   onReferenceExposed={() => setReferenceExposed(true)}
