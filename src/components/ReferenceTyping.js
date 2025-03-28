@@ -117,7 +117,6 @@ export default function ReferenceTyping({
     isConfirmationOpen,
     textareaRef,
     hasMistakes,
-    shakeError,
     handleInputChange: internalHandleInputChange,
     handleBackToLastCorrect,
     handleConfirmShowReference,
@@ -207,7 +206,7 @@ export default function ReferenceTyping({
         </div>
         
         {/* Typing area */}
-        <div className={`typing-area w-full p-4 relative ${shakeError ? 'shake-error' : ''}`}>
+        <div className="typing-area w-full p-4 relative">
           <div className="font-mono whitespace-pre-wrap text-gray-800 dark:text-gray-200 min-h-[100px]">
             <ColoredTextDisplay userInput={internalUserInput} referenceText={selectedReference} easyMode={easyMode} />
             
