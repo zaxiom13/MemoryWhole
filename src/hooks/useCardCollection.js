@@ -1,7 +1,14 @@
 // useCardCollection.js - Custom hook for managing card collection
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import CardCollection from '../models/CardCollection';
-import { loadCardsFromStorage, saveCardsToStorage } from '../utils/memoryUtils';
+import Card from '../models/Card'; // Import Card model
+import Stack from '../models/Stack'; // Import Stack model
+import { 
+  loadCardsFromStorage, 
+  saveCardsToStorage, 
+  loadStacksFromStorage, 
+  saveStacksToStorage 
+} from '../utils/memoryUtils';
 
 /**
  * Default cards data
@@ -58,87 +65,179 @@ const defaultCards = [
 ];
 
 /**
- * Custom hook for managing card collection
- * @returns {Object} Card collection state and operations
+ * Custom hook for managing card collection and stacks
+ * @returns {Object} Card and stack collection state and operations
  */
 function useCardCollection() {
   const [collection, setCollection] = useState(null);
   const [sortedCards, setSortedCards] = useState([]);
   const [editingCard, setEditingCard] = useState(null);
+  const [stacks, setStacks] = useState([]); // State for stacks
+  const [editingStack, setEditingStack] = useState(null); // State for editing stack
 
-  // Load collection on mount
+  // --- Data Loading --- 
+
+  // Load cards on mount
   useEffect(() => {
     const rawCards = loadCardsFromStorage(defaultCards);
     const cardCollection = CardCollection.fromArray(rawCards);
     setCollection(cardCollection);
   }, []);
 
-  // Update sorted cards when collection changes
+  // Load stacks on mount
   useEffect(() => {
-    if (collection) {
-      const sorted = collection.sortByDate(false);
-      setSortedCards(sorted);
-    }
-  }, [collection]);
+    const rawStacks = loadStacksFromStorage();
+    const stackObjects = rawStacks.map(stackData => Stack.fromObject(stackData));
+    setStacks(stackObjects);
+  }, []);
 
-  // Save collection when it changes
+  // --- Data Persistence --- 
+
+  // Save cards when collection changes
   useEffect(() => {
     if (collection) {
       saveCardsToStorage(collection.toArray());
     }
   }, [collection]);
 
+  // Save stacks when stacks state changes
+  useEffect(() => {
+    const rawStacks = stacks.map(stack => stack.toObject());
+    saveStacksToStorage(rawStacks);
+  }, [stacks]);
+
+  // --- Computed State --- 
+
+  // Update sorted cards when collection changes
+  useEffect(() => {
+    if (collection) {
+      // Sort by creation date, newest first
+      const sorted = collection.getAll().sort((a, b) => b.createdAt - a.createdAt);
+      setSortedCards(sorted);
+    }
+  }, [collection]);
+
+  // --- Card Operations --- 
+
   // Create a new card
-  const handleCreateCard = (cardData) => {
+  const handleCreateCard = useCallback((cardData) => {
     if (!collection) return null;
     
-    const newCard = collection.addCard(cardData);
-    setCollection(new CardCollection([...collection.getAll()]));
+    // Ensure stackId is handled correctly (null or number)
+    const dataWithStackId = { 
+      ...cardData, 
+      stackId: cardData.stackId !== undefined ? Number(cardData.stackId) : null 
+    };
+    const newCard = collection.addCard(dataWithStackId); // CardCollection handles ID generation
+    setCollection(new CardCollection([...collection.getAll()])); // Trigger update
     setEditingCard(null);
     return newCard;
-  };
+  }, [collection]);
 
   // Update an existing card
-  const handleUpdateCard = (cardData) => {
+  const handleUpdateCard = useCallback((cardData) => {
     if (!collection) return null;
     
-    const updatedCard = collection.updateCard(cardData.id, cardData);
+    // Ensure stackId is handled correctly
+    const dataWithStackId = { 
+      ...cardData, 
+      stackId: cardData.stackId !== undefined ? Number(cardData.stackId) : null 
+    };
+    const updatedCard = collection.updateCard(cardData.id, dataWithStackId);
     if (updatedCard) {
-      setCollection(new CardCollection([...collection.getAll()]));
+      setCollection(new CardCollection([...collection.getAll()])); // Trigger update
       setEditingCard(null);
     }
     return updatedCard;
-  };
+  }, [collection]);
 
   // Delete a card
-  const handleDeleteCard = (cardId) => {
+  const handleDeleteCard = useCallback((cardId) => {
     if (!collection) return false;
     
     const success = collection.removeCard(cardId);
     if (success) {
-      setCollection(new CardCollection([...collection.getAll()]));
+      setCollection(new CardCollection([...collection.getAll()])); // Trigger update
     }
     return success;
-  };
+  }, [collection]);
 
   // Set a card for editing
-  const handleEditCard = (card) => {
+  const handleEditCard = useCallback((card) => {
     setEditingCard(card);
-  };
+  }, []);
 
-  // Cancel editing
-  const handleCancelEdit = () => {
+  // Cancel editing card
+  const handleCancelEditCard = useCallback(() => {
     setEditingCard(null);
-  };
+  }, []);
+
+  // --- Stack Operations --- 
+
+  // Create a new stack
+  const handleCreateStack = useCallback((stackData) => {
+    const newStack = new Stack({ 
+      ...stackData, 
+      id: Date.now() // Simple ID generation for now
+    });
+    setStacks(prevStacks => [...prevStacks, newStack]);
+    setEditingStack(null); // Close edit form if open
+    return newStack;
+  }, []);
+
+  // Update an existing stack
+  const handleUpdateStack = useCallback((stackData) => {
+    setStacks(prevStacks => 
+      prevStacks.map(stack => 
+        stack.id === stackData.id ? stack.update(stackData) : stack
+      )
+    );
+    setEditingStack(null); // Close edit form
+    return stacks.find(s => s.id === stackData.id); // Return the updated stack (or undefined)
+  }, [stacks]);
+
+  // Delete a stack and optionally its cards
+  const handleDeleteStack = useCallback((stackId, deleteCards = false) => {
+    setStacks(prevStacks => prevStacks.filter(stack => stack.id !== stackId));
+
+    if (deleteCards && collection) {
+      const cardsToDelete = collection.getAll().filter(card => card.stackId === stackId);
+      cardsToDelete.forEach(card => collection.removeCard(card.id));
+      setCollection(new CardCollection([...collection.getAll()])); // Trigger card update
+    }
+  }, [collection]);
+
+  // Set a stack for editing
+  const handleEditStack = useCallback((stack) => {
+    setEditingStack(stack);
+  }, []);
+
+  // Cancel editing stack
+  const handleCancelEditStack = useCallback(() => {
+    setEditingStack(null);
+  }, []);
 
   return {
+    // Cards
     cards: sortedCards,
     editingCard,
     createCard: handleCreateCard,
     updateCard: handleUpdateCard,
     deleteCard: handleDeleteCard,
     editCard: handleEditCard,
-    cancelEdit: handleCancelEdit
+    cancelEditCard: handleCancelEditCard,
+    getCardById: collection ? collection.getById.bind(collection) : () => null,
+    getCardsByStackId: collection ? (stackId) => collection.getAll().filter(card => card.stackId === stackId) : () => [],
+
+    // Stacks
+    stacks, 
+    editingStack,
+    createStack: handleCreateStack,
+    updateStack: handleUpdateStack,
+    deleteStack: handleDeleteStack,
+    editStack: handleEditStack,
+    cancelEditStack: handleCancelEditStack,
+    getStackById: (id) => stacks.find(s => s.id === id)
   };
 }
 

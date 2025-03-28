@@ -240,3 +240,44 @@ export function loadPersonalBestTimes(referenceText) {
     return [];
   }
 }
+
+/**
+ * Default stacks data (optional, can start empty)
+ */
+const defaultStacks = [
+  // { id: Date.now(), name: 'Default Stack', createdAt: Date.now() }
+];
+
+/**
+ * Load stacks from localStorage
+ * @returns {Array} Stacks from localStorage or defaultStacks
+ */
+export function loadStacksFromStorage() {
+  try {
+    const savedStacks = localStorage.getItem('memoryStacks');
+    if (savedStacks) {
+      return JSON.parse(savedStacks);
+    }
+    
+    // Initialize with default stacks if none exist (currently empty)
+    localStorage.setItem('memoryStacks', JSON.stringify(defaultStacks));
+    return defaultStacks;
+  } catch (error) {
+    console.error('Error loading stacks from localStorage:', error);
+    return []; // Return empty array on error
+  }
+}
+
+/**
+ * Save stacks to localStorage
+ * @param {Array} stacks - Stacks to save
+ */
+export function saveStacksToStorage(stacks) {
+  try {
+    if (stacks) { // Allow saving empty array
+      localStorage.setItem('memoryStacks', JSON.stringify(stacks));
+    }
+  } catch (error) {
+    console.error('Error saving stacks to localStorage:', error);
+  }
+}

@@ -13,6 +13,7 @@ class Card {
    * @param {string} data.text - Card content text
    * @param {number} data.createdAt - Creation timestamp
    * @param {number} [data.updatedAt] - Last update timestamp
+   * @param {number|null} [data.stackId=null] - ID of the stack this card belongs to
    */
   constructor(data = {}) {
     this.id = data.id || 0;
@@ -20,6 +21,7 @@ class Card {
     this.text = data.text || '';
     this.createdAt = data.createdAt || Date.now();
     this.updatedAt = data.updatedAt || null;
+    this.stackId = data.stackId === undefined ? null : data.stackId; // Default to null if not provided
   }
 
   /**
@@ -67,7 +69,8 @@ class Card {
       title: this.title,
       text: this.text,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      stackId: this.stackId
     };
   }
 }
