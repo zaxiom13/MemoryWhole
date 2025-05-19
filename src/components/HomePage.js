@@ -249,7 +249,8 @@ function HomePage({
   editingDeck,
   onUpdateDeck,
   onCreateNewDeck,
-  onCancelEditDeck
+  onCancelEditDeck,
+  onViewBestTimes
 }) {
   const [showBatchUpload, setShowBatchUpload] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
@@ -465,6 +466,7 @@ function HomePage({
       onCreateDeck={handleCreateDeck}
       onEditDeck={onEditDeck}
       onDeleteDeck={onDeleteDeck}
+      onViewBestTimes={onViewBestTimes}
     />
   );
 }

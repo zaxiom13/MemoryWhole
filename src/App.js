@@ -5,6 +5,7 @@ import ReferenceTyping from './components/ReferenceTyping';
 import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
+import BestTimesPage from './components/BestTimesPage';
 import useCardCollection from './hooks/useCardCollection';
 import useDeckCollection from './hooks/useDeckCollection';
 import { loadPreference, savePreference, savePersonalBestTime, normalizeWhitespace } from './utils/memoryUtils';
@@ -53,6 +54,12 @@ export default function App() {
     const tutorialComplete = loadPreference('tutorialComplete', false);
     setStep(tutorialComplete ? 1 : 0);
   }, []);
+
+  // Step 0: Tutorial
+  // Step 1: Home Page
+  // Step 2: Reference Confirmation
+  // Step 3: Reference Typing
+  // Step 4: Best Times Page
 
   // Load preferences
   useEffect(() => {
@@ -125,8 +132,8 @@ export default function App() {
           // Set the total completion time (base time includes penalties already due to startTime adjustment    
           //  
           setCompletionTime(baseTime);
-          // Pass easyMode parameter to savePersonalBestTime
-          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+          // Pass easyMode, referenceExposed and ghostTextEnabled parameters to savePersonalBestTime
+          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
           // ,    
         }
 
@@ -140,8 +147,8 @@ export default function App() {
       // so we don't need to add penalties here)
       setCompletionTime(baseTime);
       
-      // Save the personal best time with easyMode information and referenceExposed flag
-      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+      // Save the personal best time with easyMode, referenceExposed and ghostTextEnabled information
+      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
     }
   };
 
@@ -173,6 +180,11 @@ export default function App() {
     setReferenceExposed(false); // Reset reference exposed flag
     // Reset time penalty when returning to menu
     localStorage.setItem('timePenalty', '0');
+  };
+  
+  // View best times handler
+  const handleViewBestTimes = () => {
+    setStep(4);
   };
 
   // Dark mode toggle
@@ -259,6 +271,7 @@ export default function App() {
                   onUpdateDeck={updateDeck}
                   onCreateNewDeck={createDeck}
                   onCancelEditDeck={cancelEditDeck}
+                  onViewBestTimes={handleViewBestTimes}
                 />
               )}
               
@@ -294,6 +307,12 @@ export default function App() {
                   ghostTextEnabled={ghostTextEnabled}
                   showReferenceEnabled={showReferenceEnabled}
                   inputError={inputError}
+                />
+              )}
+              
+              {step === 4 && (
+                <BestTimesPage 
+                  onBack={handleReturnToMenu}
                 />
               )}
               
