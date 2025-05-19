@@ -3,24 +3,29 @@ import { useState, useEffect } from 'react';
 import { formatDate, normalizeWhitespace } from '../utils/memoryUtils';
 import Card from '../models/Card';
 import BatchUploadPage from './BatchUploadPage';
+import DeckList from './DeckList';
+import DeckForm from './DeckForm';
 
 /**
  * Card form component for creating/editing cards
  */
-function CardForm({ card, onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({ title: '', text: '' });
+function CardForm({ card, deck, onSubmit, onCancel }) {
+  const [formData, setFormData] = useState({ title: '', text: '', deckId: null });
 
   // Initialize form data when card changes
   useEffect(() => {
     if (card) {
       setFormData({
         title: card.title || '',
-        text: card.text || ''
+        text: card.text || '',
+        deckId: card.deckId || (deck ? deck.id : null)
       });
+    } else if (deck) {
+      setFormData({ title: '', text: '', deckId: deck.id });
     } else {
-      setFormData({ title: '', text: '' });
+      setFormData({ title: '', text: '', deckId: null });
     }
-  }, [card]);
+  }, [card, deck]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,20 +35,20 @@ function CardForm({ card, onSubmit, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!formData.title.trim() || !formData.text.trim()) {
-      alert("Title and text are required!");
+    if (!formData.title.trim() || !formData.text.trim() || !formData.deckId) {
+      alert("Title, text, and deck are required!");
       return;
     }
     
     onSubmit(formData);
-    setFormData({ title: '', text: '' });
+    setFormData({ title: '', text: '', deckId: deck ? deck.id : null });
   };
 
   return (
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-          {card && card.id ? 'Edit Card' : 'Create New Card'}
+          {card && card.id ? 'Edit Card' : `Create New Card in "${deck ? deck.title : 'Deck'}"` }
         </h2>
         <div className="flex space-x-2">
           <button 
@@ -160,15 +165,26 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
 }
 
 /**
- * Card list component
+ * Card list component for a specific deck
  */
-function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard }) {
+function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard, onBackToDeckList }) {
   return (
     <>
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-          Choose a passage to practice your memory
-        </h2>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={onBackToDeckList}
+            className="leather-button p-2 rounded-full flex items-center justify-center"
+            title="Back to Decks"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+            {deck.title}: Choose a card to practice
+          </h2>
+        </div>
         <div>
           <button 
             onClick={onCreateCard}
@@ -182,17 +198,30 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
         </div>
       </div>
       <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-8">
-          {cards.map((card) => (
-            <CardItem 
-              key={card.id}
-              card={card}
-              onSelect={onSelectReference}
-              onEdit={onEditCard}
-              onDelete={onDeleteCard}
-            />
-          ))}
-        </div>
+        {cards.length === 0 ? (
+          <div className="mt-20 flex flex-col items-center justify-center text-center p-8">
+            <h3 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">No cards in this deck yet</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Create your first card to start practicing</p>
+            <button 
+              onClick={onCreateCard}
+              className="leather-button py-2 px-6 text-lg"
+            >
+              Create Card
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-8">
+            {cards.map((card) => (
+              <CardItem 
+                key={card.id}
+                card={card}
+                onSelect={onSelectReference}
+                onEdit={onEditCard}
+                onDelete={onDeleteCard}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
@@ -203,6 +232,9 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
  */
 function HomePage({ 
   cards, 
+  decks,
+  currentDeckId,
+  setCurrentDeckId,
   onSelectReference, 
   onCreateCard, 
   onEditCard, 
@@ -210,10 +242,18 @@ function HomePage({
   editingCard,
   onUpdateCard,
   onCreateNewCard,
-  onCancelEdit
+  onCancelEdit,
+  onCreateDeck,
+  onEditDeck,
+  onDeleteDeck,
+  editingDeck,
+  onUpdateDeck,
+  onCreateNewDeck,
+  onCancelEditDeck
 }) {
   const [showBatchUpload, setShowBatchUpload] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
+  const [showDeckForm, setShowDeckForm] = useState(false);
 
   const handleFormSubmit = (formData) => {
     if (editingCard && editingCard.id) {
@@ -222,6 +262,15 @@ function HomePage({
       onCreateNewCard(formData);
     }
     setShowCardForm(false);
+  };
+
+  const handleDeckFormSubmit = (formData) => {
+    if (editingDeck && editingDeck.id) {
+      onUpdateDeck({ ...editingDeck, ...formData });
+    } else {
+      onCreateNewDeck(formData);
+    }
+    setShowDeckForm(false);
   };
 
   const handleBatchUpload = () => {
@@ -237,7 +286,8 @@ function HomePage({
   const handleCreateCards = (cardsData) => {
     // Create multiple cards from the batch data
     cardsData.forEach(cardData => {
-      onCreateNewCard(cardData);
+      // Make sure each card has the current deck ID
+      onCreateNewCard({ ...cardData, deckId: currentDeckId });
     });
     setShowBatchUpload(false);
     setShowCardForm(false);
@@ -245,6 +295,12 @@ function HomePage({
 
   const handleCreateCard = () => {
     setShowCardForm(true);
+    setShowDeckForm(false);
+  };
+
+  const handleCreateDeck = () => {
+    setShowDeckForm(true);
+    setShowCardForm(false);
   };
 
   const handleCancelCreate = () => {
@@ -252,16 +308,44 @@ function HomePage({
     onCancelEdit();
   };
 
+  const handleCancelCreateDeck = () => {
+    setShowDeckForm(false);
+    onCancelEditDeck();
+  };
+
+  const handleSelectDeck = (deck) => {
+    setCurrentDeckId(deck.id);
+  };
+
+  const handleBackToDeckList = () => {
+    setCurrentDeckId(null);
+  };
+
+  // If editing a card, show card form
   if (editingCard !== null) {
+    const deck = decks.find(d => d.id === editingCard.deckId) || null;
     return (
       <CardForm 
         card={editingCard} 
+        deck={deck}
         onSubmit={handleFormSubmit}
         onCancel={onCancelEdit}
       />
     );
   }
 
+  // If editing a deck, show deck form
+  if (editingDeck !== null) {
+    return (
+      <DeckForm 
+        deck={editingDeck} 
+        onSubmit={handleDeckFormSubmit}
+        onCancel={onCancelEditDeck}
+      />
+    );
+  }
+
+  // If batch uploading
   if (showBatchUpload) {
     return (
       <BatchUploadPage 
@@ -271,12 +355,14 @@ function HomePage({
     );
   }
 
-  if (showCardForm) {
+  // If creating a new card in a deck
+  if (showCardForm && currentDeckId) {
+    const selectedDeck = decks.find(d => d.id === currentDeckId) || null;
     return (
       <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
         <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-            Create New Card
+            {`Create New Card in "${selectedDeck ? selectedDeck.title : 'Deck'}"`}
           </h2>
           <div className="flex space-x-2">
             <button 
@@ -295,7 +381,14 @@ function HomePage({
           </div>
         </div>
         
-        <form onSubmit={(e) => { e.preventDefault(); handleFormSubmit({ title: e.target.title.value, text: e.target.text.value }); }} className="space-y-4">
+        <form onSubmit={(e) => { 
+          e.preventDefault(); 
+          handleFormSubmit({ 
+            title: e.target.title.value, 
+            text: e.target.text.value,
+            deckId: currentDeckId
+          }); 
+        }} className="space-y-4">
           <div>
             <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
               Title
@@ -335,13 +428,43 @@ function HomePage({
     );
   }
 
+  // If creating a new deck
+  if (showDeckForm) {
+    return (
+      <DeckForm 
+        deck={null} 
+        onSubmit={handleDeckFormSubmit}
+        onCancel={handleCancelCreateDeck}
+      />
+    );
+  }
+
+  // If a deck is selected, show its cards
+  if (currentDeckId) {
+    const selectedDeck = decks.find(d => d.id === currentDeckId) || null;
+    if (!selectedDeck) return null;
+
+    return (
+      <CardList
+        deck={selectedDeck}
+        cards={cards}
+        onSelectReference={onSelectReference}
+        onCreateCard={handleCreateCard}
+        onEditCard={onEditCard}
+        onDeleteCard={onDeleteCard}
+        onBackToDeckList={handleBackToDeckList}
+      />
+    );
+  }
+
+  // Default: show deck list
   return (
-    <CardList
-      cards={cards}
-      onSelectReference={onSelectReference}
-      onCreateCard={handleCreateCard}
-      onEditCard={onEditCard}
-      onDeleteCard={onDeleteCard}
+    <DeckList
+      decks={decks}
+      onSelectDeck={handleSelectDeck}
+      onCreateDeck={handleCreateDeck}
+      onEditDeck={onEditDeck}
+      onDeleteDeck={onDeleteDeck}
     />
   );
 }

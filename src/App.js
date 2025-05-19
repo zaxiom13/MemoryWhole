@@ -6,12 +6,14 @@ import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import useCardCollection from './hooks/useCardCollection';
+import useDeckCollection from './hooks/useDeckCollection';
 import { loadPreference, savePreference, savePersonalBestTime, normalizeWhitespace } from './utils/memoryUtils';
 import './styles/modern.css';
 import './styles/ui-enhancements.css';
 
 // Application state management
 export default function App() {
+  // Card collection state
   const {
     cards,
     editingCard,
@@ -19,8 +21,21 @@ export default function App() {
     updateCard,
     deleteCard,
     editCard,
-    cancelEdit
+    cancelEdit,
+    currentDeckId,
+    setCurrentDeckId
   } = useCardCollection();
+
+  // Deck collection state
+  const {
+    decks,
+    editingDeck,
+    createDeck,
+    updateDeck,
+    deleteDeck,
+    editDeck,
+    cancelEdit: cancelEditDeck
+  } = useDeckCollection();
 
   const [step, setStep] = useState(0);
   const [selectedReference, setSelectedReference] = useState('');
@@ -226,6 +241,9 @@ export default function App() {
               {step === 1 && (
                 <HomePage 
                   cards={cards} 
+                  decks={decks}
+                  currentDeckId={currentDeckId}
+                  setCurrentDeckId={setCurrentDeckId}
                   onSelectReference={handleSelectReference}
                   onCreateCard={() => editCard({})}
                   onEditCard={editCard}
@@ -234,6 +252,13 @@ export default function App() {
                   onUpdateCard={updateCard}
                   onCreateNewCard={createCard}
                   onCancelEdit={cancelEdit}
+                  onCreateDeck={() => editDeck({})}
+                  onEditDeck={editDeck}
+                  onDeleteDeck={deleteDeck}
+                  editingDeck={editingDeck}
+                  onUpdateDeck={updateDeck}
+                  onCreateNewDeck={createDeck}
+                  onCancelEditDeck={cancelEditDeck}
                 />
               )}
               
