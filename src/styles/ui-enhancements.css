@@ -108,4 +108,14 @@
   .leather-button {
     @apply py-2 px-4 text-sm; /* Smaller buttons on mobile */
   }
+  
+  /* Improved mobile text alignment */
+  h1, h2, h3 {
+    @apply text-center;
+  }
+  
+  /* Better button spacing on mobile */
+  .space-x-4 {
+    @apply space-x-2;
+  }
 }

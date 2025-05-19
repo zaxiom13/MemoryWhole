@@ -57,19 +57,19 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
       </motion.h2>
       
       <motion.p 
-        className="text-xl mb-4 text-gray-700 dark:text-gray-300"
+        className="text-xl mb-6 text-gray-700 dark:text-gray-300 flex flex-col items-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.8 }}
       >
         You completed the task in{' '}
-        <span className="font-bold leather-card px-4 py-2 rounded-lg inline-block mt-2 text-gray-800 dark:text-gray-200">
+        <span className="font-bold leather-card px-5 py-3 rounded-lg mt-3 text-gray-800 dark:text-gray-200 inline-flex justify-center min-w-32">
           {formatTime(completionTime)}
         </span>
       </motion.p>
       
       <motion.div
-        className="flex justify-center space-x-4"
+        className="flex justify-center space-x-4 mt-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.1 }}
