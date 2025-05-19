@@ -110,8 +110,8 @@ export default function App() {
           // Set the total completion time (base time includes penalties already due to startTime adjustment    
           //  
           setCompletionTime(baseTime);
-          // Pass easyMode parameter to savePersonalBestTime
-          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+          // Pass easyMode, referenceExposed and ghostTextEnabled parameters to savePersonalBestTime
+          savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
           // ,    
         }
 
@@ -125,8 +125,8 @@ export default function App() {
       // so we don't need to add penalties here)
       setCompletionTime(baseTime);
       
-      // Save the personal best time with easyMode information and referenceExposed flag
-      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed);
+      // Save the personal best time with easyMode, referenceExposed and ghostTextEnabled information
+      savePersonalBestTime(selectedReference, baseTime, easyMode, referenceExposed, ghostTextEnabled);
     }
   };
 
