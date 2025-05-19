@@ -5,6 +5,7 @@ import ReferenceTyping from './components/ReferenceTyping';
 import TutorialGuide from './components/TutorialGuide';
 import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
+import BestTimesPage from './components/BestTimesPage';
 import useCardCollection from './hooks/useCardCollection';
 import { loadPreference, savePreference, savePersonalBestTime, normalizeWhitespace } from './utils/memoryUtils';
 import './styles/modern.css';
@@ -38,6 +39,12 @@ export default function App() {
     const tutorialComplete = loadPreference('tutorialComplete', false);
     setStep(tutorialComplete ? 1 : 0);
   }, []);
+
+  // Step 0: Tutorial
+  // Step 1: Home Page
+  // Step 2: Reference Confirmation
+  // Step 3: Reference Typing
+  // Step 4: Best Times Page
 
   // Load preferences
   useEffect(() => {
@@ -159,6 +166,11 @@ export default function App() {
     // Reset time penalty when returning to menu
     localStorage.setItem('timePenalty', '0');
   };
+  
+  // View best times handler
+  const handleViewBestTimes = () => {
+    setStep(4);
+  };
 
   // Dark mode toggle
   const toggleDarkMode = () => {
@@ -234,6 +246,7 @@ export default function App() {
                   onUpdateCard={updateCard}
                   onCreateNewCard={createCard}
                   onCancelEdit={cancelEdit}
+                  onViewBestTimes={handleViewBestTimes}
                 />
               )}
               
@@ -269,6 +282,12 @@ export default function App() {
                   ghostTextEnabled={ghostTextEnabled}
                   showReferenceEnabled={showReferenceEnabled}
                   inputError={inputError}
+                />
+              )}
+              
+              {step === 4 && (
+                <BestTimesPage 
+                  onBack={handleReturnToMenu}
                 />
               )}
               
