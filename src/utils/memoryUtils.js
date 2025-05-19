@@ -240,3 +240,42 @@ export function loadPersonalBestTimes(referenceText) {
     return [];
   }
 }
+
+/**
+ * Load decks from localStorage
+ * @param {Array} defaultDecks - Default decks to use if none exist in storage
+ * @returns {Array} Decks from localStorage or defaultDecks
+ */
+export function loadDecksFromStorage(defaultDecks) {
+  try {
+    const savedDecks = localStorage.getItem('memoryDecks');
+    if (savedDecks) {
+      return JSON.parse(savedDecks);
+    }
+    
+    const defaultDecksWithTimestamps = defaultDecks.map(deck => ({
+      ...deck,
+      createdAt: deck.createdAt || Date.now()
+    }));
+    
+    localStorage.setItem('memoryDecks', JSON.stringify(defaultDecksWithTimestamps));
+    return defaultDecksWithTimestamps;
+  } catch (error) {
+    console.error('Error loading decks from localStorage:', error);
+    return defaultDecks;
+  }
+}
+
+/**
+ * Save decks to localStorage
+ * @param {Array} decks - Decks to save
+ */
+export function saveDecksToStorage(decks) {
+  try {
+    if (decks && decks.length > 0) {
+      localStorage.setItem('memoryDecks', JSON.stringify(decks));
+    }
+  } catch (error) {
+    console.error('Error saving decks to localStorage:', error);
+  }
+}
