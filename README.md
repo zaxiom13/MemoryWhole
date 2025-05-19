@@ -1,70 +1,131 @@
-# Getting Started with Create React App
+# MemoryWhole
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React Version](https://img.shields.io/badge/react-v19.0.0-61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/tailwindcss-v3.4.17-38B2AC)
 
-## Available Scripts
+> A memory training application to improve your memorization skills through active recall practice.
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+- [Overview](#overview)
+- [Features](#features)
+- [The Science Behind MemoryWhole](#the-science-behind-memorywhole)
+- [Technology Stack](#technology-stack)
+- [Installation and Setup](#installation-and-setup)
+- [Usage](#usage)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+MemoryWhole is a memory training application designed to help users improve their memorization skills through practice and repetition. The app presents users with passages of text that they can select, study, and then attempt to reproduce from memory with real-time feedback on their progress.
 
-### `npm test`
+The application provides a clean, minimalist interface that helps users focus on the memory task at hand, with smooth transitions between different stages of the memory training process. Whether you're looking to sharpen your memory for academic purposes, professional development, or personal growth, MemoryWhole offers an effective and engaging way to practice and enhance your memorization abilities.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+### Interactive Learning Flow
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Tutorial Guide**: New users are greeted with a tutorial that explains how to use the application.
+2. **Reference Selection**: Users can choose from a variety of thought-provoking passages on topics like Ancient Wisdom, Cosmic Perspective, Technological Revolution, Neural Plasticity, Information Theory, and Memory Palaces.
+3. **Reference Confirmation**: Before beginning the memorization exercise, users can review their selected passage.
+4. **Memory Challenge**: Users type the passage from memory, with real-time feedback on their progress.
+5. **Completion Tracking**: Upon successful completion, users receive feedback on their performance, including the time taken to complete the challenge.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Responsive Design
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- The application is built with a responsive design that works across different device sizes.
+- Clean, minimalist interface that helps users focus on the memory task at hand.
+- Smooth transitions between different stages of the application using animation.
 
-### `npm run eject`
+### Assisted Learning Options
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Easy Mode**: A setting that can be enabled to make the memory challenge more accessible.
+- **Ghost Text**: Provides users with a cue for the next characters when they're struggling.
+- **Reference Toggle**: Option to show the original reference during practice for more challenging material.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## The Science Behind MemoryWhole
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The application is built on established memory techniques and cognitive science principles:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Active Recall**: By challenging users to reproduce text from memory, the app leverages the proven technique of active recall, which strengthens memory pathways more effectively than passive review.
+- **Instant Feedback**: Through color coding the text that they input they can know that they are on the right track. Green characters indicate that the user has typed the correct character, while red characters indicate that the user has typed an incorrect character. This allows users to quickly identify and correct mistakes. 
+- **Ghost Text as a Cue**: The application uses ghost text to provide users with a cue for the next characters they need to type when they are struggling (stall for more than some time). This helps users focus on continuing inplace rather than pulling up the passage again.
 
-## Learn More
+## Technology Stack
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+MemoryWhole is built using:
+- **React.js** for the user interface
+- **Framer Motion** for animations
+- **Tailwind CSS** for styling
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation and Setup
 
-### Code Splitting
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/zaxiom13/MemoryWhole.git
+   cd MemoryWhole
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### Analyzing the Bundle Size
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
+   This will run the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+   This builds the app for production to the `build` folder, optimizing the build for the best performance.
 
-### Making a Progressive Web App
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. When you first open MemoryWhole, you'll be presented with a tutorial that explains how to use the application.
+2. From the home page, select a passage that interests you from the available options, or create your own custom card.
+3. Review your selected passage on the confirmation screen. You can also adjust settings like Easy Mode or Ghost Text here.
+4. When you're ready, click "Begin" to start the memory challenge.
+5. Type the passage from memory. The text will be color-coded to provide instant feedback:
+   - Green: Correct characters
+   - Red: Incorrect characters
+6. Upon successful completion, you'll see your completion time and have the option to try again or return to the menu.
+7. Track your improvement over time as you become more proficient at memorizing complex information.
 
-### Advanced Configuration
+## Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Planned features for future releases include:
+- User accounts to track progress over time
+- Customizable difficulty levels
+- User-submitted passages
+- Memory games and additional exercises
+- Performance analytics and insights
+- Mobile app versions
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contributions are welcome! If you'd like to contribute to MemoryWhole:
 
-### `npm run build` fails to minify
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for better memory</sub>
+</div>
