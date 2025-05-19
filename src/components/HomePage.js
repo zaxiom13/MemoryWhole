@@ -7,7 +7,7 @@ import BatchUploadPage from './BatchUploadPage';
 /**
  * Card form component for creating/editing cards
  */
-function CardForm({ card, onSubmit, onCancel }) {
+function CardForm({ card, onSubmit, onCancel, isAddingCards }) {
   const [formData, setFormData] = useState({ title: '', text: '' });
 
   // Initialize form data when card changes
@@ -36,7 +36,11 @@ function CardForm({ card, onSubmit, onCancel }) {
     }
     
     onSubmit(formData);
-    setFormData({ title: '', text: '' });
+    
+    // Clear form only if we're adding cards to a deck
+    if (isAddingCards) {
+      setFormData({ title: '', text: '' });
+    }
   };
 
   return (
@@ -227,14 +231,8 @@ function HomePage({
       // Switch to "adding cards to deck" mode after first deck creation
       if (!isAddingCardsToDeck) {
         setIsAddingCardsToDeck(true);
-        // Clear the form fields for the next card
-        document.getElementById('title').value = '';
-        document.getElementById('text').value = '';
-      } else {
-        // When adding subsequent cards to deck, keep form open and just clear fields
-        document.getElementById('title').value = '';
-        document.getElementById('text').value = '';
       }
+      // The form will clear itself in the CardForm component
     }
   };
 
@@ -276,6 +274,7 @@ function HomePage({
         card={editingCard} 
         onSubmit={handleFormSubmit}
         onCancel={onCancelEdit}
+        isAddingCards={false}
       />
     );
   }
@@ -313,7 +312,19 @@ function HomePage({
           </div>
         </div>
         
-        <form onSubmit={(e) => { e.preventDefault(); handleFormSubmit({ title: e.target.title.value, text: e.target.text.value }); }} className="space-y-4">
+        <form onSubmit={(e) => { 
+          e.preventDefault(); 
+          handleFormSubmit({ 
+            title: e.target.title.value, 
+            text: e.target.text.value 
+          }); 
+          
+          // Clear form fields after submission if adding cards to deck
+          if (isAddingCardsToDeck) {
+            e.target.title.value = '';
+            e.target.text.value = '';
+          }
+        }} className="space-y-4">
           <div>
             <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
               Title
