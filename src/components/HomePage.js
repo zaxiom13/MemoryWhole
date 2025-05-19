@@ -214,24 +214,40 @@ function HomePage({
 }) {
   const [showBatchUpload, setShowBatchUpload] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
+  const [isAddingCardsToDeck, setIsAddingCardsToDeck] = useState(false);
 
   const handleFormSubmit = (formData) => {
     if (editingCard && editingCard.id) {
       onUpdateCard({ ...editingCard, ...formData });
+      setShowCardForm(false);
+      setIsAddingCardsToDeck(false);
     } else {
       onCreateNewCard(formData);
+      
+      // Switch to "adding cards to deck" mode after first deck creation
+      if (!isAddingCardsToDeck) {
+        setIsAddingCardsToDeck(true);
+        // Clear the form fields for the next card
+        document.getElementById('title').value = '';
+        document.getElementById('text').value = '';
+      } else {
+        // When adding subsequent cards to deck, keep form open and just clear fields
+        document.getElementById('title').value = '';
+        document.getElementById('text').value = '';
+      }
     }
-    setShowCardForm(false);
   };
 
   const handleBatchUpload = () => {
     setShowBatchUpload(true);
     setShowCardForm(false);
+    setIsAddingCardsToDeck(false);
   };
 
   const handleBatchCancel = () => {
     setShowBatchUpload(false);
     setShowCardForm(true);
+    setIsAddingCardsToDeck(false);
   };
 
   const handleCreateCards = (cardsData) => {
@@ -245,10 +261,12 @@ function HomePage({
 
   const handleCreateCard = () => {
     setShowCardForm(true);
+    setIsAddingCardsToDeck(false);
   };
 
   const handleCancelCreate = () => {
     setShowCardForm(false);
+    setIsAddingCardsToDeck(false);
     onCancelEdit();
   };
 
@@ -276,7 +294,7 @@ function HomePage({
       <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
         <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-            Create New Deck
+            {isAddingCardsToDeck ? 'Add Cards to Deck' : 'Create New Deck'}
           </h2>
           <div className="flex space-x-2">
             <button 
@@ -327,7 +345,7 @@ function HomePage({
               type="submit"
               className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
             >
-              Create Deck
+              {isAddingCardsToDeck ? 'Add Card to Deck' : 'Create Deck'}
             </button>
           </div>
         </form>
