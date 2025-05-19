@@ -43,7 +43,7 @@ function CardForm({ card, onSubmit, onCancel }) {
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-          {card && card.id ? 'Edit Card' : 'Create New Card'}
+          {card && card.id ? 'Edit Deck' : 'Create New Deck'}
         </h2>
         <div className="flex space-x-2">
           <button 
@@ -91,7 +91,7 @@ function CardForm({ card, onSubmit, onCancel }) {
             type="submit"
             className="leather-button py-2 px-6"
           >
-            {card && card.id ? 'Update Card' : 'Create Card'}
+            {card && card.id ? 'Update Deck' : 'Create Deck'}
           </button>
         </div>
       </form>
@@ -173,7 +173,7 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
           <button 
             onClick={onCreateCard}
             className="leather-button p-2 rounded-full flex items-center justify-center"
-            title="Add New Card"
+            title="Add New Deck"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -276,7 +276,7 @@ function HomePage({
       <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
         <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-            Create New Card
+            Create New Deck
           </h2>
           <div className="flex space-x-2">
             <button 
@@ -327,7 +327,7 @@ function HomePage({
               type="submit"
               className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
             >
-              Create Card
+              Create Deck
             </button>
           </div>
         </form>
