@@ -42,7 +42,7 @@ function CardForm({ card, onSubmit, onCancel }) {
   return (
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
           {card && card.id ? 'Edit Card' : 'Create New Card'}
         </h2>
         <div className="flex space-x-2">
@@ -86,7 +86,7 @@ function CardForm({ card, onSubmit, onCancel }) {
           ></textarea>
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <button
             type="submit"
             className="leather-button py-2 px-6"
@@ -136,7 +136,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           </svg>
         </button>
       </div>
-      <h3 className="text-1xl font-semibold mb-1 text-gray-800 dark:text-gray-100 pr-0 h-[3rem] w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap">
+      <h3 className="text-xl font-semibold mb-1 text-gray-800 dark:text-gray-100 h-[3rem] w-full overflow-hidden text-ellipsis whitespace-nowrap">
         {card.title}
       </h3>
       <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
@@ -166,7 +166,7 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
   return (
     <>
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
           Choose a passage to practice your memory
         </h2>
         <div>
@@ -275,7 +275,7 @@ function HomePage({
     return (
       <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
         <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
             Create New Card
           </h2>
           <div className="flex space-x-2">
@@ -322,7 +322,7 @@ function HomePage({
             ></textarea>
           </div>
           
-          <div className="flex justify-end">
+          <div className="flex justify-center">
             <button
               type="submit"
               className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
