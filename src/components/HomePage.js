@@ -270,41 +270,6 @@ function CardList({ cards, onSelectReference, onCreateCard, onEditCard, onDelete
     </>
   );
 }
-  return (
-    <>
-      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-          Choose a passage to practice your memory
-        </h2>
-        <div>
-          <button 
-            onClick={onCreateCard}
-            className="leather-button p-2 rounded-full flex items-center justify-center"
-            title="Add New Card"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-8">
-          {cards.map((card) => (
-            <CardItem 
-              key={card.id}
-              card={card}
-              onSelect={onSelectReference}
-              onEdit={onEditCard}
-              onDelete={onDeleteCard}
-              onView={onViewCard}
-            />
-          ))}
-        </div>
-      </div>
-    </>
-  );
-}
 
 /**
  * HomePage component
