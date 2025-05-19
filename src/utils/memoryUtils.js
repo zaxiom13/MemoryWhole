@@ -240,3 +240,79 @@ export function loadPersonalBestTimes(referenceText) {
     return [];
   }
 }
+
+/**
+ * Load all personal best times for all references
+ * @returns {Array} Array of objects with reference preview and best times
+ */
+export function loadAllPersonalBestTimes() {
+  try {
+    const results = [];
+    
+    // Iterate through all localStorage keys
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      
+      // Check if this is a personal best time key
+      if (key && key.startsWith('personalBest_')) {
+        // Extract the reference preview from the key
+        const referencePreview = key.substring(13).replace(/_/g, ' ');
+        
+        // Get the times for this reference
+        const times = JSON.parse(localStorage.getItem(key));
+        
+        // Add to results if there are times
+        if (times && times.length > 0) {
+          results.push({
+            referencePreview,
+            times
+          });
+        }
+      }
+    }
+    
+    return results;
+  } catch (error) {
+    console.error('Error loading all personal best times:', error);
+    return [];
+  }
+}
+
+/**
+ * Load decks from localStorage
+ * @param {Array} defaultDecks - Default decks to use if none exist in storage
+ * @returns {Array} Decks from localStorage or defaultDecks
+ */
+export function loadDecksFromStorage(defaultDecks) {
+  try {
+    const savedDecks = localStorage.getItem('memoryDecks');
+    if (savedDecks) {
+      return JSON.parse(savedDecks);
+    }
+    
+    const defaultDecksWithTimestamps = defaultDecks.map(deck => ({
+      ...deck,
+      createdAt: deck.createdAt || Date.now()
+    }));
+    
+    localStorage.setItem('memoryDecks', JSON.stringify(defaultDecksWithTimestamps));
+    return defaultDecksWithTimestamps;
+  } catch (error) {
+    console.error('Error loading decks from localStorage:', error);
+    return defaultDecks;
+  }
+}
+
+/**
+ * Save decks to localStorage
+ * @param {Array} decks - Decks to save
+ */
+export function saveDecksToStorage(decks) {
+  try {
+    if (decks && decks.length > 0) {
+      localStorage.setItem('memoryDecks', JSON.stringify(decks));
+    }
+  } catch (error) {
+    console.error('Error saving decks to localStorage:', error);
+  }
+}
