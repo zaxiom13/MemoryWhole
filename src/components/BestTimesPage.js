@@ -1,18 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { loadAllPersonalBestTimes, formatTime, formatDate } from '../utils/memoryUtils';
+import { useAppState } from '../contexts/AppStateContext';
 
 /**
  * BestTimesPage component - displays all personal best times
  */
 function BestTimesPage({ onBack }) {
   const [allBestTimes, setAllBestTimes] = useState([]);
+  const { cards, decks } = useAppState();
   
   // Load all personal best times when the component mounts
   useEffect(() => {
     const bestTimes = loadAllPersonalBestTimes();
     setAllBestTimes(bestTimes);
   }, []);
+
+  // Helper function to find card and deck based on reference text
+  const findCardAndDeck = (referencePreview) => {
+    if (!cards || !decks) return { cardTitle: null, deckTitle: null };
+    
+    // Try to find a matching card based on the text content
+    const matchingCard = cards.find(card => {
+      const normalizedCardText = card.text.replace(/\s+/g, ' ');
+      return normalizedCardText.substring(0, 50).includes(referencePreview.substring(0, 40));
+    });
+    
+    if (!matchingCard) return { cardTitle: null, deckTitle: null };
+    
+    // Find the deck this card belongs to
+    const matchingDeck = decks.find(deck => deck.id === matchingCard.deckId);
+    
+    return { 
+      cardTitle: matchingCard.title, 
+      deckTitle: matchingDeck ? matchingDeck.title : 'Unknown Deck' 
+    };
+  };
 
   return (
     <motion.div
@@ -48,12 +71,15 @@ function BestTimesPage({ onBack }) {
           </div>
         ) : (
           <div className="space-y-8">
-            {allBestTimes.map((item, index) => (
-              <div key={index} className="p-4 rounded-lg leather-card border border-gray-200 dark:border-gray-700">
-                <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">
-                  {item.referencePreview}...
-                </h4>
-                <div className="space-y-2">
+            {allBestTimes.map((item, index) => {
+              const { cardTitle, deckTitle } = findCardAndDeck(item.referencePreview);
+              
+              return (
+                <div key={index} className="p-4 rounded-lg leather-card border border-gray-200 dark:border-gray-700">
+                  <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">
+                    {cardTitle ? `${cardTitle} (${deckTitle})` : `${item.referencePreview}...`}
+                  </h4>
+                  <div className="space-y-2">
                   {item.times.slice(0, 3).map((timeData, timeIndex) => (
                     <div
                       key={timeIndex}
@@ -107,8 +133,9 @@ function BestTimesPage({ onBack }) {
                     </div>
                   ))}
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
