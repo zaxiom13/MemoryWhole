@@ -3,47 +3,62 @@
 @tailwind utilities;
 
 @layer base {
-  /* Add a base font family for consistency */
+  /* Base font and style setup */
   body {
-    /* @apply font-sans; */ /* Let Tailwind base handle this */
-    /* Consider importing a font like Inter or Lato */
-    /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'); */
-    /* font-family: 'Inter', sans-serif; */
+    @apply font-sans text-neutral-800 dark:text-neutral-100;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  /* Improve focus visibility globally */
+
+  /* Focus styles and accessibility */
   *:focus-visible {
-      @apply outline-none ring-2 ring-offset-2 ring-indigo-500 dark:ring-offset-gray-900;
+    @apply outline-none ring-2 ring-offset-2 ring-primary-500 dark:ring-primary-400 dark:ring-offset-neutral-800;
+  }
+  
+  /* Basic heading styles */
+  h1 {
+    @apply text-3xl md:text-4xl font-display font-semibold tracking-tight;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl font-display font-medium tracking-tight;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl font-medium;
   }
 }
 
 @layer components {
+  /* Character display styling - used in typing interface */
   .character-correct {
-    @apply inline-block text-green-600 dark:text-green-400 font-medium; /* Added font-medium */
-    animation: pop-animation 0.2s ease-out; /* Faster pop */
+    @apply inline-block text-success-500 dark:text-success-300 font-medium;
+    animation: pop-animation 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .character-incorrect {
-    @apply inline-block text-red-600 dark:text-red-400 font-medium; /* Added font-medium */
+    @apply inline-block text-danger-500 dark:text-danger-300 font-medium;
   }
 
-  /* Special handling for incorrect spaces */
+  /* Incorrect space visualization */
   .incorrect-space {
-    @apply inline-block bg-red-500/30 dark:bg-red-400/30 rounded-sm; /* Use opacity and slight rounding */
-    min-width: 0.3em; /* Ensure visibility */
-    height: 1.1em; /* Match line height */
-    vertical-align: text-bottom; /* Align better */
+    @apply inline-block bg-danger-300/30 dark:bg-danger-500/30 rounded-[1px];
+    min-width: 0.35em;
+    height: 1.1em;
+    vertical-align: text-bottom;
   }
 
-  /* Pop animation */
+  /* Animation definitions - refined for smoother experience */
   @keyframes pop-animation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); } /* Slightly less pop */
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.15); }
     100% { transform: scale(1); }
   }
 
-  /* Blinking caret animation */
+  /* Blinking cursor animation */
   .animate-blink {
-    animation: blink-caret 1.1s step-end infinite; /* Slightly slower blink */
+    animation: blink-caret 1s step-end infinite;
   }
 
   @keyframes blink-caret {
@@ -51,32 +66,26 @@
     50% { border-color: currentColor; }
   }
 
-  /* Wobble animation for incorrect input */
+  /* Refined wobble animation for incorrect input */
   @keyframes wobble-animation {
     0%, 100% { transform: translateX(0); }
-    15% { transform: translateX(-4px) rotate(-2deg); } /* Less intense wobble */
-    30% { transform: translateX(4px) rotate(2deg); }
-    45% { transform: translateX(-4px) rotate(-2deg); }
-    60% { transform: translateX(4px) rotate(2deg); }
-    75% { transform: translateX(-2px) rotate(-1deg); }
-    90% { transform: translateX(2px) rotate(1deg); }
+    15% { transform: translateX(-3px) rotate(-1deg); }
+    30% { transform: translateX(3px) rotate(1deg); }
+    45% { transform: translateX(-3px) rotate(-1deg); }
+    60% { transform: translateX(3px) rotate(1deg); }
+    75% { transform: translateX(-2px) rotate(-0.5deg); }
+    90% { transform: translateX(2px) rotate(0.5deg); }
   }
 
   .input-wobble {
-    animation: wobble-animation 0.4s ease-in-out; /* Faster wobble */
+    animation: wobble-animation 0.35s ease-in-out;
   }
 
-  /* Base styles for note-paper effect - Defined in modern.css */
-  /* .note-paper { ... } */
-
-  /* Leather button style - Defined in ui-enhancements.css */
-  /* .leather-button { ... } */
-
-  /* Shake animation for incorrect typing */
+  /* Shake animation for errors */
   @keyframes shake-animation {
     0% { transform: translateX(0); }
-    15% { transform: translateX(-5px); }
-    30% { transform: translateX(5px); }
+    15% { transform: translateX(-4px); }
+    30% { transform: translateX(4px); }
     45% { transform: translateX(-3px); }
     60% { transform: translateX(3px); }
     75% { transform: translateX(-1px); }
@@ -85,6 +94,16 @@
   }
   
   .shake-error {
-    animation: shake-animation 0.5s ease-in-out;
+    animation: shake-animation 0.4s ease-in-out;
+  }
+  
+  /* Fade transition for elements */
+  .fade-transition {
+    @apply transition-opacity duration-300 ease-in-out;
+  }
+  
+  /* Scale transition for interactive elements */
+  .scale-transition {
+    @apply transition-transform duration-200 ease-out;
   }
 }
