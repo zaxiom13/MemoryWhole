@@ -21,7 +21,14 @@ function useTyping() {
     setReferenceExposed,
     inputError,
     setInputError,
-    setStep
+    setStep,
+    // Deck study mode related
+    isDeckStudyMode,
+    studyDeckId,
+    studyCardIds,
+    currentCardIndex,
+    cards,
+    startDeckStudy
   } = useAppState();
   
   const { easyMode, ghostTextEnabled } = useUserPreferences();
@@ -93,6 +100,31 @@ function useTyping() {
     localStorage.setItem('timePenalty', '0');
   };
   
+  // Start deck study mode
+  const handleStartDeckStudy = (deck) => {
+    // Get all cards for this deck
+    const deckCards = cards.filter(card => deck.cardIds.includes(card.id));
+    if (deckCards.length === 0) return;
+    
+    // Set up deck study mode
+    const cardIds = deckCards.map(card => card.id);
+    startDeckStudy(deck.id, cardIds);
+    
+    // Select the first card's reference
+    handleSelectReference(deckCards[0].text);
+  };
+  
+  // Load the next card in deck study mode
+  const loadNextStudyCard = () => {
+    if (!isDeckStudyMode || currentCardIndex >= studyCardIds.length - 1) return;
+    
+    const nextCardId = studyCardIds[currentCardIndex + 1];
+    const nextCard = cards.find(card => card.id === nextCardId);
+    if (nextCard) {
+      handleSelectReference(nextCard.text);
+    }
+  };
+  
   return {
     userInput,
     selectedReference,
@@ -104,6 +136,8 @@ function useTyping() {
     handleBeginTyping,
     handleRetryTyping,
     handleReturnToMenu,
+    handleStartDeckStudy,
+    loadNextStudyCard,
     onReferenceExposed: () => setReferenceExposed(true)
   };
 }

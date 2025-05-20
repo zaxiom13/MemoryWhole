@@ -32,6 +32,14 @@ export function AppStateProvider({ children }) {
   const [referenceExposed, setReferenceExposed] = useState(false);
   const [inputError, setInputError] = useState(false);
   
+  // Deck study mode state
+  const [studyDeckId, setStudyDeckId] = useState(null);
+  const [studyCardIds, setStudyCardIds] = useState([]);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isDeckStudyMode, setIsDeckStudyMode] = useState(false);
+  const [deckStudyComplete, setDeckStudyComplete] = useState(false);
+  const [deckCompletionTimes, setDeckCompletionTimes] = useState([]);
+  
   // Set initial step based on tutorial completion
   useEffect(() => {
     const tutorialComplete = loadPreference('tutorialComplete', false);
@@ -59,6 +67,54 @@ export function AppStateProvider({ children }) {
     setReferenceExposed,
     inputError,
     setInputError,
+    
+    // Deck study mode state
+    studyDeckId,
+    setStudyDeckId,
+    studyCardIds,
+    setStudyCardIds,
+    currentCardIndex,
+    setCurrentCardIndex,
+    isDeckStudyMode,
+    setIsDeckStudyMode,
+    deckStudyComplete,
+    setDeckStudyComplete,
+    deckCompletionTimes,
+    setDeckCompletionTimes,
+    
+    // Start deck study mode
+    startDeckStudy: (deckId, cardIds) => {
+      setStudyDeckId(deckId);
+      setStudyCardIds(cardIds);
+      setCurrentCardIndex(0);
+      setIsDeckStudyMode(true);
+      setDeckStudyComplete(false);
+      setDeckCompletionTimes([]);
+    },
+    
+    // Move to the next card in deck study mode
+    nextStudyCard: (completedTime) => {
+      setDeckCompletionTimes(prev => [...prev, completedTime]);
+      setCurrentCardIndex(prev => prev + 1);
+      setIsComplete(false);
+      setUserInput('');
+    },
+    
+    // Complete deck study mode
+    completeDeckStudy: () => {
+      setDeckStudyComplete(true);
+      setIsDeckStudyMode(false);
+    },
+    
+    // Exit deck study mode early
+    exitDeckStudy: () => {
+      setStudyDeckId(null);
+      setStudyCardIds([]);
+      setCurrentCardIndex(0);
+      setIsDeckStudyMode(false);
+      setDeckStudyComplete(false);
+      // Note: we don't clear completionTimes to preserve records
+    },
     
     // Tutorial completion
     completeTutorial: () => {

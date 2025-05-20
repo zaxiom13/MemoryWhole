@@ -4,7 +4,7 @@ import { formatDate } from '../utils/memoryUtils';
 /**
  * Deck item component
  */
-function DeckItem({ deck, onSelect, onEdit, onDelete }) {
+function DeckItem({ deck, onSelect, onEdit, onDelete, onStudyDeck }) {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -55,15 +55,28 @@ function DeckItem({ deck, onSelect, onEdit, onDelete }) {
         <div className="text-xs text-gray-600 dark:text-gray-400">
           {`${deck.cardIds.length} cards · Last modified: ${formatDate(deck.updatedAt || deck.createdAt)}`}
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(deck);
-          }}
-          className="px-4 py-2 leather-button text-sm font-medium hover:scale-105 transform transition-transform duration-200"
-        >
-          View Cards
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(deck);
+            }}
+            className="px-4 py-2 leather-button text-sm font-medium hover:scale-105 transform transition-transform duration-200"
+          >
+            View Cards
+          </button>
+          {deck.cardIds.length > 0 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStudyDeck(deck);
+              }}
+              className="px-4 py-2 leather-button bg-indigo-600 text-sm font-medium hover:scale-105 transform transition-transform duration-200"
+            >
+              Study Deck
+            </button>
+          )}
+        </div>
       </div>
     </motion.div>
   );
@@ -72,7 +85,7 @@ function DeckItem({ deck, onSelect, onEdit, onDelete }) {
 /**
  * DeckList component
  */
-function DeckList({ decks, onSelectDeck, onCreateDeck, onEditDeck, onDeleteDeck, onViewBestTimes }) {
+function DeckList({ decks, onSelectDeck, onCreateDeck, onEditDeck, onDeleteDeck, onViewBestTimes, onStudyDeck }) {
   return (
     <>
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
@@ -109,6 +122,7 @@ function DeckList({ decks, onSelectDeck, onCreateDeck, onEditDeck, onDeleteDeck,
               onSelect={onSelectDeck}
               onEdit={onEditDeck}
               onDelete={onDeleteDeck}
+              onStudyDeck={onStudyDeck}
             />
           ))}
         </div>
@@ -116,5 +130,7 @@ function DeckList({ decks, onSelectDeck, onCreateDeck, onEditDeck, onDeleteDeck,
     </>
   );
 }
+
+export default DeckList;
 
 export default DeckList;
