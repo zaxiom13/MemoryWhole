@@ -39,11 +39,11 @@ export default function ReferenceConfirmation({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="w-full max-w-screen-sm overflow-y-auto max-h-screen pb-4"
+      className="w-full max-w-screen-sm overflow-y-auto max-h-screen pb-24 md:pb-4"
     >
       <div className="p-6 sm:p-6 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 note-paper transition-all duration-300">
         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready to Test Your Memory?</h3>
-        <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[50vh] overflow-y-auto mb-4">
+        <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[40vh] sm:max-h-[50vh] overflow-y-auto mb-4">
           <h4 className="text-lg font-medium mb-2 text-gray-700 dark:text-gray-300">Selected Reference:</h4>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
             {selectedReference}
@@ -122,7 +122,7 @@ export default function ReferenceConfirmation({
           <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">Study Options</h4>
           
           {/* Easy Mode Toggle */}
-          <div className="flex items-center mb-3">
+          <div className="flex items-center mb-2 sm:mb-3">
             <button 
               onClick={() => {
                 const newEasyMode = !localEasyMode;
@@ -151,7 +151,7 @@ export default function ReferenceConfirmation({
           </div>
           
           {/* Ghost Text Toggle */}
-          <div className="flex items-center mb-3">
+          <div className="flex items-center mb-2 sm:mb-3">
             <button 
               onClick={() => {
                 const newGhostTextEnabled = !localGhostTextEnabled;
@@ -205,12 +205,15 @@ export default function ReferenceConfirmation({
             </div>
           </div>
         </div>
-        
-        <div className="flex justify-end gap-3 mt-6 sm:mt-6 mt-4 sm:relative sticky bottom-0 bg-white dark:bg-gray-800 py-2 z-10">
+      </div>
+      
+      {/* Fixed action buttons at bottom for mobile */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 py-3 px-4 border-t border-gray-200 dark:border-gray-700 shadow-lg md:hidden z-20">
+        <div className="flex justify-between gap-3 max-w-screen-sm mx-auto">
           <motion.button 
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300"
+            className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300 flex-1"
             onClick={onBack}
           >
             Back
@@ -218,12 +221,32 @@ export default function ReferenceConfirmation({
           <motion.button 
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="leather-button px-5 py-2"
+            className="leather-button px-5 py-2 flex-1 font-medium"
             onClick={onBegin}
           >
             Begin Test
           </motion.button>
         </div>
+      </div>
+      
+      {/* Desktop buttons */}
+      <div className="hidden md:flex justify-end gap-3 mt-6">
+        <motion.button 
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+          className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300"
+          onClick={onBack}
+        >
+          Back
+        </motion.button>
+        <motion.button 
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+          className="leather-button px-5 py-2"
+          onClick={onBegin}
+        >
+          Begin Test
+        </motion.button>
       </div>
     </motion.div>
   );
