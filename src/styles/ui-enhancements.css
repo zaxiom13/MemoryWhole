@@ -121,7 +121,27 @@
   }
 
   .leather-button {
-    @apply py-2 px-4 text-sm; /* Smaller buttons on mobile */
+    @apply py-2 px-4 text-sm font-medium; /* Smaller buttons on mobile with medium font */
+  }
+  
+  /* Reduce the maximum height of the reference text container on mobile */
+  .note-paper .max-h-\[50vh\] {
+    max-height: 30vh; /* Smaller height on mobile to leave room for controls */
+  }
+  
+  /* Make option toggles more compact on mobile */
+  .flex.items-center.mb-3 {
+    @apply mb-2; /* Less margin between options */
+  }
+  
+  /* Make text descriptions smaller on mobile */
+  .ml-2.text-sm {
+    @apply text-xs; /* Smaller helper text */
+  }
+  
+  /* Bottom fixed buttons styles for mobile */
+  .fixed.bottom-0.left-0.right-0 {
+    @apply border-t border-gray-200 dark:border-gray-700 shadow-lg py-3;
   }
   
   /* Improved mobile text alignment */
