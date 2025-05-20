@@ -43,7 +43,7 @@ export default function ReferenceConfirmation({
     >
       <div className="p-6 sm:p-6 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 note-paper transition-all duration-300">
         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready to Test Your Memory?</h3>
-        <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[50vh] overflow-y-auto">
+        <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[50vh] overflow-y-auto mb-4">
           <h4 className="text-lg font-medium mb-2 text-gray-700 dark:text-gray-300">Selected Reference:</h4>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
             {selectedReference}
@@ -118,7 +118,7 @@ export default function ReferenceConfirmation({
         </p>
         
         {/* Feature Toggles Section */}
-        <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-4 p-3">
           <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">Study Options</h4>
           
           {/* Easy Mode Toggle */}
@@ -206,7 +206,7 @@ export default function ReferenceConfirmation({
           </div>
         </div>
         
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex justify-end gap-3 mt-6 sm:mt-6 mt-4 sm:relative sticky bottom-0 bg-white dark:bg-gray-800 py-2 z-10">
           <motion.button 
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
