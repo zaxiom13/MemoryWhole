@@ -58,6 +58,16 @@ function useTyping() {
         ghostTextEnabled
       );
       setCompletionTime(time);
+
+      // If in deck study mode and not the last card, automatically load the next card
+      if (isDeckStudyMode && currentCardIndex < studyCardIds.length - 1) {
+        const nextCardId = studyCardIds[currentCardIndex + 1];
+        const nextCard = cards.find(card => card.id === nextCardId);
+        if (nextCard) {
+          // We'll let the DeckStudyMode component handle the transition
+          // via its useEffect that watches isComplete
+        }
+      }
     }
   };
   
@@ -121,7 +131,15 @@ function useTyping() {
     const nextCardId = studyCardIds[currentCardIndex + 1];
     const nextCard = cards.find(card => card.id === nextCardId);
     if (nextCard) {
-      handleSelectReference(nextCard.text);
+      setUserInput('');
+      setIsComplete(false);
+      setReferenceExposed(false);
+      window.startTime = Date.now();
+      localStorage.setItem('timePenalty', '0');
+      
+      // Update the reference text
+      const normalizedText = normalizeWhitespace(nextCard.text);
+      setSelectedReference(normalizedText);
     }
   };
   
@@ -138,6 +156,14 @@ function useTyping() {
     handleReturnToMenu,
     handleStartDeckStudy,
     loadNextStudyCard,
+    beginNextCard: () => {
+      // Reset state for the next card
+      setUserInput('');
+      setIsComplete(false);
+      setReferenceExposed(false);
+      window.startTime = Date.now();
+      localStorage.setItem('timePenalty', '0');
+    },
     onReferenceExposed: () => setReferenceExposed(true)
   };
 }

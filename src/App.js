@@ -61,6 +61,7 @@ function AppContent() {
     handleReturnToMenu,
     handleStartDeckStudy,
     loadNextStudyCard,
+    beginNextCard,
     onReferenceExposed
   } = useTyping();
 
@@ -136,6 +137,7 @@ function AppContent() {
               inputError={inputError}
               loadNextStudyCard={loadNextStudyCard}
               completionTime={completionTime}
+              beginNextCard={beginNextCard}
             />
           ) : step === 3 && (
             <ReferenceTyping 

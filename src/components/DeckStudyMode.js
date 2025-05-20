@@ -17,7 +17,9 @@ function DeckStudyMode({
   ghostTextEnabled = true,
   showReferenceEnabled = false,
   inputError,
-  completionTime
+  completionTime,
+  loadNextStudyCard,
+  beginNextCard
 }) {
   const { 
     studyDeckId,
@@ -38,11 +40,15 @@ function DeckStudyMode({
     if (isComplete && currentCardIndex < studyCardIds.length - 1) {
       // Move to next card with the completion time
       nextStudyCard(completionTime);
+      // Load the next card
+      loadNextStudyCard();
+      // Begin typing the next card
+      beginNextCard();
     } else if (isComplete && currentCardIndex === studyCardIds.length - 1) {
       // All cards completed
       completeDeckStudy();
     }
-  }, [isComplete, currentCardIndex, studyCardIds.length, completionTime, nextStudyCard, completeDeckStudy]);
+  }, [isComplete, currentCardIndex, studyCardIds.length, completionTime, nextStudyCard, completeDeckStudy, loadNextStudyCard, beginNextCard]);
 
   return (
     <motion.div 
