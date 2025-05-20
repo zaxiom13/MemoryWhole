@@ -268,10 +268,15 @@ function HomePage({
   const handleDeckFormSubmit = (formData) => {
     if (editingDeck && editingDeck.id) {
       onUpdateDeck({ ...editingDeck, ...formData });
+      setShowDeckForm(false);
     } else {
-      onCreateNewDeck(formData);
+      // Create new deck and navigate to its cards view
+      const newDeck = onCreateNewDeck(formData);
+      if (newDeck && newDeck.id) {
+        setCurrentDeckId(newDeck.id); // Navigate to the cards view for the new deck
+      }
+      setShowDeckForm(false);
     }
-    setShowDeckForm(false);
   };
 
   const handleBatchUpload = () => {

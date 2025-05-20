@@ -11,21 +11,21 @@ const defaultDecks = [
     id: 1, 
     title: 'Famous Quotations', 
     description: 'A collection of profound and memorable quotes from throughout history.',
-    cardIds: [1, 2, 3],
+    cardIds: [1, 2, 3, 7],
     createdAt: new Date('2023-01-01').getTime()
   },
   { 
     id: 2, 
     title: 'Scientific Concepts', 
     description: 'Key scientific principles and theories explained in accessible language.',
-    cardIds: [4, 5],
+    cardIds: [4, 5, 8],
     createdAt: new Date('2023-02-01').getTime()
   },
   { 
     id: 3, 
     title: 'Memory Techniques', 
     description: 'Methods and approaches to improve memory retention and recall.',
-    cardIds: [6],
+    cardIds: [6, 9],
     createdAt: new Date('2023-03-01').getTime()
   }
 ];

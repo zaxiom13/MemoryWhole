@@ -123,9 +123,12 @@ export function loadCardsFromStorage(defaultCards) {
   try {
     const savedCards = localStorage.getItem('memoryCards');
     if (savedCards) {
-      return JSON.parse(savedCards);
+      const parsedCards = JSON.parse(savedCards);
+      console.log('Loaded saved cards from localStorage:', parsedCards.length);
+      return parsedCards;
     }
     
+    console.log('No saved cards found, using default cards:', defaultCards.length);
     const defaultCardsWithTimestamps = defaultCards.map(card => ({
       ...card,
       createdAt: card.createdAt || Date.now()
@@ -287,9 +290,12 @@ export function loadDecksFromStorage(defaultDecks) {
   try {
     const savedDecks = localStorage.getItem('memoryDecks');
     if (savedDecks) {
-      return JSON.parse(savedDecks);
+      const parsedDecks = JSON.parse(savedDecks);
+      console.log('Loaded saved decks from localStorage:', parsedDecks.length);
+      return parsedDecks;
     }
     
+    console.log('No saved decks found, using default decks:', defaultDecks.length);
     const defaultDecksWithTimestamps = defaultDecks.map(deck => ({
       ...deck,
       createdAt: deck.createdAt || Date.now()
