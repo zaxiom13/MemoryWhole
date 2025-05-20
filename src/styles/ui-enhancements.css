@@ -6,10 +6,15 @@
   @apply transition-all duration-300 ease-out;
   @apply shadow-button hover:shadow-button-hover;
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
-  @apply active:scale-97 active:shadow-none;
+  @apply active:shadow-none;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.01em;
+  transform: translateZ(0);
+}
+
+.leather-button:active {
+  transform: scale(0.97) translateY(1px) translateZ(0);
 }
 
 .dark .leather-button {
@@ -30,10 +35,6 @@
 
 .leather-button:hover::after {
   left: 100%;
-}
-
-.leather-button:active {
-  @apply transform scale-95 translate-y-0.5;
 }
 
 /* Consistent Spacing */
