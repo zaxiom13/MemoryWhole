@@ -60,6 +60,35 @@ const defaultCards = [
     This method, also known as the Method of Loci, was used by ancient Greek and Roman orators to memorize hours-long speeches. Modern neuroscience confirms that spatial memory engages multiple brain regions, creating stronger and more resilient memory traces than rote memorization.`,
     createdAt: new Date('2023-03-15').getTime(),
     deckId: 3
+  },
+  { 
+    id: 7, 
+    title: 'Einstein\'s Quotes', 
+    text: `Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world. - Albert Einstein
+    
+    The important thing is not to stop questioning. Curiosity has its own reason for existing. - Albert Einstein
+    
+    The true sign of intelligence is not knowledge but imagination. - Albert Einstein`,
+    createdAt: new Date('2023-03-20').getTime(),
+    deckId: 1
+  },
+  { 
+    id: 8, 
+    title: 'Quantum Mechanics', 
+    text: `Quantum mechanics is the branch of physics relating to the very small. It describes the behavior of matter and its interactions with energy at the scale of atoms and subatomic particles.
+    
+    One of the most counterintuitive principles of quantum mechanics is quantum entanglement, where particles become linked and instantaneously affect one another regardless of distance.`,
+    createdAt: new Date('2023-03-25').getTime(),
+    deckId: 2
+  },
+  { 
+    id: 9, 
+    title: 'Spaced Repetition', 
+    text: `Spaced repetition is a learning technique that incorporates increasing intervals of time between subsequent review of previously learned material. This leverages the psychological spacing effect, which demonstrates that information is more effectively remembered when studied in multiple spaced-out sessions.
+    
+    Digital flashcard apps like Anki use algorithms to optimize review schedules based on your recall performance, making memory practice more efficient.`,
+    createdAt: new Date('2023-04-01').getTime(),
+    deckId: 3
   }
 ];
 
