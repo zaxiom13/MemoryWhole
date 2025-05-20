@@ -39,9 +39,9 @@ export default function ReferenceConfirmation({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="w-full max-w-screen-sm"
+      className="w-full max-w-screen-sm overflow-y-auto max-h-screen pb-4"
     >
-      <div className="p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 note-paper transition-all duration-300">
+      <div className="p-6 sm:p-6 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 note-paper transition-all duration-300">
         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready to Test Your Memory?</h3>
         <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[50vh] overflow-y-auto">
           <h4 className="text-lg font-medium mb-2 text-gray-700 dark:text-gray-300">Selected Reference:</h4>
