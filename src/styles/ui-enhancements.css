@@ -4,7 +4,8 @@
   @apply bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700
          dark:from-indigo-600 dark:to-indigo-700 dark:hover:from-indigo-700 dark:hover:to-indigo-800
          text-white font-semibold py-2.5 px-5 rounded-lg shadow-md hover:shadow-lg
-         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900;
+         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900
+         flex items-center justify-center;
   position: relative;
   overflow: hidden;
   letter-spacing: 0.03em;
@@ -34,9 +35,23 @@
 }
 
 
+/* Consistent Spacing Helpers */
+.content-container {
+  @apply p-4 md:p-6;
+}
+
+.section-spacing {
+  @apply my-4 md:my-6;
+}
+
+.card-spacing {
+  @apply p-4 md:p-6;
+}
+
 /* Enhanced Card Styles - Adding subtle pattern */
 .leather-card {
   /* Keep base styles from modern.css, removed pattern */
+  @apply card-spacing;
 }
 
 .dark .leather-card {
@@ -107,5 +122,15 @@
 
   .leather-button {
     @apply py-2 px-4 text-sm; /* Smaller buttons on mobile */
+  }
+  
+  /* Improved mobile text alignment */
+  h1, h2, h3 {
+    @apply text-center;
+  }
+  
+  /* Better button spacing on mobile */
+  .space-x-4 {
+    @apply space-x-2;
   }
 }

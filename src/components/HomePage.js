@@ -47,7 +47,7 @@ function CardForm({ card, deck, onSubmit, onCancel }) {
   return (
     <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
       <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
           {card && card.id ? 'Edit Card' : `Create New Card in "${deck ? deck.title : 'Deck'}"` }
         </h2>
         <div className="flex space-x-2">
@@ -91,7 +91,7 @@ function CardForm({ card, deck, onSubmit, onCancel }) {
           ></textarea>
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <button
             type="submit"
             className="leather-button py-2 px-6"
@@ -115,7 +115,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
       className="leather-card p-8 h-[280px] flex flex-col cursor-pointer relative group hover:shadow-lg"
     >
       <div 
-        className="absolute top-4 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        className="absolute top-3 right-3 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -123,7 +123,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           className="leather-button p-2 rounded-full"
           title="Edit Card"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
         </button>
@@ -136,12 +136,12 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           className="leather-button p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/40"
           title="Delete Card"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </button>
       </div>
-      <h3 className="text-1xl font-semibold mb-1 text-gray-800 dark:text-gray-100 pr-0 h-[3rem] w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap">
+      <h3 className="text-xl font-semibold mb-1 text-gray-800 dark:text-gray-100 h-[3rem] w-full overflow-hidden text-ellipsis whitespace-nowrap">
         {card.title}
       </h3>
       <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
@@ -177,11 +177,11 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
             className="leather-button p-2 rounded-full flex items-center justify-center"
             title="Back to Decks"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
           </button>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
             {deck.title}: Choose a card to practice
           </h2>
         </div>
@@ -191,7 +191,7 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
             className="leather-button p-2 rounded-full flex items-center justify-center"
             title="Add New Card"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
           </button>
@@ -204,7 +204,7 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
             <p className="text-gray-600 dark:text-gray-400 mb-6">Create your first card to start practicing</p>
             <button 
               onClick={onCreateCard}
-              className="leather-button py-2 px-6 text-lg"
+              className="leather-button py-2 px-6 text-lg flex items-center justify-center"
             >
               Create Card
             </button>
@@ -362,7 +362,7 @@ function HomePage({
     return (
       <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
         <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
             {`Create New Card in "${selectedDeck ? selectedDeck.title : 'Deck'}"`}
           </h2>
           <div className="flex space-x-2">
@@ -416,7 +416,7 @@ function HomePage({
             ></textarea>
           </div>
           
-          <div className="flex justify-end">
+          <div className="flex justify-center">
             <button
               type="submit"
               className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"

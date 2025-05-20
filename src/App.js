@@ -246,10 +246,10 @@ export default function App() {
             className="flex flex-col items-center justify-center"
           >
             <GlobalStyles />
-            <h1 className="text-5xl font-bold mb-10 sticky top-0 z-10 leather-title py-2">
+            <h1 className="text-5xl font-bold mb-10 sticky top-0 z-10 leather-title py-2 text-center">
               Memory Whole
             </h1>
-            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-8">
+            <div className="w-full max-w-2xl h-[80vh] relative stitched-border paper-background p-8 mx-auto">
               {step === 1 && (
                 <HomePage 
                   cards={cards} 
