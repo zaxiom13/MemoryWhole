@@ -132,5 +132,3 @@ function DeckList({ decks, onSelectDeck, onCreateDeck, onEditDeck, onDeleteDeck,
 }
 
 export default DeckList;
-
-export default DeckList;

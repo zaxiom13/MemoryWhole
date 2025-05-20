@@ -24,7 +24,6 @@ function useTyping() {
     setStep,
     // Deck study mode related
     isDeckStudyMode,
-    studyDeckId,
     studyCardIds,
     currentCardIndex,
     cards,

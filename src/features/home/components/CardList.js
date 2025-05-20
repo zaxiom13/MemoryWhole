@@ -77,5 +77,3 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
 }
 
 export default CardList;
-
-export default CardList;

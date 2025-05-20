@@ -25,7 +25,6 @@ function DeckStudyMode({
     studyDeckId,
     studyCardIds,
     currentCardIndex,
-    cards,
     decks,
     nextStudyCard,
     completeDeckStudy
