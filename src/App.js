@@ -8,9 +8,9 @@ import useStatistics from './features/statistics/useStatistics';
 import TutorialGuide from './components/TutorialGuide';
 import ReferenceConfirmation from './components/ReferenceConfirmation';
 import ReferenceTyping from './components/ReferenceTyping';
-import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage';
 import BestTimesPage from './components/BestTimesPage';
+import HomePage from './features/home/HomePage';
 import AppLayout from './layout/AppLayout';
 
 import './styles/modern.css';

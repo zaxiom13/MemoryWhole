@@ -1,6 +1,6 @@
 import { useAppState } from '../../contexts/AppStateContext';
 import { useUserPreferences } from '../../contexts/UserPreferencesContext';
-import { isInputCorrect, isTypingComplete, handleCompletion } from './typingUtils';
+import { isInputCorrect, isTypingComplete, handleCompletion } from '../../utils/typingUtils';
 import { normalizeWhitespace } from '../../utils/memoryUtils';
 
 /**
