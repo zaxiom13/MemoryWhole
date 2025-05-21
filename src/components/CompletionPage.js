@@ -9,8 +9,9 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
   // const penaltyTime = localStorage.getItem('timePenalty') ? parseInt(localStorage.getItem('timePenalty')) : 0;
   
   return (
-    <motion.div 
-      className="text-center p-8 rounded-xl shadow-lg note-paper border border-gray-200 dark:border-gray-700"
+    // Main container: Removed note-paper, applied new card styles, adjusted padding
+    <motion.div
+      className="text-center bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 md:p-8 border border-gray-200 dark:border-gray-700"
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: "spring", stiffness: 300, damping: 15 }}
@@ -63,7 +64,8 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
         transition={{ delay: 1.8 }}
       >
         You completed the task in{' '}
-        <span className="font-bold leather-card px-5 py-3 rounded-lg mt-3 text-gray-800 dark:text-gray-200 inline-flex justify-center min-w-32">
+        {/* Completion Time Display: Removed leather-card, styled as a badge */}
+        <span className="font-bold bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200 px-5 py-3 rounded-lg mt-3 inline-flex justify-center items-center min-w-32 shadow-md">
           {formatTime(completionTime)}
         </span>
       </motion.p>
@@ -74,16 +76,16 @@ function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onT
         animate={{ opacity: 1 }}
         transition={{ delay: 2.1 }}
       >
-        <button 
+        <button
           onClick={onReturnToMenu}
-          className="leather-button px-6 py-3 rounded-lg font-bold shadow-md transition-all duration-300"
+          className="leather-button" // Removed custom padding & redundant classes
         >
           Return to Menu
         </button>
         
-        <button 
+        <button
           onClick={onTryAgain}
-          className="leather-button px-6 py-3 rounded-lg font-bold shadow-md transition-all duration-300"
+          className="leather-button" // Removed custom padding & redundant classes
         >
           Try Again
         </button>

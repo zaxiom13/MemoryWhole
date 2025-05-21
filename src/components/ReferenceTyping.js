@@ -54,8 +54,9 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
   
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-70 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center">
-      <motion.div 
-        className="relative mx-auto p-6 border border-gray-200 dark:border-gray-700 w-full max-w-md shadow-xl rounded-xl note-paper"
+      {/* Modal card: Removed note-paper, applied new card styles */}
+      <motion.div
+        className="relative mx-auto p-6 border border-gray-300 dark:border-gray-600 w-full max-w-md shadow-xl rounded-lg bg-white dark:bg-gray-800"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -80,7 +81,7 @@ function ReferenceTextModal({ isOpen, onConfirm, onCancel }) {
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+            className="leather-button" // Removed custom padding & redundant classes
             onClick={onConfirm}
           >
             Show Reference
@@ -193,9 +194,10 @@ export default function ReferenceTyping({
           )}
           
           {/* Timer */}
-          <motion.div 
-            className="inline-block font-mono text-lg font-semibold px-4 py-1 note-paper rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm text-gray-900 dark:text-gray-100"
-            animate={{ 
+          {/* Timer Display: Removed note-paper, used new card-like style */}
+          <motion.div
+            className="inline-block font-mono text-lg font-semibold px-4 py-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm text-gray-900 dark:text-gray-100"
+            animate={{
               scale: [1, 1.02, 1],
             }}
             transition={{ 
@@ -244,10 +246,10 @@ export default function ReferenceTyping({
         <div className="w-full max-w-lg mt-6 flex flex-col space-y-3">
           {/* Control buttons */}
           <div className="flex gap-3 justify-between">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className="leather-button px-4 py-2 flex items-center"
+              className="leather-button flex items-center" // Removed custom padding
               onClick={onBack}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -257,10 +259,10 @@ export default function ReferenceTyping({
             </motion.button>
             
             {hasMistakes() && (
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-4 py-2 leather-button text-white font-medium rounded-lg shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="leather-button disabled:opacity-50 disabled:cursor-not-allowed" // Removed custom padding & redundant classes
                 onClick={handleBackToLastCorrect}
                 disabled={lastCorrectIndex === internalUserInput.length}
               >
@@ -273,12 +275,12 @@ export default function ReferenceTyping({
         </div>
       )}
       
-      {/* Reference text display when opened */}
+      {/* Reference text display when opened: Removed note-paper, applied content area style */}
       {isReferenceOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-lg mt-4 p-4 border border-indigo-300 dark:border-indigo-600 rounded-xl note-paper shadow-md transition-all duration-300"
+          className="w-full max-w-lg mt-4 p-4 border border-indigo-300 dark:border-indigo-600 rounded-lg bg-gray-50 dark:bg-gray-700 shadow-md transition-all duration-300"
         >
           {easyMode && (
             <div className="mb-3 p-2 bg-green-100 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">

@@ -37,7 +37,8 @@ export default function TutorialGuide({ onComplete }) {
   const [currentStep, setCurrentStep] = useState(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-50 flex flex-col items-center justify-center p-8">
+    // Adjusted main background for dark mode
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-50 dark:bg-gray-900 flex flex-col items-center justify-center p-8">
       <AnimatePresence mode='wait'>
         <motion.div
           key={currentStep}
@@ -47,22 +48,23 @@ export default function TutorialGuide({ onComplete }) {
           transition={{ duration: 0.5 }}
           className="max-w-2xl text-center"
         >
-          <div className="text-8xl mb-6 animate-bounce">
+          {/* Added text color for icon container for better dark mode SVG visibility */}
+          <div className="text-8xl mb-6 animate-bounce text-gray-700 dark:text-gray-400">
             {tutorialSteps[currentStep].icon}
           </div>
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
             {tutorialSteps[currentStep].title}
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8"> {/* Added dark mode text */}
             {tutorialSteps[currentStep].content}
           </p>
           
           <div className="flex justify-center gap-4 mb-8">
             {tutorialSteps.map((_, index) => (
-              <div 
+              <div
                 key={index}
                 className={`h-2 w-8 rounded-full transition-all duration-300 ${
-                  index === currentStep ? 'bg-purple-500' : 'bg-gray-200'
+                  index === currentStep ? 'bg-purple-500' : 'bg-gray-200 dark:bg-gray-700' // Added dark mode for inactive dot
                 }`}
               />
             ))}
@@ -72,7 +74,8 @@ export default function TutorialGuide({ onComplete }) {
             {currentStep > 0 && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                // Added dark mode for Back button
+                className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
                 ← Back
               </button>
@@ -81,14 +84,16 @@ export default function TutorialGuide({ onComplete }) {
             {currentStep < tutorialSteps.length - 1 ? (
               <button
                 onClick={() => setCurrentStep(prev => prev + 1)}
-                className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                // Purple button should be fine in dark mode, hover adjusted for consistency
+                className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 dark:hover:bg-purple-700 transition-colors"
               >
                 Next →
               </button>
             ) : (
               <button
                 onClick={onComplete}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors animate-pulse"
+                // Blue button should be fine in dark mode, hover adjusted for consistency
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors animate-pulse"
               >
                 Begin Your Journey
               </button>

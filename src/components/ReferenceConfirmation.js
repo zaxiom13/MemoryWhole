@@ -41,26 +41,29 @@ export default function ReferenceConfirmation({
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-screen-sm overflow-y-auto max-h-screen pb-24 md:pb-4"
     >
-      <div className="p-6 sm:p-6 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 note-paper transition-all duration-300">
+      {/* Main Content Area: Removed note-paper, applied new card styles */}
+      <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300">
         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready to Test Your Memory?</h3>
-        <div className="p-4 rounded-lg note-paper border border-gray-200 dark:border-gray-700 max-h-[40vh] sm:max-h-[50vh] overflow-y-auto mb-4">
+        {/* Reference Text Display: Removed note-paper, applied new content area styles */}
+        <div className="p-4 rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 max-h-[40vh] sm:max-h-[50vh] overflow-y-auto mb-4">
           <h4 className="text-lg font-medium mb-2 text-gray-700 dark:text-gray-300">Selected Reference:</h4>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
             {selectedReference}
           </p>
         </div>
         
-        {/* Personal Best Times Section */}
+        {/* Personal Best Times Section: Removed leather-card, applied new card styles */}
         {personalBestTimes.length > 0 && (
-          <div className="mt-6 p-4 rounded-lg leather-card border border-gray-200 dark:border-gray-700">
+          <div className="mt-6 p-4 rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
             <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300 flex items-center">
               <span className="mr-2">🏆</span> Personal Best Times
             </h4>
             <div className="space-y-2">
               {personalBestTimes.slice(0, 3).map((timeData, index) => (
-                <div 
+                // Time Row: Adjusted background
+                <div
                   key={index}
-                  className="flex justify-between items-center p-2 rounded-lg bg-white/50 dark:bg-gray-800/50"
+                  className="flex justify-between items-center p-2 rounded-md bg-gray-100 dark:bg-gray-700"
                 >
                   <div className="flex items-center">
                     <span className="text-lg font-bold mr-2">{index + 1}.</span>
@@ -117,8 +120,8 @@ export default function ReferenceConfirmation({
           Take a moment to study this text. When ready, click "Begin" to test your recall.
         </p>
         
-        {/* Feature Toggles Section */}
-        <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-4 p-3">
+        {/* Feature Toggles Section: Adjusted border and background */}
+        <div className="mt-4 border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50">
           <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">Study Options</h4>
           
           {/* Easy Mode Toggle */}
@@ -218,10 +221,10 @@ export default function ReferenceConfirmation({
           >
             Back
           </motion.button>
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="leather-button px-5 py-2 flex-1 font-medium"
+            className="leather-button flex-1" // Removed custom padding and font-medium
             onClick={onBegin}
           >
             Begin Test
@@ -231,18 +234,18 @@ export default function ReferenceConfirmation({
       
       {/* Desktop buttons */}
       <div className="hidden md:flex justify-end gap-3 mt-6">
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
-          className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300"
+          className="px-5 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-all duration-300" // Kept as secondary button style
           onClick={onBack}
         >
           Back
         </motion.button>
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
-          className="leather-button px-5 py-2"
+          className="leather-button" // Removed custom padding
           onClick={onBegin}
         >
           Begin Test
