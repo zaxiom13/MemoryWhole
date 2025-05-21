@@ -8,7 +8,8 @@ import GlobalStyles from '../ui/GlobalStyles';
  * Main application layout component
  */
 function AppLayout({ children }) {
- // const { darkMode } = useUserPreferences(); // darkMode is still used by UserPreferencesContext to set class on <html>
+  // const { darkMode } = useUserPreferences(); // darkMode is used by UserPreferencesContext to set class on <html>, not directly here.
+  useUserPreferences(); // Call the hook to ensure UserPreferencesContext logic (like setting <html> class) runs.
   
   return (
     // Main div: Removed leather-background and darkMode ternary. Added flex properties.

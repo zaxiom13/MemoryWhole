@@ -4,7 +4,7 @@ import { formatTime } from '../utils/memoryUtils';
 /**
  * CompletionPage component - displays completion metrics and animation
  */
-function CompletionPage({ completionTime, selectedReference, onReturnToMenu, onTryAgain }) {
+function CompletionPage({ completionTime, onReturnToMenu, onTryAgain }) { // Removed selectedReference
   // Get any stored penalty time from localStorage - no longer needed
   // const penaltyTime = localStorage.getItem('timePenalty') ? parseInt(localStorage.getItem('timePenalty')) : 0;
   

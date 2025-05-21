@@ -23,7 +23,7 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
   const [isReferenceOpen, setIsReferenceOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [penaltyTime, setPenaltyTime] = useState(0);
+  // const [penaltyTime, setPenaltyTime] = useState(0); // Removed unused penaltyTime state
   const [shakeError, setShakeError] = useState(false);
   const textareaRef = useRef(null);
 
@@ -142,9 +142,9 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     const now = Date.now();
     setStartTime(now);
     window.startTime = now; // For compatibility with existing code
-    // Reset penalty time when starting a new session
-    setPenaltyTime(0);
-    localStorage.setItem('timePenalty', '0');
+    // Reset penalty time when starting a new session - Removed
+    // setPenaltyTime(0);
+    // localStorage.setItem('timePenalty', '0');
   }, []);
   
   // Update timer every second
@@ -265,16 +265,15 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
 
   // Reset to last correct position
   const handleBackToLastCorrect = () => {
-    console.log('Back to last correct position: ' + lastCorrectIndex + ' characters');
+    // console.log('Back to last correct position: ' + lastCorrectIndex + ' characters'); // Removed console.log
     const correctedInput = userInput.slice(0, lastCorrectIndex);
     setUserInput(correctedInput);
-
   };
 
-  // Show reference confirmation dialog
-  const handleShowReferenceClick = () => {
-    setIsConfirmationOpen(true);
-  };
+  // Show reference confirmation dialog - This function seems unused, setIsConfirmationOpen is used directly or via other handlers.
+  // const handleShowReferenceClick = () => {
+  //   setIsConfirmationOpen(true);
+  // };
 
   // Handle showing the reference text
   const handleConfirmShowReference = () => {
@@ -297,9 +296,9 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     const now = Date.now();
     setStartTime(now);
     window.startTime = now;
-    // Reset penalty time
-    setPenaltyTime(0);
-    localStorage.setItem('timePenalty', '0');
+    // Reset penalty time - Removed
+    // setPenaltyTime(0);
+    // localStorage.setItem('timePenalty', '0');
   };
 
   return {
@@ -311,12 +310,12 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     isReferenceOpen,
     isConfirmationOpen,
     textareaRef,
-    penaltyTime,
+    // penaltyTime, // Removed from return
     shakeError,
     hasMistakes: checkMistakes,
     handleInputChange,
     handleBackToLastCorrect,
-    handleShowReferenceClick,
+    // handleShowReferenceClick, // Removed from return
     handleConfirmShowReference,
     handleCancelShowReference,
     resetTyping,
