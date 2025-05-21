@@ -8,12 +8,12 @@ import Card from '../../../models/Card';
  */
 function CardItem({ card, onSelect, onEdit, onDelete }) {
   return (
-    {/* Main Card: Removed leather-card, h-280px, adjusted padding */}
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl rounded-lg p-6 transition-shadow duration-300 flex flex-col cursor-pointer relative group"
     >
+      {/* Main Card: Removed leather-card, h-280px, adjusted padding */}
       {/* Edit/Delete Buttons: Changed to icon-button */}
       <div
         className="absolute top-3 right-3 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
