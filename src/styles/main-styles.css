@@ -34,6 +34,37 @@
     @apply shadow-inner scale-[0.98] transform translate-y-0;
 }
 
+/* Icon Button Styles - Derived from leather-button but with smaller padding */
+.icon-button {
+  @apply bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700
+         dark:from-indigo-600 dark:to-indigo-700 dark:hover:from-indigo-700 dark:hover:to-indigo-800
+         text-white font-semibold p-2 rounded-lg shadow-md hover:shadow-lg
+         transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900
+         flex items-center justify-center relative overflow-hidden;
+  /* letter-spacing: normal; */ /* Assuming default is fine, leather-button had 0.03em */
+}
+
+.icon-button::after { /* Keep the sheen effect */
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: rotate(30deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.icon-button:hover::after {
+  opacity: 1;
+}
+
+.icon-button:active {
+    @apply shadow-inner scale-[0.98] transform translate-y-0;
+}
 
 /* Consistent Spacing Helpers */
 .content-container {
@@ -48,17 +79,6 @@
   @apply p-4 md:p-6;
 }
 
-/* Enhanced Card Styles - Adding subtle pattern */
-.leather-card {
-  /* Keep base styles from modern.css, removed pattern */
-  @apply card-spacing;
-}
-
-.dark .leather-card {
-  /* Keep base styles from modern.css, removed pattern */
-}
-
-
 /* Enhanced Form Inputs */
 .enhanced-input, .enhanced-textarea {
   @apply w-full px-4 py-2.5 rounded-md border border-gray-300 dark:border-gray-600
@@ -66,12 +86,11 @@
          placeholder-gray-400 dark:placeholder-gray-500
          focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent
          transition-all duration-200 ease-in-out shadow-sm;
-  min-height: 140px; /* Slightly taller */
+  /* min-height removed from shared class */
 }
 
-/* Paper Background Styles - Adding faint lines */
-.note-paper {
-  /* Keep base from modern.css, removed lines */
+.enhanced-textarea {
+  min-height: 140px; /* Specific to textarea */
 }
 
 /* Animation Enhancements */
@@ -82,11 +101,6 @@
 
 .subtle-pulse {
   animation: subtlePulse 4s ease-in-out infinite; /* Slower pulse */
-}
-
-/* Dark Mode Enhancements */
-.dark .note-paper {
-  /* Dark mode lines removed */
 }
 
 /* Typing Area Enhancements */
@@ -122,11 +136,6 @@
 
   .leather-button {
     @apply py-2 px-4 text-sm font-medium; /* Smaller buttons on mobile with medium font */
-  }
-  
-  /* Reduce the maximum height of the reference text container on mobile */
-  .note-paper .max-h-\[50vh\] {
-    max-height: 30vh; /* Smaller height on mobile to leave room for controls */
   }
   
   /* Make option toggles more compact on mobile */

@@ -15,8 +15,7 @@ import BestTimesPage from './components/BestTimesPage';
 import HomePage from './features/home/HomePage';
 import AppLayout from './layout/AppLayout';
 
-import './styles/modern.css';
-import './styles/ui-enhancements.css';
+import './styles/main-styles.css';
 
 /**
  * Main application component

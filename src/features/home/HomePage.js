@@ -144,35 +144,37 @@ function HomePage({
   if (showCardForm && currentDeckId) {
     const selectedDeck = decks.find(d => d.id === currentDeckId) || null;
     return (
-      <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
-        <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+      // Scrollable div: Adjusted min-h for mobile
+      <div className="overflow-y-auto min-h-[calc(50vh-60px)] sm:min-h-[calc(70vh-70px)] pr-2">
+        {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
+        <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md shadow-sm py-4 px-4 mx-0 mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 text-center flex-grow">
             {`Create New Card in "${selectedDeck ? selectedDeck.title : 'Deck'}"`}
           </h2>
           <div className="flex space-x-2">
-            <button 
+            <button
               onClick={handleBatchUpload}
-              className="leather-button px-4 py-2"
+              className="leather-button" // Removed custom padding
               title="Upload multiple cards from JSON"
             >
               Batch Upload
             </button>
-            <button 
+            <button
               onClick={handleCancelCreate}
-              className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+              className="leather-button" // Removed custom padding & redundant classes
             >
               Cancel
             </button>
           </div>
         </div>
         
-        <form onSubmit={(e) => { 
-          e.preventDefault(); 
-          handleFormSubmit({ 
-            title: e.target.title.value, 
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleFormSubmit({
+            title: e.target.title.value,
             text: e.target.text.value,
             deckId: currentDeckId
-          }); 
+          });
         }} className="space-y-4">
           <div>
             <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
@@ -182,7 +184,7 @@ function HomePage({
               type="text"
               id="title"
               name="title"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              className="enhanced-input" // Applied enhanced-input
               placeholder="Card Title"
             />
           </div>
@@ -195,7 +197,7 @@ function HomePage({
               id="text"
               name="text"
               rows="10"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+              className="enhanced-textarea" // Applied enhanced-textarea
               placeholder="Card Content"
             ></textarea>
           </div>
@@ -203,7 +205,7 @@ function HomePage({
           <div className="flex justify-center">
             <button
               type="submit"
-              className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+              className="leather-button" // Removed custom padding & redundant classes
             >
               Create Card
             </button>
