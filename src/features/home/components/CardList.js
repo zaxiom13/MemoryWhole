@@ -7,11 +7,12 @@ import CardItem from './CardItem';
 function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard, onBackToDeckList }) {
   return (
     <>
-      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center">
+      {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
+      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md shadow-sm py-4 px-4 mx-0 flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <button 
+          <button
             onClick={onBackToDeckList}
-            className="leather-button p-2 rounded-full flex items-center justify-center"
+            className="icon-button rounded-full flex items-center justify-center" // Changed to icon-button
             title="Back to Decks"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,9 +24,9 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
           </h2>
         </div>
         <div>
-          <button 
+          <button
             onClick={onCreateCard}
-            className="leather-button p-2 rounded-full flex items-center justify-center"
+            className="icon-button rounded-full flex items-center justify-center" // Changed to icon-button
             title="Add New Card"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,14 +35,15 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
           </button>
         </div>
       </div>
-      <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
+      {/* Scrollable Area: Adjusted min-h for mobile */}
+      <div className="overflow-y-auto min-h-[calc(50vh-110px)] sm:min-h-[calc(70vh-120px)] pr-2">
         {cards.length === 0 ? (
           <div className="mt-20 flex flex-col items-center justify-center text-center p-8">
             <h3 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">No cards in this deck yet</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">Create your first card to start practicing</p>
-            <button 
+            <button
               onClick={onCreateCard}
-              className="leather-button py-2 px-6 text-lg flex items-center justify-center"
+              className="leather-button flex items-center justify-center" // Removed custom padding and text-lg
             >
               Create Card
             </button>

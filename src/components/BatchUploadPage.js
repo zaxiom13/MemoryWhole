@@ -93,14 +93,16 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
   };
 
   return (
-    <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
-      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+    // Main scrollable div: Adjusted min-h for mobile
+    <div className="overflow-y-auto min-h-[calc(50vh-60px)] sm:min-h-[calc(70vh-70px)] pr-2">
+      {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
+      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md shadow-sm py-4 px-4 mx-0 mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           Batch Upload Cards
         </h2>
-        <button 
+        <button
           onClick={onCancel}
-          className="px-4 py-2 leather-button rounded-lg transition-all duration-300"
+          className="leather-button" // Removed custom padding & redundant classes
         >
           Cancel
         </button>
@@ -117,13 +119,13 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
               id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="shadow appearance-none border rounded flex-1 py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="enhanced-input flex-1" // Applied enhanced-input
               placeholder="Enter a prompt for AI generation..."
             />
             <button
               type="button"
               onClick={handleGenerateWithAI}
-              className="leather-button font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+              className="leather-button" // Removed custom padding & redundant classes
             >
               Generate with AI
             </button>
@@ -140,7 +142,7 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
             value={jsonInput}
             onChange={handleInputChange}
             rows="10"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 font-mono"
+            className="enhanced-textarea font-mono" // Applied enhanced-textarea, kept font-mono
             placeholder='[
   {
     "title": "Card Title 1",
@@ -162,10 +164,11 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
             <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
               Preview ({preview.length} cards)
             </h3>
-            <div className="max-h-60 overflow-y-auto border rounded p-3 bg-gray-50 dark:bg-gray-800">
+            {/* Adjusted preview area bg and added shadow */}
+            <div className="max-h-60 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded p-3 bg-gray-50 dark:bg-gray-700 shadow-sm">
               {preview.map((card, index) => (
-                <div key={index} className="mb-3 p-2 border-b last:border-b-0">
-                  <p className="font-semibold">{card.title}</p>
+                <div key={index} className="mb-3 p-2 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
+                  <p className="font-semibold text-gray-800 dark:text-gray-100">{card.title}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {card.text.length > 100 ? card.text.substring(0, 100) + '...' : card.text}
                   </p>
@@ -179,25 +182,26 @@ function BatchUploadPage({ onCreateCards, onCancel }) {
           <button
             type="button"
             onClick={handleValidate}
-            className="leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300"
+            className="leather-button" // Removed custom padding & redundant classes
           >
             Validate JSON
           </button>
           <button
             type="submit"
             disabled={!preview}
-            className={`leather-button font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-all duration-300 ${!preview ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`leather-button ${!preview ? 'opacity-50 cursor-not-allowed' : ''}`} // Removed custom padding & redundant classes
           >
             Create Cards
           </button>
         </div>
       </form>
 
-      <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      {/* Instructions Area: Adjusted bg and added shadow */}
+      <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Instructions</h3>
         <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
           <li>Paste valid JSON array containing card objects</li>
-          <li>Each card object must have a <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">title</code> and <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">text</code> property</li>
+          <li>Each card object must have a <code className="bg-gray-200 dark:bg-gray-600 px-1 rounded">title</code> and <code className="bg-gray-200 dark:bg-gray-600 px-1 rounded">text</code> property</li> {/* Adjusted code bg for dark mode */}
           <li>Click "Validate JSON" to check your input</li>
           <li>Review the preview before creating cards</li>
         </ul>

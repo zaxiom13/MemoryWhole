@@ -36,15 +36,17 @@ function DeckForm({ deck, onSubmit, onCancel }) {
   };
 
   return (
-    <div className="overflow-y-auto h-[calc(70vh-70px)] pr-2">
-      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm mb-6 flex justify-between items-center">
+    // Main scrollable div: Adjusted min-h for mobile
+    <div className="overflow-y-auto min-h-[calc(50vh-60px)] sm:min-h-[calc(70vh-70px)] pr-2">
+      {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
+      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md shadow-sm py-4 px-4 mx-0 mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
           {deck && deck.id ? 'Edit Deck' : 'Create New Deck'}
         </h2>
         <div className="flex space-x-2">
-          <button 
+          <button
             onClick={onCancel}
-            className="leather-button px-4 py-2"
+            className="leather-button" // Removed px-4 py-2 to use leather-button default padding
           >
             Cancel
           </button>
@@ -85,7 +87,7 @@ function DeckForm({ deck, onSubmit, onCancel }) {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="leather-button py-2 px-6"
+            className="leather-button" // Removed py-2 px-6 to use leather-button default padding
           >
             {deck && deck.id ? 'Update Deck' : 'Create Deck'}
           </button>

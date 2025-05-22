@@ -11,15 +11,17 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="leather-card p-8 h-[280px] flex flex-col cursor-pointer relative group hover:shadow-lg"
+      className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl rounded-lg p-6 transition-shadow duration-300 flex flex-col cursor-pointer relative group"
     >
-      <div 
+      {/* Main Card: Removed leather-card, h-280px, adjusted padding */}
+      {/* Edit/Delete Buttons: Changed to icon-button */}
+      <div
         className="absolute top-3 right-3 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={() => onEdit(card)}
-          className="leather-button p-2 rounded-full"
+          className="icon-button rounded-full"
           title="Edit Card"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -32,7 +34,7 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
               onDelete(card.id);
             }
           }}
-          className="leather-button p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/40"
+          className="icon-button rounded-full" // Custom hover will be overridden by icon-button
           title="Delete Card"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +45,8 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
       <h3 className="text-xl font-semibold mb-1 text-gray-800 dark:text-gray-100 h-[3rem] w-full overflow-hidden text-ellipsis whitespace-nowrap">
         {card.title}
       </h3>
-      <div className="flex-grow note-paper p-4 rounded-xl mt-2 h-[12rem] overflow-hidden">
+      {/* Text Preview: Removed note-paper, h-12rem, adjusted styling */}
+      <div className="flex-grow bg-gray-50 dark:bg-gray-700 p-4 rounded-md mt-2 overflow-hidden">
         <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">
           {card instanceof Card ? card.getPreview() : normalizeWhitespace(card.text).substring(0, 70) + '...'}
         </p>
@@ -52,9 +55,10 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
         <div className="text-xs text-gray-600 dark:text-gray-400">
           {` · Last modified: ${formatDate(card.updatedAt || card.createdAt)}`}
         </div>
+        {/* Study Button: Standardized leather-button classes */}
         <button
           onClick={() => onSelect(normalizeWhitespace(card.text))}
-          className="px-4 py-2 leather-button text-sm font-medium hover:scale-105 transform transition-transform duration-200"
+          className="leather-button text-sm"
         >
           Study
         </button>
