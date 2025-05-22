@@ -5,14 +5,18 @@ import { UserPreferencesProvider, useUserPreferences } from './contexts/UserPref
 import useTyping from './features/typing/useTyping';
 import useStatistics from './features/statistics/useStatistics';
 
-import TutorialGuide from './components/TutorialGuide';
-import ReferenceConfirmation from './components/ReferenceConfirmation';
-import ReferenceTyping from './components/ReferenceTyping';
-import CompletionPage from './components/CompletionPage';
-import DeckStudyMode from './components/DeckStudyMode';
-import DeckCompletionPage from './components/DeckCompletionPage';
-import BestTimesPage from './components/BestTimesPage';
-import HomePage from './features/home/HomePage';
+// Import routes instead of direct components
+import {
+  TutorialRoute,
+  HomeRoute,
+  ReferenceConfirmationRoute,
+  ReferenceTypingRoute,
+  DeckStudyRoute,
+  BestTimesRoute,
+  CompletionRoute,
+  DeckCompletionRoute
+} from './routes';
+
 import AppLayout from './layout/AppLayout';
 
 import './styles/main-styles.css';
@@ -79,11 +83,11 @@ function AppContent() {
   return (
     <AnimatePresence>
       {step === 0 ? (
-        <TutorialGuide onComplete={completeTutorial} />
+        <TutorialRoute completeTutorial={completeTutorial} />
       ) : (
         <AppLayout>
           {step === 1 && (
-            <HomePage 
+            <HomeRoute
               cards={cards} 
               decks={decks}
               currentDeckId={currentDeckId}
@@ -109,7 +113,7 @@ function AppContent() {
           )}
           
           {step === 2 && (
-            <ReferenceConfirmation 
+            <ReferenceConfirmationRoute
               selectedReference={selectedReference}
               onBegin={handleBeginTyping}
               onBack={handleReturnToMenu}
@@ -123,7 +127,7 @@ function AppContent() {
           )}
           
           {step === 3 && isDeckStudyMode ? (
-            <DeckStudyMode
+            <DeckStudyRoute
               userInput={userInput}
               selectedReference={selectedReference}
               onInputChange={handleInputChange}
@@ -139,7 +143,7 @@ function AppContent() {
               beginNextCard={beginNextCard}
             />
           ) : step === 3 && (
-            <ReferenceTyping 
+            <ReferenceTypingRoute
               userInput={userInput}
               selectedReference={selectedReference}
               onInputChange={handleInputChange}
@@ -154,13 +158,13 @@ function AppContent() {
           )}
           
           {step === 4 && (
-            <BestTimesPage 
+            <BestTimesRoute
               onBack={handleReturnToMenu}
             />
           )}
           
           {isComplete && !isDeckStudyMode && (
-            <CompletionPage 
+            <CompletionRoute
               completionTime={completionTime}
               selectedReference={selectedReference}
               onReturnToMenu={handleReturnToMenu}
@@ -169,7 +173,7 @@ function AppContent() {
           )}
 
           {deckStudyComplete && (
-            <DeckCompletionPage
+            <DeckCompletionRoute
               completionTimes={deckCompletionTimes}
               deckTitle={decks.find(d => d.id === studyDeckId)?.title || 'Deck Study'}
               cardCount={deckCompletionTimes.length}
