@@ -28,7 +28,8 @@ function HomePage({
   onUpdateDeck,
   onCreateNewDeck,
   onCancelEditDeck,
-  onViewBestTimes
+  onViewBestTimes,
+  onStartDeckStudy
 }) {
   const [showBatchUpload, setShowBatchUpload] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
@@ -239,6 +240,7 @@ function HomePage({
         onEditCard={onEditCard}
         onDeleteCard={onDeleteCard}
         onBackToDeckList={handleBackToDeckList}
+        onStudyAllCards={onStartDeckStudy}
       />
     );
   }
@@ -252,6 +254,7 @@ function HomePage({
       onEditDeck={onEditDeck}
       onDeleteDeck={onDeleteDeck}
       onViewBestTimes={onViewBestTimes}
+      onStudyDeck={onStartDeckStudy}
     />
   );
 }

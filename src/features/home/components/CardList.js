@@ -4,7 +4,7 @@ import CardItem from './CardItem';
 /**
  * Card list component for a specific deck
  */
-function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard, onBackToDeckList }) {
+function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, onDeleteCard, onBackToDeckList, onStudyAllCards }) {
   return (
     <>
       {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
@@ -23,8 +23,20 @@ function CardList({ deck, cards, onSelectReference, onCreateCard, onEditCard, on
             {deck.title}: Choose a card to practice
           </h2>
         </div>
-        <div>
-          <button
+        <div className="flex space-x-2">
+          {cards.length > 0 && (
+            <button 
+              onClick={() => onStudyAllCards(deck)}
+              className="leather-button px-4 py-2 rounded-lg bg-indigo-600 flex items-center justify-center"
+              title="Study All Cards"
+            >
+              <span className="mr-1">Study All</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+          <button 
             onClick={onCreateCard}
             className="icon-button rounded-full flex items-center justify-center" // Changed to icon-button
             title="Add New Card"

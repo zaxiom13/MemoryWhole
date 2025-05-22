@@ -9,6 +9,8 @@ import TutorialGuide from './components/TutorialGuide';
 import ReferenceConfirmation from './components/ReferenceConfirmation';
 import ReferenceTyping from './components/ReferenceTyping';
 import CompletionPage from './components/CompletionPage';
+import DeckStudyMode from './components/DeckStudyMode';
+import DeckCompletionPage from './components/DeckCompletionPage';
 import BestTimesPage from './components/BestTimesPage';
 import HomePage from './features/home/HomePage';
 import AppLayout from './layout/AppLayout';
@@ -38,7 +40,12 @@ function AppContent() {
     editDeck,
     cancelEdit: cancelEditDeck,
     completeTutorial,
-    isComplete
+    isComplete,
+    isDeckStudyMode,
+    deckStudyComplete,
+    studyDeckId,
+    deckCompletionTimes,
+    exitDeckStudy
   } = useAppState();
 
   const { 
@@ -51,6 +58,9 @@ function AppContent() {
     handleBeginTyping,
     handleRetryTyping,
     handleReturnToMenu,
+    handleStartDeckStudy,
+    loadNextStudyCard,
+    beginNextCard,
     onReferenceExposed
   } = useTyping();
 
@@ -58,6 +68,12 @@ function AppContent() {
   
   // For user preferences access in components
   const { easyMode, toggleEasyMode, ghostTextEnabled, toggleGhostText, showReferenceEnabled, toggleShowReference } = useUserPreferences();
+
+  // Handler for returning from deck study
+  const handleExitDeckStudy = () => {
+    exitDeckStudy();
+    handleReturnToMenu();
+  };
 
   // Conditional rendering based on application step
   return (
@@ -88,6 +104,7 @@ function AppContent() {
               onCreateNewDeck={createDeck}
               onCancelEditDeck={cancelEditDeck}
               onViewBestTimes={handleViewBestTimes}
+              onStartDeckStudy={handleStartDeckStudy}
             />
           )}
           
@@ -105,7 +122,23 @@ function AppContent() {
             />
           )}
           
-          {step === 3 && (
+          {step === 3 && isDeckStudyMode ? (
+            <DeckStudyMode
+              userInput={userInput}
+              selectedReference={selectedReference}
+              onInputChange={handleInputChange}
+              onBack={handleExitDeckStudy}
+              isComplete={isComplete}
+              easyMode={easyMode}
+              onReferenceExposed={onReferenceExposed}
+              ghostTextEnabled={ghostTextEnabled}
+              showReferenceEnabled={showReferenceEnabled}
+              inputError={inputError}
+              loadNextStudyCard={loadNextStudyCard}
+              completionTime={completionTime}
+              beginNextCard={beginNextCard}
+            />
+          ) : step === 3 && (
             <ReferenceTyping 
               userInput={userInput}
               selectedReference={selectedReference}
@@ -126,12 +159,21 @@ function AppContent() {
             />
           )}
           
-          {isComplete && (
+          {isComplete && !isDeckStudyMode && (
             <CompletionPage 
               completionTime={completionTime}
               selectedReference={selectedReference}
               onReturnToMenu={handleReturnToMenu}
               onTryAgain={handleRetryTyping}
+            />
+          )}
+
+          {deckStudyComplete && (
+            <DeckCompletionPage
+              completionTimes={deckCompletionTimes}
+              deckTitle={decks.find(d => d.id === studyDeckId)?.title || 'Deck Study'}
+              cardCount={deckCompletionTimes.length}
+              onReturnToMenu={handleReturnToMenu}
             />
           )}
         </AppLayout>

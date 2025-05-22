@@ -21,7 +21,13 @@ function useTyping() {
     setReferenceExposed,
     inputError,
     setInputError,
-    setStep
+    setStep,
+    // Deck study mode related
+    isDeckStudyMode,
+    studyCardIds,
+    currentCardIndex,
+    cards,
+    startDeckStudy
   } = useAppState();
   
   const { easyMode, ghostTextEnabled } = useUserPreferences();
@@ -51,6 +57,16 @@ function useTyping() {
         ghostTextEnabled
       );
       setCompletionTime(time);
+
+      // If in deck study mode and not the last card, automatically load the next card
+      if (isDeckStudyMode && currentCardIndex < studyCardIds.length - 1) {
+        const nextCardId = studyCardIds[currentCardIndex + 1];
+        const nextCard = cards.find(card => card.id === nextCardId);
+        if (nextCard) {
+          // We'll let the DeckStudyMode component handle the transition
+          // via its useEffect that watches isComplete
+        }
+      }
     }
   };
   
@@ -93,6 +109,39 @@ function useTyping() {
     localStorage.setItem('timePenalty', '0');
   };
   
+  // Start deck study mode
+  const handleStartDeckStudy = (deck) => {
+    // Get all cards for this deck
+    const deckCards = cards.filter(card => deck.cardIds.includes(card.id));
+    if (deckCards.length === 0) return;
+    
+    // Set up deck study mode
+    const cardIds = deckCards.map(card => card.id);
+    startDeckStudy(deck.id, cardIds);
+    
+    // Select the first card's reference
+    handleSelectReference(deckCards[0].text);
+  };
+  
+  // Load the next card in deck study mode
+  const loadNextStudyCard = () => {
+    if (!isDeckStudyMode || currentCardIndex >= studyCardIds.length - 1) return;
+    
+    const nextCardId = studyCardIds[currentCardIndex + 1];
+    const nextCard = cards.find(card => card.id === nextCardId);
+    if (nextCard) {
+      setUserInput('');
+      setIsComplete(false);
+      setReferenceExposed(false);
+      window.startTime = Date.now();
+      localStorage.setItem('timePenalty', '0');
+      
+      // Update the reference text
+      const normalizedText = normalizeWhitespace(nextCard.text);
+      setSelectedReference(normalizedText);
+    }
+  };
+  
   return {
     userInput,
     selectedReference,
@@ -104,6 +153,16 @@ function useTyping() {
     handleBeginTyping,
     handleRetryTyping,
     handleReturnToMenu,
+    handleStartDeckStudy,
+    loadNextStudyCard,
+    beginNextCard: () => {
+      // Reset state for the next card
+      setUserInput('');
+      setIsComplete(false);
+      setReferenceExposed(false);
+      window.startTime = Date.now();
+      localStorage.setItem('timePenalty', '0');
+    },
     onReferenceExposed: () => setReferenceExposed(true)
   };
 }
