@@ -38,7 +38,7 @@ export default function useReferenceTypingUI(reference, initialInput = "", easyM
   // Check input correctness when it changes
   useEffect(() => {
     if (userInput) {
-      const { isCorrect, correctIndex } = checkCorrectness(reference, userInput, easyMode);
+      const { correctIndex } = checkCorrectness(reference, userInput, easyMode);
       setLastCorrectIndex(correctIndex);
     }
   }, [userInput, reference, easyMode]);
