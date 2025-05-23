@@ -44,22 +44,25 @@ function BestTimesPage({ onBack }) {
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <div className="sticky top-0 z-20 note-paper py-4 px-4 mx-0 shadow-sm flex justify-between items-center mb-6">
+      {/* Sticky Header: Removed note-paper, added new bg and blur effect */}
+      <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md shadow-sm py-4 px-4 mx-0 flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
           <span className="mr-2">🏆</span> Personal Best Times
         </h2>
         <button
           onClick={onBack}
-          className="leather-button p-2 rounded-full flex items-center justify-center"
+          className="icon-button rounded-full flex items-center justify-center" // Changed to icon-button
           title="Back to Home"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {/* Removed text-gray-700 dark:text-gray-300 to inherit text-white */}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
         </button>
       </div>
 
-      <div className="overflow-y-auto h-[calc(70vh-120px)] pr-2">
+      {/* Scrollable Area: Adjusted min-h for mobile */}
+      <div className="overflow-y-auto min-h-[calc(50vh-110px)] sm:min-h-[calc(70vh-120px)] pr-2">
         {allBestTimes.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -75,15 +78,17 @@ function BestTimesPage({ onBack }) {
               const { cardTitle, deckTitle } = findCardAndDeck(item.referencePreview);
               
               return (
-                <div key={index} className="p-4 rounded-lg leather-card border border-gray-200 dark:border-gray-700">
+                // Best Time Item Card: Removed leather-card, added new card styles
+                <div key={index} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                   <h4 className="text-lg font-medium mb-3 text-gray-700 dark:text-gray-300">
                     {cardTitle ? `${cardTitle} (${deckTitle})` : `${item.referencePreview}...`}
                   </h4>
                   <div className="space-y-2">
                   {item.times.slice(0, 3).map((timeData, timeIndex) => (
+                    // Time Data Row: Adjusted background
                     <div
                       key={timeIndex}
-                      className="flex justify-between items-center p-2 rounded-lg bg-white/50 dark:bg-gray-800/50"
+                      className="flex justify-between items-center p-2 rounded-md bg-gray-100 dark:bg-gray-700"
                     >
                       <div className="flex items-center">
                         <span className="text-lg font-bold mr-2">{timeIndex + 1}.</span>
@@ -133,7 +138,7 @@ function BestTimesPage({ onBack }) {
                     </div>
                   ))}
                 </div>
-                </div>
+              </div>
               );
             })}
           </div>
