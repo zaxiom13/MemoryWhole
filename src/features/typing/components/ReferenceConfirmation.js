@@ -39,7 +39,7 @@ export default function ReferenceConfirmation({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="w-full max-w-screen-sm overflow-y-auto max-h-screen pb-24 md:pb-4"
+      className="w-full overflow-y-auto max-h-screen pb-24 md:pb-4"
     >
       {/* Main Content Area: Removed note-paper, applied new card styles */}
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300">
