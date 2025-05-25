@@ -11,7 +11,8 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl rounded-lg p-6 transition-shadow duration-300 flex flex-col cursor-pointer relative group"
+      className="modern-card content-container flex flex-col cursor-pointer relative group float-animation"
+      style={{ animationDelay: `${Math.random() * 2}s` }}
     >
       {/* Main Card: Removed leather-card, h-280px, adjusted padding */}
       {/* Edit/Delete Buttons: Changed to icon-button */}
@@ -42,18 +43,18 @@ function CardItem({ card, onSelect, onEdit, onDelete }) {
           </svg>
         </button>
       </div>
-      <h3 className="text-xl font-semibold mb-1 text-gray-800 dark:text-gray-100 h-[3rem] w-full overflow-hidden text-ellipsis whitespace-nowrap">
+      <h3 className="section-title text-lg mb-1 h-[3rem] w-full overflow-hidden text-ellipsis whitespace-nowrap">
         {card.title}
       </h3>
       {/* Text Preview: Removed note-paper, h-12rem, adjusted styling */}
-      <div className="flex-grow bg-gray-50 dark:bg-gray-700 p-4 rounded-md mt-2 overflow-hidden">
-        <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">
+      <div className="flex-grow gradient-bg-card p-4 rounded-xl mt-2 overflow-hidden border border-gray-100/50 dark:border-gray-700/30">
+        <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden leading-relaxed">
           {card instanceof Card ? card.getPreview() : normalizeWhitespace(card.text).substring(0, 70) + '...'}
         </p>
       </div>
-      <div className="mt-2 flex justify-between items-center">
-        <div className="text-xs text-gray-600 dark:text-gray-400">
-          {` · Last modified: ${formatDate(card.updatedAt || card.createdAt)}`}
+      <div className="mt-4 flex justify-between items-center">
+        <div className="text-xs text-gray-500 dark:text-gray-500 font-medium">
+          Last modified: {formatDate(card.updatedAt || card.createdAt)}
         </div>
         {/* Study Button: Standardized leather-button classes */}
         <button
