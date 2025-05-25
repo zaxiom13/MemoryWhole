@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { checkCorrectness, getGhostText } from '../../../utils/typingUtils';
+import { checkCorrectness, getGhostText, isTypingComplete } from '../../../utils/typingUtils';
 
 /**
  * Custom hook for managing the UI state and logic of the ReferenceTyping component
@@ -8,9 +8,16 @@ import { checkCorrectness, getGhostText } from '../../../utils/typingUtils';
  * @param {string} initialInput - The initial input text
  * @param {boolean} easyMode - Whether easy mode is enabled
  * @param {boolean} ghostTextEnabled - Whether ghost text is enabled
+ * @param {boolean} isComplete - Whether typing is complete
  * @returns {Object} UI state and handlers for ReferenceTyping component
  */
-export default function useReferenceTypingUI(reference, initialInput = "", easyMode = false, ghostTextEnabled = true) {
+export default function useReferenceTypingUI(
+  reference, 
+  initialInput = "", 
+  easyMode = false, 
+  ghostTextEnabled = true,
+  isComplete = false
+) {
   // State variables
   const [userInput, setUserInput] = useState(initialInput);
   const [ghostText, setGhostText] = useState('');
@@ -23,7 +30,7 @@ export default function useReferenceTypingUI(reference, initialInput = "", easyM
   // Start ghost text timer when input changes
   useEffect(() => {
     let timer;
-    if (ghostTextEnabled && userInput && !ghostText && timerRunning) {
+    if (ghostTextEnabled && userInput && !ghostText && timerRunning && !isComplete) {
       timer = setTimeout(() => {
         const text = getGhostText(reference, userInput, easyMode);
         setGhostText(text);
@@ -33,7 +40,7 @@ export default function useReferenceTypingUI(reference, initialInput = "", easyM
     return () => {
       clearTimeout(timer);
     };
-  }, [userInput, ghostText, reference, easyMode, ghostTextEnabled, timerRunning]);
+  }, [userInput, ghostText, reference, easyMode, ghostTextEnabled, timerRunning, isComplete]);
   
   // Check input correctness when it changes
   useEffect(() => {
@@ -50,14 +57,28 @@ export default function useReferenceTypingUI(reference, initialInput = "", easyM
     }
   }, [initialInput]);
   
+  // Stop timer when typing is complete
+  useEffect(() => {
+    if (isComplete && timerRunning) {
+      setTimerRunning(false);
+    }
+  }, [isComplete, timerRunning]);
+  
+  // Check if typing is complete based on the current input
+  useEffect(() => {
+    if (userInput && reference && isTypingComplete(userInput, reference, easyMode)) {
+      setTimerRunning(false);
+    }
+  }, [userInput, reference, easyMode]);
+  
   // Handle input changes
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setUserInput(newValue);
     setGhostText('');  // Reset ghost text when typing
     
-    // Start timer on first input
-    if (!typingStarted && newValue) {
+    // Start timer on first input if not complete
+    if (!typingStarted && newValue && !isComplete) {
       setTypingStarted(true);
     }
   };

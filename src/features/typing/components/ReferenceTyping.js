@@ -74,7 +74,7 @@ export default function ReferenceTyping({
     typingStarted,
     handleInputChange: internalHandleInputChange,
     handleConfirmShowReference,
-  } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled);
+  } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled, isComplete);
   
   const textareaRef = useRef(null);
   
@@ -157,7 +157,7 @@ export default function ReferenceTyping({
         )}
         
         {/* Typing area */}
-        <div className="relative">
+        <div className={`relative ${inputError ? 'shake-error' : ''}`}>
           <div className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 font-mono whitespace-pre-wrap`}>
             <ColoredTextDisplay userInput={userInput} referenceText={selectedReference} easyMode={easyMode} />
             
