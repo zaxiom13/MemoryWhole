@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import useReferenceTypingUI from '../hooks/useReferenceTypingUI';
 import Timer from '../../../components/Timer';
