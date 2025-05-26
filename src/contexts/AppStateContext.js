@@ -46,11 +46,45 @@ export function AppStateProvider({ children }) {
     setStep(tutorialComplete ? 1 : 0);
   }, []);
 
+  // Enhanced card operations that also update deck collection
+  const enhancedCardOperations = {
+    // Create card and add it to the deck
+    createCard: (cardData) => {
+      // Create the card in the card collection
+      const newCard = cardCollection.createCard(cardData);
+      
+      // If the card is created and has a deckId, add it to the deck
+      if (newCard && newCard.id && newCard.deckId) {
+        deckCollection.addCardToDeck(newCard.deckId, newCard.id);
+      }
+      
+      return newCard;
+    },
+    
+    // Delete card and remove it from deck
+    deleteCard: (cardId) => {
+      // Get the card before deletion to know which deck it belongs to
+      const cardToDelete = cardCollection.cards.find(card => card.id === cardId);
+      
+      // Delete the card from the card collection
+      const success = cardCollection.deleteCard(cardId);
+      
+      // If deletion succeeded and the card had a deckId, remove it from the deck
+      if (success && cardToDelete && cardToDelete.deckId) {
+        deckCollection.removeCardFromDeck(cardToDelete.deckId, cardId);
+      }
+      
+      return success;
+    }
+  };
+
   // Value object with all state and handlers
   const value = {
     // Card and deck state
     ...cardCollection,
     ...deckCollection,
+    // Override card operations with enhanced versions
+    ...enhancedCardOperations,
     
     // App flow state
     step,
