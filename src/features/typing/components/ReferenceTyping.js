@@ -73,7 +73,6 @@ export default function ReferenceTyping({
     lastCorrectIndex,
     typingStarted,
     handleInputChange: internalHandleInputChange,
-    handleConfirmShowReference,
   } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled, isComplete);
   
   const textareaRef = useRef(null);
@@ -115,16 +114,6 @@ export default function ReferenceTyping({
     // Then propagate the change to the parent component
     if (onInputChange) {
       onInputChange(e);
-    }
-  };
-  
-  // Override the handleConfirmShowReference to notify parent component
-  const handleConfirmShowReferenceWithCallback = () => {
-    // Call the hook's implementation
-    handleConfirmShowReference();
-    // Notify parent component that reference was exposed
-    if (onReferenceExposed) {
-      onReferenceExposed();
     }
   };
 
@@ -204,21 +193,6 @@ export default function ReferenceTyping({
               </svg>
               Back
             </motion.button>
-            
-            {!isReferenceOpen && !isComplete && (
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className="leather-button bg-blue-700 hover:bg-blue-800 flex items-center" // Removed custom padding
-                onClick={handleConfirmShowReferenceWithCallback}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-                Show Reference
-              </motion.button>
-            )}
           </div>
         </div>
       </div>
