@@ -41,7 +41,7 @@ export function checkCorrectness(reference, input, easyMode) {
  * @param {string} reference - Reference text to display as ghost
  * @param {string} input - User's input text
  * @param {boolean} easyMode - Whether easy mode is enabled
- * @returns {string} The ghost text to display
+ * @returns {string} The ghost text to display (only the next 10 characters)
  */
 export function getGhostText(reference, input, easyMode) {
   if (!reference || !input) return '';
@@ -49,8 +49,8 @@ export function getGhostText(reference, input, easyMode) {
   const { correctIndex } = checkCorrectness(reference, input, easyMode);
   if (correctIndex < input.length) return ''; // Don't show ghost text if there's an error
   
-  // Return the next part of the reference text
-  return reference.substring(correctIndex);
+  // Return only the next 10 characters of the reference text
+  return reference.substring(correctIndex, correctIndex + 10);
 }
 
 /**

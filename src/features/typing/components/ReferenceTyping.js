@@ -4,6 +4,50 @@ import useReferenceTypingUI from '../hooks/useReferenceTypingUI';
 import Timer from '../../../components/Timer';
 import EasyModeIndicator from '../../../ui/EasyModeIndicator';
 import { calculateAccuracy } from '../../../utils/typingUtils';
+import { getCharacterCorrectness } from '../../../utils/memoryUtils';
+
+/**
+ * Character display component for colored text
+ */
+function CharacterDisplay({ char, isCorrect, isSpace }) {
+  // Special handling for spaces
+  if (isSpace && !isCorrect) {
+    return (
+      <span className="text-red-500 inline-block" style={{ 
+        width: '0.5em', 
+        height: '1em', 
+        backgroundColor: 'rgba(239, 68, 68, 0.3)', 
+      }}></span>
+    );
+  }
+  
+  return (
+    <span className={isCorrect ? 'character-correct' : 'character-incorrect'}>
+      {char || ''}
+    </span>
+  );
+}
+
+/**
+ * Text display with character coloring
+ */
+function ColoredTextDisplay({ userInput, referenceText, easyMode }) {
+  // The reference text is already normalized at this point
+  const characterData = getCharacterCorrectness(userInput, referenceText, easyMode);
+  
+  return (
+    <>
+      {characterData.map((data, index) => (
+        <CharacterDisplay 
+          key={index} 
+          char={data.char} 
+          isCorrect={data.isCorrect} 
+          isSpace={data.isSpace} 
+        />
+      ))}
+    </>
+  );
+}
 
 /**
  * Main reference typing component
@@ -29,8 +73,7 @@ export default function ReferenceTyping({
     lastCorrectIndex,
     typingStarted,
     handleInputChange: internalHandleInputChange,
-    handleConfirmShowReference,
-  } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled);
+  } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled, isComplete);
   
   const textareaRef = useRef(null);
   
@@ -73,16 +116,6 @@ export default function ReferenceTyping({
       onInputChange(e);
     }
   };
-  
-  // Override the handleConfirmShowReference to notify parent component
-  const handleConfirmShowReferenceWithCallback = () => {
-    // Call the hook's implementation
-    handleConfirmShowReference();
-    // Notify parent component that reference was exposed
-    if (onReferenceExposed) {
-      onReferenceExposed();
-    }
-  };
 
   return (
     <motion.div 
@@ -113,26 +146,30 @@ export default function ReferenceTyping({
         )}
         
         {/* Typing area */}
-        <div className="relative">
+        <div className={`relative ${inputError ? 'shake-error' : ''}`}>
+          <div className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 font-mono whitespace-pre-wrap`}>
+            <ColoredTextDisplay userInput={userInput} referenceText={selectedReference} easyMode={easyMode} />
+            
+            {/* Position the caret relative to character width */}
+            {!isComplete && (
+              <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
+            )}
+            
+            {/* Ghost text positioned relative to character width */}
+            {ghostTextEnabled && ghostText && (
+              <span className="text-gray-400 opacity-50" style={{ marginLeft: '-0.5ch' }}>
+                {ghostText}
+              </span>
+            )}
+          </div>
           <textarea
             ref={textareaRef}
             value={userInput}
             onChange={handleInputChange}
             disabled={isComplete}
-            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400`}
+            className="absolute inset-0 w-full h-full opacity-0 p-3 resize-none rounded-lg"
             placeholder="Start typing to recall the text..."
           />
-
-          {/* Ghost text overlay */}
-          {ghostTextEnabled && ghostText && (
-            <div 
-              className="absolute inset-0 pointer-events-none p-3 text-gray-400 dark:text-gray-600 overflow-hidden whitespace-pre-wrap"
-              aria-hidden="true"
-            >
-              <span className="invisible">{userInput}</span>
-              {ghostText}
-            </div>
-          )}
 
           {/* Accuracy counter when completed */}
           {isComplete && (
@@ -156,21 +193,6 @@ export default function ReferenceTyping({
               </svg>
               Back
             </motion.button>
-            
-            {!isReferenceOpen && !isComplete && (
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className="leather-button bg-blue-700 hover:bg-blue-800 flex items-center" // Removed custom padding
-                onClick={handleConfirmShowReferenceWithCallback}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-                Show Reference
-              </motion.button>
-            )}
           </div>
         </div>
       </div>
