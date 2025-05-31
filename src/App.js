@@ -176,7 +176,7 @@ function AppContent() {
             <DeckCompletionRoute
               completionTimes={deckCompletionTimes}
               deckTitle={decks.find(d => d.id === studyDeckId)?.title || 'Deck Study'}
-              cardCount={deckCompletionTimes.length}
+              cardCount={decks.find(d => d.id === studyDeckId)?.cardIds?.length || deckCompletionTimes.length}
               onReturnToMenu={handleExitDeckStudy}
             />
           )}

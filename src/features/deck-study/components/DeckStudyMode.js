@@ -44,6 +44,8 @@ function DeckStudyMode({
       // Begin typing the next card
       beginNextCard();
     } else if (isComplete && currentCardIndex === studyCardIds.length - 1) {
+      // Add the last card's completion time before completing the deck
+      nextStudyCard(completionTime);
       // All cards completed
       completeDeckStudy();
     }
