@@ -163,7 +163,7 @@ function AppContent() {
             />
           )}
           
-          {isComplete && !isDeckStudyMode && (
+          {isComplete && !isDeckStudyMode && !deckStudyComplete && (
             <CompletionRoute
               completionTime={completionTime}
               selectedReference={selectedReference}
