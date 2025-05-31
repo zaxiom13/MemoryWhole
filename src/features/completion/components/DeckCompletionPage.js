@@ -14,9 +14,8 @@ function DeckCompletionPage({
 }) {
   const { easyMode, ghostTextEnabled, showReferenceEnabled } = useUserPreferences();
   
-  // Calculate total time and average time
+  // Calculate total time
   const totalTime = completionTimes.reduce((acc, time) => acc + time, 0);
-  const averageTime = completionTimes.length > 0 ? totalTime / completionTimes.length : 0;
 
   // Save deck completion time when component mounts
   useEffect(() => {
@@ -77,18 +76,6 @@ function DeckCompletionPage({
           <p className="text-3xl font-bold text-gray-800 dark:text-gray-200">{formatTime(totalTime)}</p>
         </div>
       </motion.div>
-
-      <motion.p
-        className="text-xl mb-6 text-gray-700 dark:text-gray-300"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-      >
-        Average time per card:{' '}
-        <span className="font-bold leather-card px-5 py-3 rounded-lg mt-3 text-gray-800 dark:text-gray-200 inline-flex justify-center min-w-32">
-          {formatTime(averageTime)}
-        </span>
-      </motion.p>
       
       <motion.div
         className="flex justify-center"
