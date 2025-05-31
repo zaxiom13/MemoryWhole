@@ -142,7 +142,7 @@ function AppContent() {
               completionTime={completionTime}
               beginNextCard={beginNextCard}
             />
-          ) : step === 3 && (
+          ) : step === 3 && !isComplete && (
             <ReferenceTypingRoute
               userInput={userInput}
               selectedReference={selectedReference}
