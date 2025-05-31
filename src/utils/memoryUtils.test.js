@@ -694,3 +694,4 @@ describe('memoryUtils', () => {
       localStorage.setItem = originalSetItem;
     });
   });
+});
