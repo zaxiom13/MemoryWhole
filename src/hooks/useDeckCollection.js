@@ -27,6 +27,13 @@ const defaultDecks = [
     description: 'Methods and approaches to improve memory retention and recall.',
     cardIds: [6, 9],
     createdAt: new Date('2023-03-01').getTime()
+  },
+  { 
+    id: 4, 
+    title: 'Super Easy', 
+    description: 'Simple one to three word cards for quick testing and practice.',
+    cardIds: [10, 11, 12, 13],
+    createdAt: new Date('2023-04-01').getTime()
   }
 ];
 

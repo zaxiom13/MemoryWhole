@@ -89,6 +89,34 @@ const defaultCards = [
     Digital flashcard apps like Anki use algorithms to optimize review schedules based on your recall performance, making memory practice more efficient.`,
     createdAt: new Date('2023-04-01').getTime(),
     deckId: 3
+  },
+  { 
+    id: 10, 
+    title: 'Simple Word', 
+    text: `Apple`,
+    createdAt: new Date('2023-04-15').getTime(),
+    deckId: 4
+  },
+  { 
+    id: 11, 
+    title: 'Two Words', 
+    text: `Blue Sky`,
+    createdAt: new Date('2023-04-16').getTime(),
+    deckId: 4
+  },
+  { 
+    id: 12, 
+    title: 'Hot Drink', 
+    text: `Hot Coffee`,
+    createdAt: new Date('2023-04-17').getTime(),
+    deckId: 4
+  },
+  { 
+    id: 13, 
+    title: 'Speed Vehicle', 
+    text: `Fast Car`,
+    createdAt: new Date('2023-04-18').getTime(),
+    deckId: 4
   }
 ];
 
