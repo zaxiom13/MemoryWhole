@@ -1,10 +1,13 @@
 import { motion } from 'framer-motion';
-import { formatDate } from '../utils/memoryUtils';
+import { formatDate, loadDeckCompletionTimes, formatTime } from '../utils/memoryUtils';
 
 /**
  * Deck item component
  */
 function DeckItem({ deck, onSelect, onEdit, onDelete, onStudyDeck }) {
+  // Load deck completion times
+  const deckCompletionTimes = loadDeckCompletionTimes(deck.title);
+  const bestTime = deckCompletionTimes.length > 0 ? deckCompletionTimes[0] : null;
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -57,7 +60,13 @@ function DeckItem({ deck, onSelect, onEdit, onDelete, onStudyDeck }) {
       </div>
       <div className="mt-4 flex justify-between items-center">
         <div className="text-xs text-gray-600 dark:text-gray-400">
-          {`${deck.cardIds.length} cards · Last modified: ${formatDate(deck.updatedAt || deck.createdAt)}`}
+          <div>{`${deck.cardIds.length} cards · Last modified: ${formatDate(deck.updatedAt || deck.createdAt)}`}</div>
+          {bestTime && (
+            <div className="mt-1 flex items-center">
+              <span className="mr-1">🏆</span>
+              <span>Best time: {formatTime(bestTime.totalTime)} ({bestTime.cardCount} cards)</span>
+            </div>
+          )}
         </div>
         <div className="flex space-x-2">
           <button

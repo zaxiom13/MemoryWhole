@@ -322,3 +322,105 @@ export function saveDecksToStorage(decks) {
     console.error('Error saving decks to localStorage:', error);
   }
 }
+
+/**
+ * Save a deck completion time
+ * @param {string} deckTitle - The deck title
+ * @param {Array} completionTimes - Array of individual card completion times in seconds
+ * @param {number} cardCount - Number of cards completed
+ * @param {boolean} easyMode - Whether easy mode was used (optional, defaults to false)
+ * @param {boolean} referenceExposed - Whether reference text was exposed (optional, defaults to false)
+ * @param {boolean} ghostTextUsed - Whether ghost text assistance was used (optional, defaults to false)
+ */
+export function saveDeckCompletionTime(deckTitle, completionTimes, cardCount, easyMode = false, referenceExposed = false, ghostTextUsed = false) {
+  try {
+    // Create a unique key based on the deck title
+    const deckKey = `deckBest_${deckTitle.substring(0, 50).replace(/\s+/g, '_')}`;
+    
+    // Calculate total time
+    const totalTime = completionTimes.reduce((acc, time) => acc + time, 0);
+    const averageTime = completionTimes.length > 0 ? totalTime / completionTimes.length : 0;
+    
+    // Get existing best times or initialize empty array
+    const existingTimes = loadDeckCompletionTimes(deckTitle);
+    
+    // Add new completion record
+    existingTimes.push({
+      totalTime: totalTime,
+      averageTime: averageTime,
+      cardCount: cardCount,
+      completionTimes: [...completionTimes], // Copy the array
+      date: Date.now(),
+      easyMode: easyMode,
+      referenceExposed: referenceExposed,
+      ghostTextUsed: ghostTextUsed
+    });
+    
+    // Sort by total time (ascending - fastest first)
+    existingTimes.sort((a, b) => a.totalTime - b.totalTime);
+    
+    // Keep only top 5 times
+    const topTimes = existingTimes.slice(0, 5);
+    
+    // Save to localStorage
+    localStorage.setItem(deckKey, JSON.stringify(topTimes));
+  } catch (error) {
+    console.error('Error saving deck completion time:', error);
+  }
+}
+
+/**
+ * Load deck completion times for a specific deck
+ * @param {string} deckTitle - The deck title
+ * @returns {Array} Array of deck completion records
+ */
+export function loadDeckCompletionTimes(deckTitle) {
+  try {
+    // Create a unique key based on the deck title
+    const deckKey = `deckBest_${deckTitle.substring(0, 50).replace(/\s+/g, '_')}`;
+    
+    // Get existing best times or initialize empty array
+    const savedTimes = localStorage.getItem(deckKey);
+    return savedTimes ? JSON.parse(savedTimes) : [];
+  } catch (error) {
+    console.error('Error loading deck completion times:', error);
+    return [];
+  }
+}
+
+/**
+ * Load all deck completion times for all decks
+ * @returns {Array} Array of objects with deck title and completion times
+ */
+export function loadAllDeckCompletionTimes() {
+  try {
+    const results = [];
+    
+    // Iterate through all localStorage keys
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      
+      // Check if this is a deck completion time key
+      if (key && key.startsWith('deckBest_')) {
+        // Extract the deck title from the key
+        const deckTitle = key.substring(9).replace(/_/g, ' ');
+        
+        // Get the times for this deck
+        const times = JSON.parse(localStorage.getItem(key));
+        
+        // Add to results if there are times
+        if (times && times.length > 0) {
+          results.push({
+            deckTitle,
+            times
+          });
+        }
+      }
+    }
+    
+    return results;
+  } catch (error) {
+    console.error('Error loading all deck completion times:', error);
+    return [];
+  }
+}

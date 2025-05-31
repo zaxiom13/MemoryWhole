@@ -4,22 +4,34 @@ import {
   formatDate, 
   hasMistakes,
   findLastCorrectIndex,
-  getCharacterCorrectness
+  getCharacterCorrectness,
+  saveDeckCompletionTime,
+  loadDeckCompletionTimes,
+  loadAllDeckCompletionTimes
 } from './memoryUtils';
 
 // Mock localStorage
-const localStorageMock = (() => {
-  let store = {};
-  return {
-    getItem: jest.fn(key => store[key] || null),
-    setItem: jest.fn((key, value) => {
-      store[key] = value.toString();
-    }),
-    clear: jest.fn(() => {
-      store = {};
-    })
-  };
-})();
+let mockStore = {};
+
+const localStorageMock = {
+  getItem: (key) => {
+    const value = mockStore[key];
+    return value !== undefined ? value : null;
+  },
+  setItem: (key, value) => {
+    mockStore[key] = value.toString();
+  },
+  clear: () => {
+    mockStore = {};
+  },
+  get length() {
+    return Object.keys(mockStore).length;
+  },
+  key: (index) => {
+    const keys = Object.keys(mockStore);
+    return keys[index] || null;
+  }
+};
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock
@@ -181,6 +193,135 @@ describe('memoryUtils', () => {
       const result = getCharacterCorrectness('hello world', 'Hello World', true);
       // In easy mode, case is ignored
       expect(result.every(c => c.isCorrect)).toBe(true);
+    });
+  });
+
+  describe('deck completion time functions', () => {
+    beforeEach(() => {
+      // Clear localStorage before each test
+      localStorageMock.clear();
+      // Don't clear all mocks as it interferes with the store
+    });
+
+    describe('saveDeckCompletionTime', () => {
+      it('saves deck completion time to localStorage', () => {
+        const deckTitle = 'Test Deck';
+        const completionTimes = [10, 15, 12];
+        const cardCount = 3;
+
+        saveDeckCompletionTime(deckTitle, completionTimes, cardCount);
+
+        // Check that data was saved by loading it
+        const loadedTimes = loadDeckCompletionTimes(deckTitle);
+        expect(loadedTimes).toHaveLength(1);
+        expect(loadedTimes[0]).toMatchObject({
+          totalTime: 37,
+          averageTime: 37/3,
+          cardCount: 3,
+          completionTimes: [10, 15, 12],
+          easyMode: false,
+          referenceExposed: false,
+          ghostTextUsed: false
+        });
+        expect(loadedTimes[0].date).toBeDefined();
+      });
+
+      it('saves with optional parameters', () => {
+        const deckTitle = 'Test Deck';
+        const completionTimes = [20, 25];
+        const cardCount = 2;
+
+        saveDeckCompletionTime(deckTitle, completionTimes, cardCount, true, true, true);
+
+        // Check that data was saved correctly
+        const loadedTimes = loadDeckCompletionTimes(deckTitle);
+        expect(loadedTimes).toHaveLength(1);
+        expect(loadedTimes[0]).toMatchObject({
+          totalTime: 45,
+          averageTime: 22.5,
+          cardCount: 2,
+          easyMode: true,
+          referenceExposed: true,
+          ghostTextUsed: true
+        });
+      });
+
+      it('keeps only top 5 times sorted by total time', () => {
+        const deckTitle = 'Test Deck';
+        
+        // Add 6 completion times
+        saveDeckCompletionTime(deckTitle, [30], 1);
+        saveDeckCompletionTime(deckTitle, [10], 1);
+        saveDeckCompletionTime(deckTitle, [50], 1);
+        saveDeckCompletionTime(deckTitle, [20], 1);
+        saveDeckCompletionTime(deckTitle, [40], 1);
+        saveDeckCompletionTime(deckTitle, [15], 1);
+
+        const loadedTimes = loadDeckCompletionTimes(deckTitle);
+        expect(loadedTimes).toHaveLength(5);
+        // Should be sorted by total time (fastest first)
+        expect(loadedTimes.map(t => t.totalTime)).toEqual([10, 15, 20, 30, 40]);
+      });
+    });
+
+    describe('loadDeckCompletionTimes', () => {
+      it('returns empty array when no times exist', () => {
+        const times = loadDeckCompletionTimes('Non-existent Deck');
+        expect(times).toEqual([]);
+      });
+
+      it('loads existing deck completion times', () => {
+        const deckTitle = 'Test Deck';
+        const completionTimes = [12, 18];
+        
+        saveDeckCompletionTime(deckTitle, completionTimes, 2);
+        
+        const loadedTimes = loadDeckCompletionTimes(deckTitle);
+        
+        expect(loadedTimes).toHaveLength(1);
+        expect(loadedTimes[0]).toMatchObject({
+          totalTime: 30,
+          averageTime: 15,
+          cardCount: 2,
+          completionTimes: [12, 18]
+        });
+      });
+    });
+
+    describe('loadAllDeckCompletionTimes', () => {
+      it('returns empty array when no deck times exist', () => {
+        const allTimes = loadAllDeckCompletionTimes();
+        expect(allTimes).toEqual([]);
+      });
+
+      it('loads all deck completion times', () => {
+        saveDeckCompletionTime('Deck One', [10], 1);
+        saveDeckCompletionTime('Deck Two', [20, 25], 2);
+        
+        const allTimes = loadAllDeckCompletionTimes();
+        expect(allTimes).toHaveLength(2);
+        
+        const deckOne = allTimes.find(d => d.deckTitle === 'Deck One');
+        const deckTwo = allTimes.find(d => d.deckTitle === 'Deck Two');
+        
+        expect(deckOne).toBeDefined();
+        expect(deckOne.times).toHaveLength(1);
+        expect(deckOne.times[0].totalTime).toBe(10);
+        
+        expect(deckTwo).toBeDefined();
+        expect(deckTwo.times).toHaveLength(1);
+        expect(deckTwo.times[0].totalTime).toBe(45);
+      });
+
+      it('ignores non-deck best time keys', () => {
+        // Add some individual card best times
+        localStorageMock.setItem('personalBest_some_card', JSON.stringify([{time: 5}]));
+        saveDeckCompletionTime('Test Deck', [15], 1);
+        
+        const allTimes = loadAllDeckCompletionTimes();
+        expect(allTimes).toHaveLength(1);
+        expect(allTimes[0].deckTitle).toBe('Test Deck');
+      });
     });
   });
 });

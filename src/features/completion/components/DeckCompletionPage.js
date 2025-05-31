@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { formatTime } from '../../../utils/memoryUtils';
+import { formatTime, saveDeckCompletionTime } from '../../../utils/memoryUtils';
+import { useUserPreferences } from '../../../contexts/UserPreferencesContext';
 
 /**
  * DeckCompletionPage component - displays completion metrics for deck study
@@ -11,9 +12,25 @@ function DeckCompletionPage({
   cardCount, 
   onReturnToMenu 
 }) {
+  const { easyMode, ghostTextEnabled, showReferenceEnabled } = useUserPreferences();
+  
   // Calculate total time and average time
   const totalTime = completionTimes.reduce((acc, time) => acc + time, 0);
   const averageTime = completionTimes.length > 0 ? totalTime / completionTimes.length : 0;
+
+  // Save deck completion time when component mounts
+  useEffect(() => {
+    if (completionTimes.length > 0 && deckTitle) {
+      saveDeckCompletionTime(
+        deckTitle,
+        completionTimes,
+        cardCount,
+        easyMode,
+        showReferenceEnabled, // referenceExposed approximation
+        ghostTextEnabled
+      );
+    }
+  }, [completionTimes, deckTitle, cardCount, easyMode, showReferenceEnabled, ghostTextEnabled]);
 
   return (
     <motion.div 
