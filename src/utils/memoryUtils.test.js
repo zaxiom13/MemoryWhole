@@ -7,7 +7,13 @@ import {
   getCharacterCorrectness,
   saveDeckCompletionTime,
   loadDeckCompletionTimes,
-  loadAllDeckCompletionTimes
+  loadAllDeckCompletionTimes,
+  loadCardsFromStorage,
+  saveCardsToStorage,
+  loadPreference,
+  savePreference,
+  loadDecksFromStorage,
+  saveDecksToStorage
 } from './memoryUtils';
 
 // Mock localStorage
@@ -324,4 +330,367 @@ describe('memoryUtils', () => {
       });
     });
   });
-});
+
+  describe('localStorage functions', () => {
+    beforeEach(() => {
+      localStorageMock.clear();
+      jest.clearAllMocks();
+    });
+
+    describe('loadCardsFromStorage', () => {
+      const defaultCards = [
+        { id: 1, title: 'Default Card 1', text: 'Content 1' },
+        { id: 2, title: 'Default Card 2', text: 'Content 2' }
+      ];
+
+      it('loads saved cards from localStorage when available', () => {
+        const savedCards = [
+          { id: 1, title: 'Saved Card', text: 'Saved Content', createdAt: 1000000000 }
+        ];
+        localStorageMock.setItem('memoryCards', JSON.stringify(savedCards));
+
+        const result = loadCardsFromStorage(defaultCards);
+        
+        expect(result).toEqual(savedCards);
+      });
+
+      it('returns default cards when no saved cards exist', () => {
+        const result = loadCardsFromStorage(defaultCards);
+        
+        expect(result).toEqual(
+          defaultCards.map(card => ({
+            ...card,
+            createdAt: expect.any(Number)
+          }))
+        );
+      });
+
+      it('saves default cards to localStorage when none exist', () => {
+        loadCardsFromStorage(defaultCards);
+        
+        const savedData = localStorageMock.getItem('memoryCards');
+        expect(savedData).toBeTruthy();
+        const parsedData = JSON.parse(savedData);
+        expect(parsedData).toHaveLength(defaultCards.length);
+      });
+
+      it('adds timestamps to default cards that lack them', () => {
+        const cardsWithoutTimestamps = [
+          { id: 1, title: 'Card 1', text: 'Content 1' },
+          { id: 2, title: 'Card 2', text: 'Content 2', createdAt: 5000 }
+        ];
+
+        const result = loadCardsFromStorage(cardsWithoutTimestamps);
+        
+        expect(result[0].createdAt).toEqual(expect.any(Number));
+        expect(result[1].createdAt).toBe(5000);
+      });
+
+      it('handles localStorage parsing errors gracefully', () => {
+        localStorageMock.setItem('memoryCards', 'invalid json');
+
+        const result = loadCardsFromStorage(defaultCards);
+        
+        expect(result).toEqual(defaultCards);
+      });
+
+      it('handles localStorage access errors gracefully', () => {
+        // Mock localStorage to throw an error
+        const originalGetItem = localStorage.getItem;
+        localStorage.getItem = jest.fn(() => {
+          throw new Error('Storage access denied');
+        });
+
+        const result = loadCardsFromStorage(defaultCards);
+        
+        expect(result).toEqual(defaultCards);
+        
+        // Restore original
+        localStorage.getItem = originalGetItem;
+      });
+
+      it('handles empty default cards array', () => {
+        const result = loadCardsFromStorage([]);
+        
+        expect(result).toEqual([]);
+      });
+
+      it('handles null default cards', () => {
+        const result = loadCardsFromStorage(null);
+        
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('saveCardsToStorage', () => {
+      it('saves cards to localStorage', () => {
+        const cards = [
+          { id: 1, title: 'Card 1', text: 'Content 1' },
+          { id: 2, title: 'Card 2', text: 'Content 2' }
+        ];
+
+        saveCardsToStorage(cards);
+        
+        const savedData = localStorageMock.getItem('memoryCards');
+        expect(savedData).toBeTruthy();
+        expect(JSON.parse(savedData)).toEqual(cards);
+      });
+
+      it('does not save empty cards array', () => {
+        saveCardsToStorage([]);
+        
+        expect(localStorageMock.getItem('memoryCards')).toBeNull();
+      });
+
+      it('does not save null cards', () => {
+        saveCardsToStorage(null);
+        
+        expect(localStorageMock.getItem('memoryCards')).toBeNull();
+      });
+
+      it('does not save undefined cards', () => {
+        saveCardsToStorage(undefined);
+        
+        expect(localStorageMock.getItem('memoryCards')).toBeNull();
+      });
+
+      it('handles localStorage access errors gracefully', () => {
+        // Mock localStorage to throw an error
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = jest.fn(() => {
+          throw new Error('Storage quota exceeded');
+        });
+
+        const cards = [{ id: 1, title: 'Card', text: 'Content' }];
+        
+        expect(() => saveCardsToStorage(cards)).not.toThrow();
+        
+        // Restore original
+        localStorage.setItem = originalSetItem;
+      });
+
+      it('handles circular reference in cards gracefully', () => {
+        const cards = [{ id: 1, title: 'Card', text: 'Content' }];
+        cards[0].self = cards[0]; // Create circular reference
+
+        expect(() => saveCardsToStorage(cards)).not.toThrow();
+      });
+    });
+
+    describe('loadPreference', () => {
+      it('loads saved preference from localStorage', () => {
+        const key = 'testPreference';
+        const value = { setting: true, count: 5 };
+        localStorageMock.setItem(key, JSON.stringify(value));
+
+        const result = loadPreference(key, null);
+        
+        expect(result).toEqual(value);
+      });
+
+      it('returns default value when preference does not exist', () => {
+        const defaultValue = { setting: false, count: 0 };
+        
+        const result = loadPreference('nonexistent', defaultValue);
+        
+        expect(result).toEqual(defaultValue);
+      });
+
+      it('handles different data types correctly', () => {
+        // String
+        localStorageMock.setItem('stringPref', JSON.stringify('test string'));
+        expect(loadPreference('stringPref', '')).toBe('test string');
+
+        // Number
+        localStorageMock.setItem('numberPref', JSON.stringify(42));
+        expect(loadPreference('numberPref', 0)).toBe(42);
+
+        // Boolean
+        localStorageMock.setItem('boolPref', JSON.stringify(true));
+        expect(loadPreference('boolPref', false)).toBe(true);
+
+        // Array
+        localStorageMock.setItem('arrayPref', JSON.stringify([1, 2, 3]));
+        expect(loadPreference('arrayPref', [])).toEqual([1, 2, 3]);
+
+        // Object
+        const objValue = { a: 1, b: 'test' };
+        localStorageMock.setItem('objPref', JSON.stringify(objValue));
+        expect(loadPreference('objPref', {})).toEqual(objValue);
+      });
+
+      it('handles JSON parsing errors gracefully', () => {
+        localStorageMock.setItem('corruptPref', 'invalid json');
+        const defaultValue = { fallback: true };
+
+        const result = loadPreference('corruptPref', defaultValue);
+        
+        expect(result).toEqual(defaultValue);
+      });
+
+      it('handles localStorage access errors gracefully', () => {
+        const originalGetItem = localStorage.getItem;
+        localStorage.getItem = jest.fn(() => {
+          throw new Error('Storage access denied');
+        });
+
+        const defaultValue = { fallback: true };
+        const result = loadPreference('anyKey', defaultValue);
+        
+        expect(result).toEqual(defaultValue);
+        
+        localStorage.getItem = originalGetItem;
+      });
+
+      it('distinguishes between null stored value and missing key', () => {
+        localStorageMock.setItem('nullValue', JSON.stringify(null));
+        
+        const result = loadPreference('nullValue', 'default');
+        
+        expect(result).toBeNull();
+      });
+    });
+
+    describe('savePreference', () => {
+      it('saves preference to localStorage', () => {
+        const key = 'testPref';
+        const value = { setting: true, count: 10 };
+
+        savePreference(key, value);
+        
+        const savedData = localStorageMock.getItem(key);
+        expect(savedData).toBeTruthy();
+        expect(JSON.parse(savedData)).toEqual(value);
+      });
+
+      it('saves different data types correctly', () => {
+        savePreference('string', 'test');
+        savePreference('number', 42);
+        savePreference('boolean', true);
+        savePreference('array', [1, 2, 3]);
+        savePreference('object', { a: 1 });
+        savePreference('null', null);
+
+        expect(JSON.parse(localStorageMock.getItem('string'))).toBe('test');
+        expect(JSON.parse(localStorageMock.getItem('number'))).toBe(42);
+        expect(JSON.parse(localStorageMock.getItem('boolean'))).toBe(true);
+        expect(JSON.parse(localStorageMock.getItem('array'))).toEqual([1, 2, 3]);
+        expect(JSON.parse(localStorageMock.getItem('object'))).toEqual({ a: 1 });
+        expect(JSON.parse(localStorageMock.getItem('null'))).toBeNull();
+      });
+
+      it('handles localStorage access errors gracefully', () => {
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = jest.fn(() => {
+          throw new Error('Storage quota exceeded');
+        });
+
+        expect(() => savePreference('test', 'value')).not.toThrow();
+        
+        localStorage.setItem = originalSetItem;
+      });
+
+      it('handles circular reference in values gracefully', () => {
+        const obj = { setting: true };
+        obj.self = obj; // Create circular reference
+
+        expect(() => savePreference('circular', obj)).not.toThrow();
+      });
+
+      it('overwrites existing preferences', () => {
+        savePreference('test', 'first');
+        savePreference('test', 'second');
+        
+        const result = JSON.parse(localStorageMock.getItem('test'));
+        expect(result).toBe('second');
+      });
+    });
+  });
+
+  describe('loadDecksFromStorage', () => {
+    beforeEach(() => {
+      localStorageMock.clear();
+    });
+
+    const defaultDecks = [
+      { id: 1, title: 'Default Deck 1', cardIds: [1, 2] },
+      { id: 2, title: 'Default Deck 2', cardIds: [3, 4] }
+    ];
+
+    it('loads saved decks from localStorage when available', () => {
+      const savedDecks = [
+        { id: 1, title: 'Saved Deck', cardIds: [1], createdAt: 1000000000 }
+      ];
+      localStorageMock.setItem('memoryDecks', JSON.stringify(savedDecks));
+
+      const result = loadDecksFromStorage(defaultDecks);
+      
+      expect(result).toEqual(savedDecks);
+    });
+
+    it('returns default decks when no saved decks exist', () => {
+      const result = loadDecksFromStorage(defaultDecks);
+      
+      expect(result).toEqual(
+        defaultDecks.map(deck => ({
+          ...deck,
+          createdAt: expect.any(Number)
+        }))
+      );
+    });
+
+    it('saves default decks to localStorage when none exist', () => {
+      loadDecksFromStorage(defaultDecks);
+      
+      const savedData = localStorageMock.getItem('memoryDecks');
+      expect(savedData).toBeTruthy();
+      const parsedData = JSON.parse(savedData);
+      expect(parsedData).toHaveLength(defaultDecks.length);
+    });
+
+    it('handles localStorage errors gracefully', () => {
+      localStorageMock.setItem('memoryDecks', 'invalid json');
+
+      const result = loadDecksFromStorage(defaultDecks);
+      
+      expect(result).toEqual(defaultDecks);
+    });
+  });
+
+  describe('saveDecksToStorage', () => {
+    beforeEach(() => {
+      localStorageMock.clear();
+    });
+
+    it('saves decks to localStorage', () => {
+      const decks = [
+        { id: 1, title: 'Deck 1', cardIds: [1, 2] },
+        { id: 2, title: 'Deck 2', cardIds: [3, 4] }
+      ];
+
+      saveDecksToStorage(decks);
+      
+      const savedData = localStorageMock.getItem('memoryDecks');
+      expect(savedData).toBeTruthy();
+      expect(JSON.parse(savedData)).toEqual(decks);
+    });
+
+    it('does not save empty decks array', () => {
+      saveDecksToStorage([]);
+      
+      expect(localStorageMock.getItem('memoryDecks')).toBeNull();
+    });
+
+    it('handles localStorage errors gracefully', () => {
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = jest.fn(() => {
+        throw new Error('Storage error');
+      });
+
+      const decks = [{ id: 1, title: 'Deck', cardIds: [] }];
+      
+      expect(() => saveDecksToStorage(decks)).not.toThrow();
+      
+      localStorage.setItem = originalSetItem;
+    });
+  });
