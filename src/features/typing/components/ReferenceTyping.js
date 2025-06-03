@@ -4,6 +4,45 @@ import useReferenceTypingUI from '../hooks/useReferenceTypingUI';
 import Timer from '../../../components/Timer';
 import EasyModeIndicator from '../../../ui/EasyModeIndicator';
 import { calculateAccuracy } from '../../../utils/typingUtils';
+import { getCharacterCorrectness } from '../../../utils/memoryUtils';
+
+/**
+ * Character display component used for coloring typed text
+ */
+function CharacterDisplay({ char, isCorrect, isSpace }) {
+  if (isSpace && !isCorrect) {
+    return (
+      <span
+        className="text-red-500 inline-block"
+        style={{ width: '0.5em', height: '1em', backgroundColor: 'rgba(239, 68, 68, 0.3)' }}
+      ></span>
+    );
+  }
+
+  return (
+    <span className={isCorrect ? 'character-correct' : 'character-incorrect'}>{char || ''}</span>
+  );
+}
+
+/**
+ * Display the user input with per-character coloring
+ */
+function ColoredTextDisplay({ userInput, referenceText, easyMode }) {
+  const characterData = getCharacterCorrectness(userInput, referenceText, easyMode);
+
+  return (
+    <>
+      {characterData.map((data, index) => (
+        <CharacterDisplay
+          key={index}
+          char={data.char}
+          isCorrect={data.isCorrect}
+          isSpace={data.isSpace}
+        />
+      ))}
+    </>
+  );
+}
 
 /**
  * Main reference typing component
@@ -114,25 +153,25 @@ export default function ReferenceTyping({
         
         {/* Typing area */}
         <div className="relative">
+          <div
+            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono whitespace-pre-wrap`}
+          >
+            <ColoredTextDisplay
+              userInput={userInput}
+              referenceText={selectedReference}
+              easyMode={easyMode}
+            />
+            {ghostTextEnabled && ghostText && (
+              <span className="text-gray-400 dark:text-gray-600">{ghostText}</span>
+            )}
+          </div>
           <textarea
             ref={textareaRef}
             value={userInput}
             onChange={handleInputChange}
             disabled={isComplete}
-            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400`}
-            placeholder="Start typing to recall the text..."
+            className="absolute inset-0 w-full h-full p-3 opacity-0 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
           />
-
-          {/* Ghost text overlay */}
-          {ghostTextEnabled && ghostText && (
-            <div 
-              className="absolute inset-0 pointer-events-none p-3 text-gray-400 dark:text-gray-600 overflow-hidden whitespace-pre-wrap"
-              aria-hidden="true"
-            >
-              <span className="invisible">{userInput}</span>
-              {ghostText}
-            </div>
-          )}
 
           {/* Accuracy counter when completed */}
           {isComplete && (
