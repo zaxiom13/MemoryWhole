@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import useReferenceTypingUI from '../hooks/useReferenceTypingUI';
 import Timer from '../../../components/Timer';
@@ -70,8 +70,9 @@ export default function ReferenceTyping({
     handleInputChange: internalHandleInputChange,
     handleConfirmShowReference,
   } = useReferenceTypingUI(selectedReference, userInput, easyMode, ghostTextEnabled);
-  
+
   const textareaRef = useRef(null);
+  const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   
   // Focus textarea when component mounts or typing starts
   useEffect(() => {
@@ -161,8 +162,13 @@ export default function ReferenceTyping({
               referenceText={selectedReference}
               easyMode={easyMode}
             />
+            {isTextareaFocused && !isComplete && (
+              <span className="animate-blink inline-block" style={{ marginLeft: '-0.5ch' }}>|</span>
+            )}
             {ghostTextEnabled && ghostText && (
-              <span className="text-gray-400 dark:text-gray-600">{ghostText}</span>
+              <span className="text-gray-400 dark:text-gray-600" style={{ marginLeft: '-0.5ch' }}>
+                {ghostText}
+              </span>
             )}
           </div>
           <textarea
@@ -170,19 +176,11 @@ export default function ReferenceTyping({
             value={userInput}
             onChange={handleInputChange}
             disabled={isComplete}
-            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 font-sans`}
+            className={`absolute inset-0 w-full h-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 font-sans opacity-0`}
             placeholder="Start typing to recall the text..."
+            onFocus={() => setIsTextareaFocused(true)}
+            onBlur={() => setIsTextareaFocused(false)}
           />
-
-          {ghostTextEnabled && ghostText && (
-            <div
-              className="absolute inset-0 pointer-events-none p-3 text-gray-400 dark:text-gray-600 overflow-hidden whitespace-pre-wrap leading-normal font-sans"
-              aria-hidden="true"
-            >
-              <span className="invisible">{userInput}</span>
-              {ghostText}
-            </div>
-          )}
 
           {/* Accuracy counter when completed */}
           {isComplete && (
