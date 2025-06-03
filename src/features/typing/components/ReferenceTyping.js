@@ -113,15 +113,6 @@ export default function ReferenceTyping({
     }
   };
   
-  // Override the handleConfirmShowReference to notify parent component
-  const handleConfirmShowReferenceWithCallback = () => {
-    // Call the hook's implementation
-    handleConfirmShowReference();
-    // Notify parent component that reference was exposed
-    if (onReferenceExposed) {
-      onReferenceExposed();
-    }
-  };
 
   return (
     <motion.div 
