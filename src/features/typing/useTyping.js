@@ -114,13 +114,23 @@ function useTyping() {
     // Get all cards for this deck
     const deckCards = cards.filter(card => deck.cardIds.includes(card.id));
     if (deckCards.length === 0) return;
-    
+
     // Set up deck study mode
     const cardIds = deckCards.map(card => card.id);
     startDeckStudy(deck.id, cardIds);
-    
-    // Select the first card's reference
-    handleSelectReference(deckCards[0].text);
+
+    // Show preview step before selecting first card
+    setStep(2);
+  };
+
+  // Begin deck study after preview
+  const handleBeginDeckStudy = () => {
+    if (studyCardIds.length === 0) return;
+    const firstCard = cards.find(card => card.id === studyCardIds[0]);
+    if (firstCard) {
+      handleSelectReference(firstCard.text);
+      handleBeginTyping();
+    }
   };
   
   // Load the next card in deck study mode
@@ -153,6 +163,7 @@ function useTyping() {
     handleBeginTyping,
     handleRetryTyping,
     handleReturnToMenu,
+    handleBeginDeckStudy,
     handleStartDeckStudy,
     loadNextStudyCard,
     beginNextCard: () => {

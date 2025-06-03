@@ -12,6 +12,7 @@ import {
   ReferenceConfirmationRoute,
   ReferenceTypingRoute,
   DeckStudyRoute,
+  DeckStudyPreviewRoute,
   BestTimesRoute,
   CompletionRoute,
   DeckCompletionRoute
@@ -63,6 +64,7 @@ function AppContent() {
     handleBeginTyping,
     handleRetryTyping,
     handleReturnToMenu,
+    handleBeginDeckStudy,
     handleStartDeckStudy,
     loadNextStudyCard,
     beginNextCard,
@@ -113,7 +115,10 @@ function AppContent() {
             />
           )}
           
-          {step === 2 && (
+          {step === 2 && isDeckStudyMode ? (
+            <DeckStudyPreviewRoute onBegin={handleBeginDeckStudy} />
+          ) :
+          step === 2 && (
             <ReferenceConfirmationRoute
               selectedReference={selectedReference}
               onBegin={handleBeginTyping}
