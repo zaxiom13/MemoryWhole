@@ -27,6 +27,11 @@ describe('routes/index.js', () => {
       expect(typeof RoutesModule.DeckStudyRoute).toBe('function');
     });
 
+    it('exports DeckStudyPreviewRoute component', () => {
+      expect(RoutesModule.DeckStudyPreviewRoute).toBeDefined();
+      expect(typeof RoutesModule.DeckStudyPreviewRoute).toBe('function');
+    });
+
     it('exports BestTimesRoute component', () => {
       expect(RoutesModule.BestTimesRoute).toBeDefined();
       expect(typeof RoutesModule.BestTimesRoute).toBe('function');
@@ -42,9 +47,9 @@ describe('routes/index.js', () => {
       expect(typeof RoutesModule.DeckCompletionRoute).toBe('function');
     });
 
-    it('exports exactly 8 route components', () => {
+    it('exports exactly 9 route components', () => {
       const exportedKeys = Object.keys(RoutesModule);
-      expect(exportedKeys).toHaveLength(8);
+      expect(exportedKeys).toHaveLength(9);
       
       const expectedRoutes = [
         'HomeRoute',
@@ -52,6 +57,7 @@ describe('routes/index.js', () => {
         'ReferenceConfirmationRoute',
         'ReferenceTypingRoute',
         'DeckStudyRoute',
+        'DeckStudyPreviewRoute',
         'BestTimesRoute',
         'CompletionRoute',
         'DeckCompletionRoute'
@@ -71,6 +77,7 @@ describe('routes/index.js', () => {
         ReferenceConfirmationRoute: expect.any(Function),
         ReferenceTypingRoute: expect.any(Function),
         DeckStudyRoute: expect.any(Function),
+        DeckStudyPreviewRoute: expect.any(Function),
         BestTimesRoute: expect.any(Function),
         CompletionRoute: expect.any(Function),
         DeckCompletionRoute: expect.any(Function)
@@ -95,18 +102,20 @@ describe('routes/index.js', () => {
 
     it('provides access to deck study routes', () => {
       expect(RoutesModule.DeckStudyRoute).toBeTruthy();
+      expect(RoutesModule.DeckStudyPreviewRoute).toBeTruthy();
       expect(RoutesModule.DeckCompletionRoute).toBeTruthy();
     });
   });
 
   describe('integration test', () => {
     it('allows destructuring import pattern', () => {
-      const { 
-        HomeRoute, 
-        TutorialRoute, 
+      const {
+        HomeRoute,
+        TutorialRoute,
         ReferenceConfirmationRoute,
         ReferenceTypingRoute,
         DeckStudyRoute,
+        DeckStudyPreviewRoute,
         BestTimesRoute,
         CompletionRoute,
         DeckCompletionRoute
@@ -117,6 +126,7 @@ describe('routes/index.js', () => {
       expect(ReferenceConfirmationRoute).toBe(RoutesModule.ReferenceConfirmationRoute);
       expect(ReferenceTypingRoute).toBe(RoutesModule.ReferenceTypingRoute);
       expect(DeckStudyRoute).toBe(RoutesModule.DeckStudyRoute);
+      expect(DeckStudyPreviewRoute).toBe(RoutesModule.DeckStudyPreviewRoute);
       expect(BestTimesRoute).toBe(RoutesModule.BestTimesRoute);
       expect(CompletionRoute).toBe(RoutesModule.CompletionRoute);
       expect(DeckCompletionRoute).toBe(RoutesModule.DeckCompletionRoute);

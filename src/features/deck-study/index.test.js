@@ -7,17 +7,24 @@ describe('deck-study/index.js', () => {
       expect(typeof DeckStudyModule.DeckStudyMode).toBe('function');
     });
 
-    it('exports exactly 1 component', () => {
+    it('exports DeckStudyPreview component', () => {
+      expect(DeckStudyModule.DeckStudyPreview).toBeDefined();
+      expect(typeof DeckStudyModule.DeckStudyPreview).toBe('function');
+    });
+
+    it('exports exactly 2 components', () => {
       const exportedKeys = Object.keys(DeckStudyModule);
-      expect(exportedKeys).toHaveLength(1);
+      expect(exportedKeys).toHaveLength(2);
       expect(exportedKeys).toContain('DeckStudyMode');
+      expect(exportedKeys).toContain('DeckStudyPreview');
     });
   });
 
   describe('module structure', () => {
     it('maintains consistent export structure', () => {
       expect(DeckStudyModule).toEqual({
-        DeckStudyMode: expect.any(Function)
+        DeckStudyMode: expect.any(Function),
+        DeckStudyPreview: expect.any(Function)
       });
     });
   });
@@ -28,13 +35,20 @@ describe('deck-study/index.js', () => {
       expect(DeckStudyMode).toBeTruthy();
       expect(DeckStudyMode.name).toBe('DeckStudyMode');
     });
+
+    it('provides access to DeckStudyPreview component', () => {
+      const { DeckStudyPreview } = DeckStudyModule;
+      expect(DeckStudyPreview).toBeTruthy();
+      expect(DeckStudyPreview.name).toBe('DeckStudyPreview');
+    });
   });
 
   describe('integration test', () => {
     it('allows destructuring import pattern', () => {
-      const { DeckStudyMode } = DeckStudyModule;
-      
+      const { DeckStudyMode, DeckStudyPreview } = DeckStudyModule;
+
       expect(DeckStudyMode).toBe(DeckStudyModule.DeckStudyMode);
+      expect(DeckStudyPreview).toBe(DeckStudyModule.DeckStudyPreview);
     });
 
     it('supports default import access pattern', () => {
@@ -52,12 +66,10 @@ describe('deck-study/index.js', () => {
 
     it('provides focused deck study functionality', () => {
       const exports = Object.keys(DeckStudyModule);
-      
-      // Should contain the main deck study component
+
       expect(exports).toContain('DeckStudyMode');
-      
-      // Should be focused (only one export for this feature)
-      expect(exports).toHaveLength(1);
+      expect(exports).toContain('DeckStudyPreview');
+      expect(exports).toHaveLength(2);
     });
   });
 
@@ -73,6 +85,7 @@ describe('deck-study/index.js', () => {
   describe('module metadata', () => {
     it('has expected module structure for deck study feature', () => {
       expect(DeckStudyModule).toHaveProperty('DeckStudyMode');
+      expect(DeckStudyModule).toHaveProperty('DeckStudyPreview');
       expect(Object.keys(DeckStudyModule)).not.toContain('default');
     });
 
