@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DeckCompletionRoute from './DeckCompletionRoute';
 
@@ -166,8 +166,11 @@ describe('DeckCompletionRoute', () => {
     it('forwards onReturnToMenu callback', () => {
       const mockCallback = jest.fn();
       render(<DeckCompletionRoute {...defaultProps} onReturnToMenu={mockCallback} />);
-      
-      expect(screen.getByTestId('return-button')).toBeInTheDocument();
+
+      const button = screen.getByTestId('return-button');
+      expect(button).toBeInTheDocument();
+      fireEvent.click(button);
+      expect(mockCallback).toHaveBeenCalledTimes(1);
     });
 
     it('handles different callback functions', () => {
