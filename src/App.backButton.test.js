@@ -87,6 +87,7 @@ describe('Back Button Visibility on Completion Page', () => {
       isDeckStudyMode: false, // Not in deck study mode
       deckStudyComplete: false, // Deck study was NOT completed
       studyDeckId: null,
+      studyCardIds: [],
       deckCompletionTimes: [],
       createCard: jest.fn(),
       updateCard: jest.fn(),
@@ -124,6 +125,7 @@ describe('Back Button Visibility on Completion Page', () => {
       isDeckStudyMode: false, // Not in deck study mode
       deckStudyComplete: false, // Deck study was NOT completed
       studyDeckId: null,
+      studyCardIds: [],
       deckCompletionTimes: [],
       createCard: jest.fn(),
       updateCard: jest.fn(),
@@ -162,6 +164,7 @@ describe('Back Button Visibility on Completion Page', () => {
       isDeckStudyMode: true, // In deck study mode
       deckStudyComplete: false, // Deck study is ongoing
       studyDeckId: 'test-deck',
+      studyCardIds: [],
       deckCompletionTimes: [],
       createCard: jest.fn(),
       updateCard: jest.fn(),

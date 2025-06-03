@@ -48,6 +48,7 @@ function AppContent() {
     isDeckStudyMode,
     deckStudyComplete,
     studyDeckId,
+    studyCardIds,
     deckCompletionTimes,
     exitDeckStudy
   } = useAppState();
@@ -176,7 +177,7 @@ function AppContent() {
             <DeckCompletionRoute
               completionTimes={deckCompletionTimes}
               deckTitle={decks.find(d => d.id === studyDeckId)?.title || 'Deck Study'}
-              cardCount={deckCompletionTimes.length}
+              cardCount={studyCardIds.length}
               onReturnToMenu={handleExitDeckStudy}
             />
           )}
