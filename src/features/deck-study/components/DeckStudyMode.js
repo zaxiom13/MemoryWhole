@@ -21,13 +21,14 @@ function DeckStudyMode({
   loadNextStudyCard,
   beginNextCard
 }) {
-  const { 
+  const {
     studyDeckId,
     studyCardIds,
     currentCardIndex,
     decks,
     nextStudyCard,
-    completeDeckStudy
+    completeDeckStudy,
+    setDeckCompletionTimes
   } = useAppState();
 
   // Get current deck and card
@@ -44,10 +45,21 @@ function DeckStudyMode({
       // Begin typing the next card
       beginNextCard();
     } else if (isComplete && currentCardIndex === studyCardIds.length - 1) {
-      // All cards completed
+      // Push final completion time and finish deck study
+      setDeckCompletionTimes(prev => [...prev, completionTime]);
       completeDeckStudy();
     }
-  }, [isComplete, currentCardIndex, studyCardIds.length, completionTime, nextStudyCard, completeDeckStudy, loadNextStudyCard, beginNextCard]);
+  }, [
+    isComplete,
+    currentCardIndex,
+    studyCardIds.length,
+    completionTime,
+    nextStudyCard,
+    completeDeckStudy,
+    loadNextStudyCard,
+    beginNextCard,
+    setDeckCompletionTimes
+  ]);
 
   return (
     <motion.div 
