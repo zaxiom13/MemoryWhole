@@ -119,14 +119,14 @@ export default function ReferenceTyping({
             value={userInput}
             onChange={handleInputChange}
             disabled={isComplete}
-            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400`}
+            className={`w-full min-h-[200px] p-3 rounded-lg border ${inputError ? 'border-red-300 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 font-sans`}
             placeholder="Start typing to recall the text..."
           />
 
           {/* Ghost text overlay */}
           {ghostTextEnabled && ghostText && (
-            <div 
-              className="absolute inset-0 pointer-events-none p-3 text-gray-400 dark:text-gray-600 overflow-hidden whitespace-pre-wrap"
+            <div
+              className="absolute inset-0 pointer-events-none p-3 text-gray-400 dark:text-gray-600 overflow-hidden whitespace-pre-wrap leading-normal font-sans"
               aria-hidden="true"
             >
               <span className="invisible">{userInput}</span>
