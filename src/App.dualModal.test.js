@@ -88,6 +88,7 @@ describe('Dual Modal Bug Fix', () => {
       isDeckStudyMode: false, // Deck study mode was exited
       deckStudyComplete: true, // Deck study was completed
       studyDeckId: 'test-deck',
+      studyCardIds: [],
       deckCompletionTimes: [1000, 2000, 1500],
       createCard: jest.fn(),
       updateCard: jest.fn(),
@@ -126,6 +127,7 @@ describe('Dual Modal Bug Fix', () => {
       isDeckStudyMode: false, // Not in deck study mode
       deckStudyComplete: false, // Deck study was NOT completed
       studyDeckId: null,
+      studyCardIds: [],
       deckCompletionTimes: [],
       createCard: jest.fn(),
       updateCard: jest.fn(),
@@ -164,6 +166,7 @@ describe('Dual Modal Bug Fix', () => {
       isDeckStudyMode: false, // Not in deck study mode
       deckStudyComplete: false, // Deck study was NOT completed
       studyDeckId: null,
+      studyCardIds: [],
       deckCompletionTimes: [],
       createCard: jest.fn(),
       updateCard: jest.fn(),
@@ -202,6 +205,7 @@ describe('Dual Modal Bug Fix', () => {
       isDeckStudyMode: false, // Deck study mode was exited
       deckStudyComplete: true, // Deck study was completed
       studyDeckId: 'test-deck',
+      studyCardIds: [],
       deckCompletionTimes: [1000, 2000, 1500],
       createCard: jest.fn(),
       updateCard: jest.fn(),
