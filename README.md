@@ -52,7 +52,7 @@ The application is built on established memory techniques and cognitive science 
 
 - **Active Recall**: By challenging users to reproduce text from memory, the app leverages the proven technique of active recall, which strengthens memory pathways more effectively than passive review.
 - **Instant Feedback**: Through color coding the text that they input they can know that they are on the right track. Green characters indicate that the user has typed the correct character, while red characters indicate that the user has typed an incorrect character. This allows users to quickly identify and correct mistakes. 
-- **Ghost Text as a Cue**: The application uses ghost text to provide users with a cue for the next characters they need to type when they are struggling (stall for more than some time). This helps users focus on continuing inplace rather than pulling up the passage again.
+ - **Ghost Text as a Cue**: The application uses ghost text to provide users with a cue for the next characters they need to type when they are struggling (stall for more than some time). This helps users focus on continuing in place rather than pulling up the passage again.
 
 ## Technology Stack
 
