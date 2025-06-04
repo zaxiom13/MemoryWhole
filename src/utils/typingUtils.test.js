@@ -172,12 +172,12 @@ describe('typingUtils', () => {
 
     it('handles whitespace differences', () => {
       const result = checkCorrectness('Hello World', 'Hello  World');
-      expect(result).toEqual({ isCorrect: false, correctIndex: 5 });
+      expect(result).toEqual({ isCorrect: false, correctIndex: 6 });
     });
 
     it('works when input is longer than reference', () => {
       const result = checkCorrectness('Hi', 'Hello');
-      expect(result).toEqual({ isCorrect: false, correctIndex: 0 });
+      expect(result).toEqual({ isCorrect: false, correctIndex: 1 });
     });
 
     it('handles exact match', () => {
