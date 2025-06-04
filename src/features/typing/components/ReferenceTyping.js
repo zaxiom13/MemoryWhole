@@ -88,11 +88,6 @@ export default function ReferenceTyping({
     }
   }, [typingStarted, timerRunning, setTimerRunning]);
   
-  // Debug logs
-  useEffect(() => {
-    console.log('Ghost text:', ghostText);
-    console.log('Last correct index:', lastCorrectIndex);
-  }, [ghostText, lastCorrectIndex]);
 
   // Automatically set isReferenceOpen if showReferenceEnabled is true
   useEffect(() => {

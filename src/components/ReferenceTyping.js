@@ -127,14 +127,9 @@ export default function ReferenceTyping({
   } = useMemoryTyping({
     referenceText: selectedReference,
     easyMode: easyMode,
-    ghostTextEnabled: ghostTextEnabled
+  ghostTextEnabled: ghostTextEnabled
   });
-  
-  // For debugging
-  useEffect(() => {
-    console.log('Ghost text:', ghostText);
-    console.log('Last correct index:', lastCorrectIndex);
-  }, [ghostText, lastCorrectIndex]);
+
 
   // Automatically set isReferenceOpen if showReferenceEnabled is true
   useEffect(() => {
