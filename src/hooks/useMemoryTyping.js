@@ -38,8 +38,8 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
         const userChar = userChars[i];
         const refChar = refChars[i] || '';
         
-        // Skip punctuation in reference text
-        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
+        // Skip any non-alphanumeric character in the reference text
+        if (/\W/.test(refChar)) {
           continue;
         }
         
@@ -79,8 +79,8 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
         const userChar = userChars[i];
         const refChar = refChars[i] || '';
         
-        // Skip punctuation in reference text
-        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
+        // Skip any non-alphanumeric character in the reference text
+        if (/\W/.test(refChar)) {
           index = i + 1;
           continue;
         }
@@ -110,8 +110,8 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
       for (let i = 0; i < refChars.length; i++) {
         const refChar = refChars[i];
         
-        // Skip punctuation in reference text
-        if (/[.,;:!?"'[\](){}\-–—]/.test(refChar)) {
+        // Skip any non-alphanumeric character in the reference text
+        if (/\W/.test(refChar)) {
           continue;
         }
         
@@ -193,8 +193,8 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
       const expectedChar = normalizedReferenceText[oldValue.length];
       
       // In easy mode, check with case insensitivity
-      const isIncorrect = easyMode 
-        ? newChar.toLowerCase() !== expectedChar?.toLowerCase() && !(/[.,;:!?"'[\](){}\-–—]/.test(expectedChar))
+      const isIncorrect = easyMode
+        ? newChar.toLowerCase() !== expectedChar?.toLowerCase() && !(/\W/.test(expectedChar))
         : newChar !== expectedChar;
         
       if (isIncorrect && expectedChar) {
@@ -202,12 +202,12 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
       }
     }
     
-    // In easy mode, filter out punctuation characters that the user types
+    // In easy mode, filter out non-alphanumeric characters that the user types
     if (easyMode && newValue.length > oldValue.length) {
-      // Check if the last character typed is punctuation
+      // Check if the last character typed is non-alphanumeric
       const lastCharTyped = newValue[newValue.length - 1];
-      if (/[.,;:!?"'[\](){}\-–—]/.test(lastCharTyped)) {
-        // Ignore the punctuation keystroke by reverting to previous value
+      if (/\W/.test(lastCharTyped)) {
+        // Ignore the keystroke by reverting to previous value
         newValue = oldValue;
       }
     }
@@ -217,10 +217,10 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
         oldValue.length > newValue.length && 
         newValue.length > 0 && 
         oldValue.length > 1) {
-      // Check if the last character was punctuation
+      // Check if the last character was non-alphanumeric
       const lastChar = oldValue[oldValue.length - 1];
-      if (/[.,;:!?"'[\](){}\-–—]/.test(lastChar)) {
-        // Remove the character before the punctuation as well
+      if (/\W/.test(lastChar)) {
+        // Remove the character before it as well
         newValue = newValue.slice(0, -1);
       }
     }
@@ -243,17 +243,17 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
       }
     }
     
-    // Auto-punctuation in easy mode - only if all characters so far are correct
-    if (easyMode && 
-        newValue.length < normalizedReferenceText.length && 
+    // Auto-insert non-alphanumeric characters in easy mode
+    if (easyMode &&
+        newValue.length < normalizedReferenceText.length &&
         !hasMistakes(newValue, normalizedReferenceText.substring(0, newValue.length))) {
-      // Check if we need to add punctuation
+      // Check if we need to add non-alphanumeric characters
       let nextIndex = newValue.length;
-      
-      // Keep adding punctuation as long as the next character is punctuation
+
+      // Keep adding characters while the next character is non-alphanumeric
       while (
-        nextIndex < normalizedReferenceText.length && 
-        /[.,;:!?"'[\](){}\-–—]/.test(normalizedReferenceText[nextIndex])
+        nextIndex < normalizedReferenceText.length &&
+        /\W/.test(normalizedReferenceText[nextIndex])
       ) {
         newValue += normalizedReferenceText[nextIndex];
         nextIndex++;
