@@ -49,7 +49,12 @@ export function formatDate(timestamp) {
  * @param {string} reference - Reference text
  * @returns {boolean} True if there are mistakes
  */
-export function hasMistakes(userInput, reference) {
+export function hasMistakes(userInput, reference, easyMode = false) {
+  if (easyMode) {
+    return userInput
+      .split('')
+      .some((char, index) => (reference[index] || '').toLowerCase() !== char.toLowerCase());
+  }
   return userInput.split('').some((char, index) => reference[index] !== char);
 }
 
