@@ -244,9 +244,9 @@ function useMemoryTyping({ referenceText, easyMode = false, ghostTextEnabled = t
     }
     
     // Auto-punctuation in easy mode - only if all characters so far are correct
-    if (easyMode && 
-        newValue.length < normalizedReferenceText.length && 
-        !hasMistakes(newValue, normalizedReferenceText.substring(0, newValue.length))) {
+    if (easyMode &&
+        newValue.length < normalizedReferenceText.length &&
+        !hasMistakes(newValue, normalizedReferenceText.substring(0, newValue.length), true)) {
       // Check if we need to add punctuation
       let nextIndex = newValue.length;
       

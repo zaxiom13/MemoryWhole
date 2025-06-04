@@ -110,6 +110,11 @@ describe('memoryUtils', () => {
     it('returns true if input differs from reference', () => {
       expect(hasMistakes('Hallo', 'Hello')).toBe(true);
     });
+
+    it('ignores case differences when easyMode is true', () => {
+      expect(hasMistakes('hello', 'Hello', true)).toBe(false);
+      expect(hasMistakes('HELLO', 'hello', true)).toBe(false);
+    });
   });
 
   describe('findLastCorrectIndex', () => {
