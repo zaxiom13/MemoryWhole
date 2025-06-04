@@ -172,12 +172,15 @@ describe('typingUtils', () => {
 
     it('handles whitespace differences', () => {
       const result = checkCorrectness('Hello World', 'Hello  World');
-      expect(result).toEqual({ isCorrect: false, correctIndex: 5 });
+      // The first mismatched character occurs at index 6 due to the extra space
+      // in the input string. correctIndex should therefore be 6.
+      expect(result).toEqual({ isCorrect: false, correctIndex: 6 });
     });
 
     it('works when input is longer than reference', () => {
       const result = checkCorrectness('Hi', 'Hello');
-      expect(result).toEqual({ isCorrect: false, correctIndex: 0 });
+      // The first character matches ("H"), so correctIndex should be 1
+      expect(result).toEqual({ isCorrect: false, correctIndex: 1 });
     });
 
     it('handles exact match', () => {
